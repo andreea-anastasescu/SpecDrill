@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>SpecDrill</id>
-        <version>1.0.28</version>
+        <version>1.0.29</version>
         <authors>Cosmin Sontu</authors>
         <owners>Cosmin Sontu</owners>
         <licenseUrl>https://github.com/CosminSontu/SpecDrill/blob/master/LICENSE</licenseUrl>
@@ -10,7 +10,9 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</description>
 	<releaseNotes>
-.
+.           v1.0.29
+                - Fixed Issue #33: Remove AcceptInsecureCertificates from BuildInternetExplorerOptions
+                - Upgraded to WebDriver 3.13.1
             v1.0.28
                 - Fixed Issue #32: Driver instantiation (local ChromeDriver) fails when capabilities are specified 
             v1.0.27
@@ -85,12 +87,12 @@
         <tags>SpecDrill SpecFlow Selenium WebDriver Automation BDD ATDD</tags>
         <dependencies>
             <dependency id="Newtonsoft.Json" version="11.0.2" />
-            <dependency id="Selenium.WebDriver" version="3.11.0" />
-            <dependency id="Selenium.Support" version="3.11.0" />
+            <dependency id="Selenium.WebDriver" version="3.13.1" />
+            <dependency id="Selenium.Support" version="3.13.1" />
             <dependency id="log4net" version="2.0.5" />
             <dependency id="FluentAssertions" version="4.14.0" />
-            <dependency id="Selenium.WebDriver.ChromeDriver" version="2.37.0" />
-            <dependency id="Selenium.WebDriver.GeckoDriver.Win64" version="0.20.0" />
+            <dependency id="Selenium.WebDriver.ChromeDriver" version="2.40.0" />
+            <dependency id="Selenium.WebDriver.GeckoDriver.Win64" version="0.21.0" />
 	    <dependency id="pdf-extract" version="1.0.1.0" />
 	    <dependency id="Appium.WebDriver" version="3.0.0.2" />
             <!--dependency id="MSTest.TestAdapter" version="1.2.0" /-->
