@@ -14,11 +14,11 @@
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "..\\..\\..\\packages\\Selenium.WebDriver.ChromeDriver.2.32.0\\driver\\win32" //"C:\\Your Browser Drivers Path"//
+          "path": "..\\..\\..\\packages\\Selenium.WebDriver.ChromeDriver.73.0.3683.68\\driver\\win32" //"C:\\Your Browser Drivers Path"//
         },
         "ie": { "path": "" },
         "firefox": {
-          "path": "..\\..\\..\\packages\\Selenium.WebDriver.GeckoDriver.Win64.0.19.0\\driver", 
+          "path": "..\\..\\..\\packages\\Selenium.WebDriver.GeckoDriver.Win64.0.24.0\\driver", 
           "browserBinaryPath": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"
         },
         "opera": { "path": "" },

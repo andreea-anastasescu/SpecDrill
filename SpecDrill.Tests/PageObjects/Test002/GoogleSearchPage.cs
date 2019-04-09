@@ -14,7 +14,7 @@ namespace SomeTests.PageObjects.Test002
         [Find(By.XPath, "/html//form[@id='tsf']/div/div/div/div/div/input[@role='combobox']")]
         public IElement TxtSearch { get; private set; }
 
-        [Find(By.CssSelector, "/html//form[@id='tsf']/div/div/div/center/input[@name='btnK']")]
+        [Find(By.XPath, "/html//form[@id='tsf']/div/div/div/center/input[@name='btnK']")]
         public INavigationElement<GoogleSearchResultsPage> BtnSearch { get; private set; }
     }
 }

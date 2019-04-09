@@ -16,7 +16,7 @@
             v1.0.23
                 - Initial version
 	</releaseNotes>
-        <copyright>Copyright 2017</copyright>
+        <copyright>Copyright 2019</copyright>
         <tags>SpecDrill MsTest Selenium WebDriver Automation BDD ATDD</tags>
         <dependencies>
             <dependency id="SpecDrill" version="1.0.23" />

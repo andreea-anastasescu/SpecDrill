@@ -11,10 +11,10 @@ namespace $rootnamespace$.PageObjects
 {
     public class GoogleSearchPage : WebPage
     {
-        [Find(By.CssSelector, "input#lst-ib")]
+        [Find(By.XPath, "/html//form[@id='tsf']/div/div/div/div/div/input[@role='combobox']")]
         public IElement TxtSearch { get; private set; }
 
-        [Find(By.CssSelector, "#tsf > div.tsf-p > div.jsb > center > input[type='submit']:nth-child(1)")]
+        [Find(By.XPath, "/html//form[@id='tsf']/div/div/div/center/input[@name='btnK']")]
         public INavigationElement<GoogleSearchResultsPage> BtnSearch { get; private set; }
     }
 }
