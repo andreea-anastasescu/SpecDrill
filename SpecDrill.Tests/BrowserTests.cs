@@ -18,7 +18,7 @@ namespace SomeTests
     [TestClass]
     public class BrowserTests : TestBase
     {
-        [TestMethod]
+      [TestMethod]
         public void ShouldConfirmAcceptSslCertsIsSet()
         {
             var capabilities = Browser.GetCapabilities();

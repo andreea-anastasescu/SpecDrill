@@ -25,7 +25,7 @@ namespace SpecDrill.Tests
             Assert.AreEqual("Test000LoginPage", configuration.Homepages[0].PageObjectType);
 
             configuration.WebDriver.Browser.IsRemote.Should().BeFalse();
-            configuration.WebDriver.Appium.ServerUri.ShouldBeEquivalentTo("127.0.0.1:4723");
+            configuration.WebDriver.Appium.ServerUri.Should().BeEquivalentTo("127.0.0.1:4723");
         }
 
         private static string JsonConfigurationFileContents

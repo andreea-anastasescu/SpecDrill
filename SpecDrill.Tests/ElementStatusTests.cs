@@ -66,7 +66,7 @@ namespace SomeTests
 
             Action checkDisplayed = () => { var displayed = unrealElement.IsDisplayed; };
 
-            checkDisplayed.ShouldThrow<ElementNotFoundException>();
+            checkDisplayed.Should().Throw<ElementNotFoundException>();
         }
 
 
@@ -78,7 +78,7 @@ namespace SomeTests
 
             Action checkDisplayed = () => { var displayed = unrealElement.IsEnabled; };
 
-            checkDisplayed.ShouldThrow<ElementNotFoundException>();
+            checkDisplayed.Should().Throw<ElementNotFoundException>();
         }
     }
 }

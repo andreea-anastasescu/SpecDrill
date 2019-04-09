@@ -19,6 +19,7 @@ namespace SomeTests
        
         public override void TestSetup()
         {
+            base.TestSetup();
             Assert.AreEqual(0, methodInitCount);
             methodInitCount++;
             Assert.AreEqual(1, methodInitCount);

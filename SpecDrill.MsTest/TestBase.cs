@@ -10,22 +10,10 @@ namespace SpecDrill.MsTest
 {
     public class TestBase
     {
-        protected static ILogger Log =  Infrastructure.Logging.Log.Get<TestBase>();
-        protected readonly IBrowser Browser;
-        public TestBase()
-        {
-            try
-            {
-                Browser = new Browser(ConfigurationManager.Settings);
-            }
-            catch (Exception e)
-            {
-                Log.Log(LogLevel.Error, e.Message);
-                Trace.Write($"TestBase. -> {e}");
-                if (Browser != null)
-                    Browser.Exit();
-            }
-        }
+        protected static ILogger Log = Infrastructure.Logging.Log.Get<TestBase>();
+        private IBrowser browser;
+
+        public IBrowser Browser => browser;
         [ClassInitialize]
         public static void _ClassSetup()
         {
@@ -59,6 +47,9 @@ namespace SpecDrill.MsTest
             catch (Exception e)
             {
                 Log.Log(LogLevel.Error, $"Failed in TestInitialize for {TestContext.TestName} with {e}");
+                if (Browser != null)
+                    Browser.Exit();
+                throw new Exception("Browser initialization exception!", e);
             }
         }
 
@@ -69,7 +60,7 @@ namespace SpecDrill.MsTest
         {
             try
             {
-                if (TestContext.CurrentTestOutcome == UnitTestOutcome.Failed && 
+                if (TestContext.CurrentTestOutcome == UnitTestOutcome.Failed &&
                     ConfigurationManager.Settings.WebDriver.Screenshots.Auto)
                 {
                     SaveScreenshot();
@@ -82,12 +73,12 @@ namespace SpecDrill.MsTest
                 Log.Log(LogLevel.Error, $"Failed in TestCleanup for {TestContext.TestName} with {e}");
             }
 
-            if (Browser != null)
-                Browser.Exit();
+            Browser?.Exit();
         }
 
         public virtual void TestSetup()
         {
+            browser = new Browser(ConfigurationManager.Settings);
         }
 
         public virtual void TestCleanup()

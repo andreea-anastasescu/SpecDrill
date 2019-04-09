@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using System.Net.Http;
 using System.IO;
+using System.Security.Cryptography;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure.Enums;
 using SpecDrill.Infrastructure;
@@ -343,13 +344,24 @@ namespace SpecDrill.Adapters.WebDriver
 
         public Dictionary<string, object> GetCapabilities()
         {
-            var capabilities = configuration.WebDriver.Browser.Capabilities;
+            void TryCopyCapability(ICapabilities from, IDictionary<string, object> to, string key)
+            {
+                if (from?.HasCapability(key) is object)
+                {
+                    to[key] = from.GetCapability(key);
+                }
+            }
+            var capabilities = new Dictionary<string, object>();
+
+            foreach (var kvp in configuration.WebDriver.Browser.Capabilities)
+                capabilities[kvp.Key] = kvp.Value;
+
             var remoteDriver = (this.seleniumDriver as OpenQA.Selenium.Remote.RemoteWebDriver);
             if (remoteDriver != null)
             {
-                capabilities["browserName"] = remoteDriver.Capabilities.BrowserName;
-                capabilities["platform"] = remoteDriver.Capabilities.Platform;
-                capabilities["version"] = remoteDriver.Capabilities.Version;
+                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "browserName");
+                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "platform");
+                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "version");
             }
             
             return capabilities;

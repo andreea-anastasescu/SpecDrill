@@ -129,7 +129,7 @@ namespace SomeTests
             Action wait = () =>
             Wait.NoMoreThan(TimeSpan.FromSeconds(1.0d)).Until(() => false);
             //stopwatch.Stop();
-            wait.ShouldThrow<TimeoutException>();
+            wait.Should().Throw<TimeoutException>();
             //stopwatch.Elapsed.Should().BeCloseTo(timeLimit, 50);
         }
 

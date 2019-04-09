@@ -113,7 +113,7 @@ namespace SomeTests
                 
                 Action waitForNonExistingElement = () =>
                 Wait.NoMoreThan(timeLimit).Until(() => nonExistingElement.IsAvailable);
-                waitForNonExistingElement.ShouldThrow<TimeoutException>();
+                waitForNonExistingElement.Should().Throw<TimeoutException>();
                 benchmark.Elapsed.Should().BeCloseTo(timeLimit, 300);
             }
         }
