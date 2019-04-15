@@ -19,11 +19,15 @@ namespace SomeTests
     public class BrowserTests : TestBase
     {
       [TestMethod]
-        public void ShouldConfirmAcceptSslCertsIsSet()
+        public void ShouldCorrectlyReadCapabilities()
         {
             var capabilities = Browser.GetCapabilities();
+            // built-in
             capabilities.ContainsKey("platform").Should().BeTrue();
             capabilities["platform"].Should().NotBeNull();
+            // custom
+            capabilities.ContainsKey("x").Should().BeTrue();
+            capabilities["x"].Should().Be("y");
         }
 
         [TestMethod]

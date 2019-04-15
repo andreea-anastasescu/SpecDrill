@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>SpecDrill</id>
-        <version>1.0.30</version>
+        <version>1.0.32</version>
         <authors>Cosmin Sontu</authors>
         <owners>Cosmin Sontu</owners>
         <licenseUrl>https://github.com/CosminSontu/SpecDrill/blob/master/LICENSE</licenseUrl>
@@ -10,7 +10,9 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</description>
 	<releaseNotes>
-.           v1.0.30
+	        v1.0.32
+			    - Moved Browser initialization in _TestInitialize virtual method.
+            v1.0.30
                 - Fixed Issue #34: Browser capabilities not being set properly
             v1.0.29
                 - Fixed Issue #33: Remove AcceptInsecureCertificates from BuildInternetExplorerOptions
@@ -88,7 +90,7 @@
         <copyright>Copyright 2019</copyright>
         <tags>SpecDrill SpecFlow Selenium WebDriver Automation BDD ATDD</tags>
         <dependencies>
-		    <dependency id="Appium.WebDriver" version="4.0.0.5-beta" />
+		    <dependency id="Appium.WebDriver" version="(4.0.0.4,)" />
             <dependency id="BoDi" version="1.4.1" />
 			<dependency id="Castle.Core" version="4.4.0" />
             <dependency id="DotNetSeleniumExtras.PageObjects" version="3.11.0" />

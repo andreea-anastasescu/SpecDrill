@@ -18,10 +18,9 @@ namespace SpecDrill
 {
     public class PdfPage : WebPage
     {
-        protected ILogger Log = Infrastructure.Logging.Log.Get<PdfPage>();
         private string titlePattern;
 
-        public PdfPage() : this(string.Empty) {  }
+        public PdfPage() : this(string.Empty) { }
         public PdfPage(string titlePattern) : base(titlePattern)
         {
             this.titlePattern = titlePattern;

@@ -66,23 +66,23 @@ namespace SpecDrill.Adapters.WebDriver
             }
             return true;
         }
-        public static DesiredCapabilities AddCapability(this DesiredCapabilities capabilities, string key, object value, Type enumType = null)
-        {
-            if (ValidateCapability(key, value, enumType))
-            {
-                capabilities.SetCapability(key, value);
-            }
-            return capabilities;
-        }
+        //public static DesiredCapabilities AddCapability(this DesiredCapabilities capabilities, string key, object value, Type enumType = null)
+        //{
+        //    if (ValidateCapability(key, value, enumType))
+        //    {
+        //        capabilities.SetCapability(key, value);
+        //    }
+        //    return capabilities;
+        //}
 
-        public static DriverOptions AddCapability(this DriverOptions driverOptions, string key, object value, Type enumType = null)
-        {
-            if (ValidateCapability(key, value, enumType))
-            {
-                driverOptions.AddAdditionalCapability(key, value);
-            }
-            return driverOptions;
-        }
+        //public static DriverOptions AddCapability(this DriverOptions driverOptions, string key, object value, Type enumType = null)
+        //{
+        //    if (ValidateCapability(key, value, enumType))
+        //    {
+        //        driverOptions.AddAdditionalCapability(key, value);
+        //    }
+        //    return driverOptions;
+        //}
     }
     public class SeleniumBrowserFactory : IBrowserDriverFactory
     {

@@ -42,6 +42,7 @@ namespace SpecDrill.MsTest
         {
             try
             {
+                browser = new Browser(ConfigurationManager.Settings);
                 TestSetup();
             }
             catch (Exception e)
@@ -78,7 +79,7 @@ namespace SpecDrill.MsTest
 
         public virtual void TestSetup()
         {
-            browser = new Browser(ConfigurationManager.Settings);
+           
         }
 
         public virtual void TestCleanup()

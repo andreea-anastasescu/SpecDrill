@@ -34,6 +34,7 @@ namespace SomeTests
         public void ShouldWaitForConfirmAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
+            Browser.GetCapabilities();
             Browser.Click(WebElement.Create(null, ElementLocator.Create(By.LinkText, "Confirm")));
             var twoSeconds = TimeSpan.FromSeconds(2);
             Wait.NoMoreThan(twoSeconds).Until(() => Browser.IsAlertPresent);

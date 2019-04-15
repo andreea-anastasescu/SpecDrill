@@ -32,7 +32,7 @@
       },
       "screenshots": { "path": "D:\\" },
       "capabilities": {
-
+        "x":  "y"
       }
     },
     "appium": { // settings for appium mode -> targets Appium server

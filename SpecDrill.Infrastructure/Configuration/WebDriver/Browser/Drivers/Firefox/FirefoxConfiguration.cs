@@ -8,7 +8,5 @@ namespace SpecDrill.Infrastructure.Configuration.WebDriver.Browser.Drivers.Firef
 {
     public class FirefoxConfiguration : DriverConfiguration
     {
-        public string Path { get; set; }
-        public string BrowserBinaryPath { get; set; }
     }
 }
