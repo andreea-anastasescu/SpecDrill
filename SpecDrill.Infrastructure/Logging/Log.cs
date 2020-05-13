@@ -15,19 +15,14 @@ namespace SpecDrill.Infrastructure.Logging
             loggerFactory = new Log4NetFactory();
         }
 
-        public static ILogger Get(string name)
-        {
-            return GetLogger(loggerFactory.Get(name));
-        }
-
         public static ILogger Get<T>()
         {
-            return GetLogger(loggerFactory.Get(typeof(T).Namespace));
+            return GetLogger(loggerFactory.Get(typeof(T)));
         }
 
         public static ILogger Get(Type type)
         {
-            return GetLogger(loggerFactory.Get(type.Namespace));
+            return GetLogger(loggerFactory.Get(type));
         }
         private static ILogger GetLogger(ILogger logger)
         {

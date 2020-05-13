@@ -28,7 +28,7 @@ namespace SpecDrill.Adapters.WebDriver
 {
     public static class DesiredCapabilitiesExtensions
     {
-        private static ILogger Log = Infrastructure.Logging.Log.Get("DesiredCapabilitiesExtensions");
+        private static ILogger Log = Infrastructure.Logging.Log.Get(typeof(DesiredCapabilitiesExtensions));
 
         public static bool ValidateCapability(string key, object value, Type enumType = null)
         {

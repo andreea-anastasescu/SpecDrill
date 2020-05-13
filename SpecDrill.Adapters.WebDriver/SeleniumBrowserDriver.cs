@@ -279,24 +279,25 @@ namespace SpecDrill.Adapters.WebDriver
         
         public string GetPdfText()
         {
-            StringBuilder pdfText = new StringBuilder();
-            string userAgent = (string)ExecuteJavaScript("return navigator.userAgent") ?? string.Empty;
+            //StringBuilder pdfText = new StringBuilder();
+            //string userAgent = (string)ExecuteJavaScript("return navigator.userAgent") ?? string.Empty;
 
 
-            using (var webClient = new WebClient())
-            {
-                var formattedCookiesString = GetFormattedCookiesString();
+            //using (var webClient = new WebClient())
+            //{
+            //    var formattedCookiesString = GetFormattedCookiesString();
 
-                Uri uri = new Uri(seleniumDriver.Url);
-                webClient.Headers.Add(HttpRequestHeader.Host, uri.Host);
-                webClient.Headers.Add(HttpRequestHeader.UserAgent, userAgent);
-                webClient.Headers.Add(HttpRequestHeader.Cookie, formattedCookiesString);
-                webClient.Headers.Add(HttpRequestHeader.Accept, "application/pdf");
+            //    Uri uri = new Uri(seleniumDriver.Url);
+            //    webClient.Headers.Add(HttpRequestHeader.Host, uri.Host);
+            //    webClient.Headers.Add(HttpRequestHeader.UserAgent, userAgent);
+            //    webClient.Headers.Add(HttpRequestHeader.Cookie, formattedCookiesString);
+            //    webClient.Headers.Add(HttpRequestHeader.Accept, "application/pdf");
 
-                using (var pdfStream = new MemoryStream(webClient.DownloadData(uri.OriginalString)))
-                using (var extractor = new PdfExtract.Extractor())
-                    return extractor.ExtractToString(pdfStream);
-            }
+            //    using (var pdfStream = new MemoryStream(webClient.DownloadData(uri.OriginalString)))
+            //    using (var extractor = new PdfExtract.Extractor())
+            //        return extractor.ExtractToString(pdfStream);
+            //}
+            return ""; //TODO: Find .netstandard 2.0 compatible pdf extractor
         }
 
         private string GetFormattedCookiesString()
@@ -360,8 +361,8 @@ namespace SpecDrill.Adapters.WebDriver
             if (remoteDriver != null)
             {
                 TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "browserName");
-                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "platform");
-                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "version");
+                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "platformName");
+                TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "browserVersion");
             }
             
             return capabilities;

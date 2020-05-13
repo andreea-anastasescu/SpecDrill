@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using log4net;
 using log4net.Config;
+using log4net.Repository;
 using Newtonsoft.Json;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure.Logging;
@@ -27,16 +30,17 @@ namespace SpecDrill.Infrastructure.Configuration
             {
                 Log.Info($"Searching Configuration file {ConfigurationFileName}...");
                 var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory);
-
+                
                 if (configurationPaths == null)
                     throw new FileNotFoundException("Configuration file not found");
 
                 var configurationFilePath = configurationPaths.Item1;
                 var log4netConfigFilePath = Path.Combine(configurationFilePath, "log4net.config");
 
+                var logRepository = LogManager.GetRepository(Assembly.GetCallingAssembly());
                 var log4NetConfig = new FileInfo(log4netConfigFilePath);
 
-                XmlConfigurator.Configure(log4NetConfig);
+                XmlConfigurator.Configure(logRepository, log4NetConfig);
 
                 var jsonConfigurationFilePath = configurationPaths.Item2;
                 

@@ -20,6 +20,7 @@ using SpecDrill.Exceptions;
 
 namespace SpecDrill
 {
+    //TODO : introduce a DI container to remove dependency from Adapters.
     public sealed class Browser : IBrowser
     {
         private static IBrowser browserInstance;

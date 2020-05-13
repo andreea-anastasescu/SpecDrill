@@ -7,7 +7,7 @@ namespace SpecDrill.Configuration
 {
     public class Settings
     {
-        public WebDriverConfiguration WebDriver { get; set; }
+        public WebDriver.WebDriverConfiguration WebDriver { get; set; }
 
         public HomepageConfiguration[] Homepages { get; set; }
     }

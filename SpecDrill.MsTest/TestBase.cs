@@ -15,7 +15,7 @@ namespace SpecDrill.MsTest
 
         public IBrowser Browser => browser;
         [ClassInitialize]
-        public static void _ClassSetup()
+        public static void _ClassSetup(TestContext testContext)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace SpecDrill.MsTest
             }
             catch (Exception e)
             {
-                Log.Log(LogLevel.Error, $"Failed in ClassInitialize with {e}");
+                Log.Log(LogLevel.Error, $"Failed in ClassInitialize for test method [{testContext.TestName}] with {e}");
             }
         }
         protected static Action ClassSetup = () => { };

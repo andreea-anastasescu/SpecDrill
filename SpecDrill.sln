@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30105.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill", "SpecDrill\SpecDrill.csproj", "{E9223B33-98FC-4D5A-8C0E-E63011FD454E}"
 EndProject
@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		specDrillConfig.json = specDrillConfig.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.Adapters.WebDriver", "SpecDrill.Adapters.WebDriver\SpecDrill.Adapters.WebDriver.csproj", "{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Adapters.WebDriver", "SpecDrill.Adapters.WebDriver\SpecDrill.Adapters.WebDriver.csproj", "{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.SecondaryPorts.AutomationFramework", "SpecDrill.Ports\SpecDrill.SecondaryPorts.AutomationFramework.csproj", "{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.Infrastructure", "SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj", "{9A59519A-1464-436E-B059-AF2BEEFFE96F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Infrastructure", "SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj", "{9A59519A-1464-436E-B059-AF2BEEFFE96F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{DA1F62FA-67D6-4246-9AFA-018D72165657}"
 EndProject
@@ -94,5 +94,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A8F68C17-F756-4FFB-ADA4-4F69E25D4809} = {DA1F62FA-67D6-4246-9AFA-018D72165657}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A1CD798-9F2F-48E2-8D98-68B1E6DC728E}
 	EndGlobalSection
 EndGlobal

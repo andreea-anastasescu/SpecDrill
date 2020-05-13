@@ -42,6 +42,7 @@ namespace SomeTests
         }
 
         [TestMethod]
+        [Ignore]
         public void ShouldJsPlumbDragAndDropSuccessfuly()
         {
             var hoverPage = Browser.Open<DndJsPlumbPage>();

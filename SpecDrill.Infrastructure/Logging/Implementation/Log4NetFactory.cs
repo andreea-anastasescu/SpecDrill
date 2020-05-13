@@ -57,21 +57,21 @@ namespace SpecDrill.Infrastructure.Logging.Implementation
         //    hierarchy.Configured = true;
         //}
 
-        public ILogger Get(string name)
+        public ILogger Get(Type t)
         {
-            if (!loggers.ContainsKey(name))
+            if (!loggers.ContainsKey(t.FullName))
             {
                 lock (SyncRoot)
                 {
-                    if (!loggers.ContainsKey(name))
+                    if (!loggers.ContainsKey(t.FullName))
                     {
-                        var log4NetLogger = LogManager.GetLogger(name);
-                        loggers[name] = new Log4NetLogger(log4NetLogger);
+                        var log4NetLogger = LogManager.GetLogger(t);
+                        loggers[t.FullName] = new Log4NetLogger(log4NetLogger);
                     }
                 }
             }
 
-            return loggers[name];
+            return loggers[t.FullName];
         }
     }
 }

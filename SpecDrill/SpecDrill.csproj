@@ -1,96 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9223B33-98FC-4D5A-8C0E-E63011FD454E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpecDrill</RootNamespace>
-    <AssemblyName>SpecDrill</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Exceptions\AlertNotFoundException.cs" />
-    <Compile Include="Exceptions\DynamicMemberInitializationException.cs" />
-    <Compile Include="Exceptions\InvalidAttributeTargetException.cs" />
-    <Compile Include="Exceptions\MissingConfigurationException.cs" />
-    <Compile Include="Exceptions\MissingEmptyConstructorException.cs" />
-    <Compile Include="Exceptions\MissingHomepageConfigEntryException.cs" />
-    <Compile Include="FindAttribute.cs" />
-    <Compile Include="AutomationScopes\BenchmarkScope.cs" />
-    <Compile Include="AutomationScopes\ImplicitWaitScope.cs" />
-    <Compile Include="Browser.cs" />
-    <Compile Include="ElementBase.cs" />
-    <Compile Include="Locator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebControl.cs" />
-    <Compile Include="WebControls\ListElement.cs" />
-    <Compile Include="WebControls\TreeControl.cs" />
-    <Compile Include="WebElement.cs" />
-    <Compile Include="PdfPage.cs" />
-    <Compile Include="WebPage.cs" />
+    <ProjectReference Include="..\SpecDrill.Adapters.WebDriver\SpecDrill.Adapters.WebDriver.csproj" />
+    <ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" />
+    <ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.AutomationFramework.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SpecDrill.Adapters.WebDriver\SpecDrill.Adapters.WebDriver.csproj">
-      <Project>{a8f68c17-f756-4ffb-ada4-4f69e25d4809}</Project>
-      <Name>SpecDrill.Adapters.WebDriver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj">
-      <Project>{9A59519A-1464-436E-B059-AF2BEEFFE96F}</Project>
-      <Name>SpecDrill.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.AutomationFramework.csproj">
-      <Project>{ad2db2ca-0c02-4a57-a92c-5a6f76a5e2fc}</Project>
-      <Name>SpecDrill.SecondaryPorts.AutomationFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

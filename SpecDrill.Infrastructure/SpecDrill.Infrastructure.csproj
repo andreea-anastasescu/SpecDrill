@@ -1,97 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9A59519A-1464-436E-B059-AF2BEEFFE96F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpecDrill.Infrastructure</RootNamespace>
-    <AssemblyName>SpecDrill.Infrastructure</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Configuration\WebDriver\Appium\AppiumConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Appium\Capabilities\Android\AndroidCapabilitiesConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\Edge\EdgeConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\CapabilitiesConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Appium\Capabilities\FirefoxOS\FirefoxCapabilitiesConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Appium\Capabilities\IOS\IosCapabilitiesConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\BrowserConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\DriversConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\Chrome\ChromeConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\DriverConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\Firefox\FirefoxConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\Ie\IeConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\Opera\OperaConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Drivers\Safari\SafariConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\Browser\Window\WindowConfiguration.cs" />
-    <Compile Include="Configuration\ConfigurationManager.cs" />
-    <Compile Include="Configuration\Homepages\Homepage.cs" />
-    <Compile Include="Configuration\WebDriver\Screenshots\ScreenshotsConfiguration.cs" />
-    <Compile Include="Configuration\WebDriver\WebdriverConfiguration.cs" />
-    <Compile Include="Configuration\Settings.cs" />
-    <Compile Include="Converters.cs" />
-    <Compile Include="Enums\BrowserNames.cs" />
-    <Compile Include="Globals.cs" />
-    <Compile Include="Logging\Interfaces\ILogger.cs" />
-    <Compile Include="Logging\Implementation\Log4NetFactory.cs" />
-    <Compile Include="Logging\Implementation\Log4NetLogger.cs" />
-    <Compile Include="Logging\Interfaces\ILoggerFactory.cs" />
-    <Compile Include="Logging\Log.cs" />
-    <Compile Include="Logging\LoggerExtensions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Wait.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
