@@ -322,7 +322,7 @@ namespace SpecDrill
             }
         }
 
-        public bool IsJQueryDefined => (bool)ExecuteJavascript("if (window.jQuery) return true else return false;");
+        public bool IsJQueryDefined => ((bool?)ExecuteJavascript("if (window.jQuery) return true else return false;"))??false;
 
         public Uri Url => browserDriver.Url;
 

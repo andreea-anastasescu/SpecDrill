@@ -34,13 +34,15 @@ namespace SpecDrill
                 string retrievedTitle = null;
                 try
                 {
-                    retrievedTitle = this.Browser.ExecuteJavascript("return document.title;") as string;
+                    using (this.Browser.ImplicitTimeout(TimeSpan.FromSeconds(3)))
+                        retrievedTitle = this.Browser.ExecuteJavascript("return document.title;") as string;
                 }
                 catch (Exception e)
                 {
                     Log.Error("Cannot read page Title!", e);
                 }
                 return retrievedTitle;
+                //return this.Browser.PageTitle;
             }
         }
         
@@ -55,43 +57,43 @@ namespace SpecDrill
         {
             get
             {
-                object result =
-                this.Browser.ExecuteJavascript(@"
-                    if (document.readyState !== 'complete') {
-                        return false;
+                //    object result =
+                //    this.Browser.ExecuteJavascript(@"
+                //        if (document.readyState !== 'complete') {
+                //            return false;
 
-                        if ((document.jQuery) && (document.jQuery.active || (document.jQuery.ajax && document.jQuery.ajax.active))) {
-                            return false;
-                        } 
+                //            if ((document.jQuery) && (document.jQuery.active || (document.jQuery.ajax && document.jQuery.ajax.active))) {
+                //                return false;
+                //            } 
 
-				        if (document.angular) {
-                            if (!window.specDrill) {
-                                window.specDrill = { silence : false };
-                            }
-                            var injector = window.angular.element('body').injector();
-                            var $rootScope = injector.get('$rootScope');
-                            var $http = injector.get('$http');
-                            var $timeout = injector.get('$timeout');
-                         
-                            if ($rootScope.$$phase === '$apply' || $rootScope.$$phase === '$digest' || $http.pendingRequests.length != 0) {
-                                window.specDrill.silence = false;
-                                return false;
-                            }
+                //if (document.angular) {
+                //                if (!window.specDrill) {
+                //                    window.specDrill = { silence : false };
+                //                }
+                //                var injector = window.angular.element('body').injector();
+                //                var $rootScope = injector.get('$rootScope');
+                //                var $http = injector.get('$http');
+                //                var $timeout = injector.get('$timeout');
 
-                            if (!window.specDrill.silence) {
-                                $timeout(function () { window.specDrill.silence = true; }, 0);
-                                return false;
-                            }
-                        }
-                    }
-                   
-                    return true;
-                ");
+                //                if ($rootScope.$$phase === '$apply' || $rootScope.$$phase === '$digest' || $http.pendingRequests.length != 0) {
+                //                    window.specDrill.silence = false;
+                //                    return false;
+                //                }
 
-                var isLoaded = this.Title != null &&
+                //                if (!window.specDrill.silence) {
+                //                    $timeout(function () { window.specDrill.silence = true; }, 0);
+                //                    return false;
+                //                }
+                //            }
+                //        }
+
+                //        return true;
+                //    ");
+                var title = this.Title;
+                var isLoaded = title != null &&
                                Regex.IsMatch(this.Title, this.titlePattern);
 
-                Log.Info("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, this.Title ?? "(null)",
+                Log.Info("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, title ?? "(null)",
                     this.titlePattern ?? "(null)");
 
 

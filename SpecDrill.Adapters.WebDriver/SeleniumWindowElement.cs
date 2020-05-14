@@ -18,11 +18,11 @@ namespace SpecDrill.Adapters.WebDriver
         }
         public T Open()
         {
-            Wait.NoMoreThan(TimeSpan.FromSeconds(30)).Until(() => this.IsAvailable);
+            Wait.NoMoreThan(TimeSpan.FromSeconds(7)).Until(() => this.IsAvailable);
             Browser.SwitchToWindow(this);
             IPage targetPage = browser.CreatePage<T>();
             targetPage.ContextType = PageContextTypes.Window;
-            Wait.Until(() => targetPage.IsLoaded);
+            Wait.NoMoreThan(TimeSpan.FromSeconds(7)).Until(() => targetPage.IsLoaded);
             targetPage.WaitForSilence();
             return (T) targetPage;
         }

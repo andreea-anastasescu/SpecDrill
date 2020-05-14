@@ -4,7 +4,7 @@
     "maxWait": 60000,
     "waitPollingFrequency": 200,
     "screenshots": {
-      "path": "D:\\screenshots",
+      "path": "C:\\screenshots",
       "auto":  true // automatically save screenshot when test fails
     },
     "browser": { // settings for browser mode -> targets browser drivers or selenium server
@@ -15,7 +15,7 @@
       "drivers": {
         "chrome": {
           "path": "..\\..\\..\\..\\packages\\Selenium.WebDriver.ChromeDriver.81.0.4044.13800\\driver\\win32", //"C:\\Your Browser Drivers Path"//
-          "arguments": [ "--incognito" ]
+          "arguments": [ "--incognito", "headless" ] //, "headless"
         },
         "ie": { "path": "" },
         "firefox": {

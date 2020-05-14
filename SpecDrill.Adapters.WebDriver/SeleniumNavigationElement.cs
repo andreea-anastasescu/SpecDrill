@@ -33,7 +33,12 @@ namespace SpecDrill.Adapters.WebDriver
 
             Wait.Until(() => this.IsAvailable);
             IPage targetPage = browser.CreatePage<T>();
-            Wait.WithRetry().Doing(() => Click()).Until(() => targetPage.IsLoaded);
+            Wait.WithRetry().Doing(() => {
+                Click();
+                }).Until(
+                () => {
+                    return targetPage.IsLoaded;
+                    });
             targetPage.WaitForSilence();
             return (T)targetPage;
         }

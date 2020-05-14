@@ -60,6 +60,9 @@ namespace SpecDrill
             catch (Exception e)
             {
                 Log.Error(e, $"TryingAction: retryCount={retryCount}");
+                //HACK: workaround for https://stackoverflow.com/questions/48450594/selenium-timed-out-receiving-message-from-renderer
+                if (e.Message.Contains("timeout") && e.Message.Contains("renderer"))
+                    return true;
             }
             return false;
         }

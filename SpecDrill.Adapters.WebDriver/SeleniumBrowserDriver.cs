@@ -122,7 +122,10 @@ namespace SpecDrill.Adapters.WebDriver
 
         public void ChangeBrowserDriverTimeout(TimeSpan timeout)
         {
-            this.seleniumDriver.Manage().Timeouts().ImplicitWait = timeout;
+            var timeouts = this.seleniumDriver.Manage().Timeouts();
+            timeouts.ImplicitWait = timeout;
+            timeouts.AsynchronousJavaScript = timeout;
+            timeouts.PageLoad = timeout;
         }
 
         public ReadOnlyCollection<object> FindElements(IElementLocator locator)
@@ -148,7 +151,7 @@ namespace SpecDrill.Adapters.WebDriver
             if (javaScriptExecutor == null)
             {
                 Log.Error($" {nameof(seleniumDriver)} is not of type {nameof(IJavaScriptExecutor)}");
-                return false;
+                return null;
             }
 
             try
@@ -158,7 +161,7 @@ namespace SpecDrill.Adapters.WebDriver
             catch (Exception e)
             {
                 Log.Error(e, "Error when executing JavaScript");
-                return false;
+                return null;
             }
         }
 
