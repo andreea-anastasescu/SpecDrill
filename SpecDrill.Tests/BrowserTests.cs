@@ -27,7 +27,7 @@ namespace SomeTests
             capabilities["platformName"].Should().NotBeNull();
             // custom
             capabilities.ContainsKey("x").Should().BeTrue();
-            capabilities["x"].Should().Be("y");
+            capabilities["x"].Should().Be("yy");
         }
 
         [TestMethod]

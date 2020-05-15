@@ -42,7 +42,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework
         /// <returns></returns>
         //object FindElement(IElementLocator locator);
 
-        object ExecuteJavaScript(string js, params object[] arguments);
+        object? ExecuteJavaScript(string js, params object[] arguments);
 
         void MoveToElement(IElement element);
 
@@ -58,7 +58,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework
 
         void DoubleClick(IElement element);
 
-        IBrowserAlert Alert { get; }
+        IBrowserAlert? Alert { get; }
 
         bool IsAlertPresent { get; }
         Uri Url { get; }

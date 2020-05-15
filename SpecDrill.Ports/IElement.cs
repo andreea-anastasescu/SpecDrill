@@ -71,10 +71,10 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework
 
         void DragAndDropAt(int offsetX, int offsetY);
 
-        IElement Parent { get; }
+        IElement? Parent { get; }
 
         IElementLocator Locator { get; }
 
-        IPage ContainingPage { get; }
+        IPage? ContainingPage { get; }
     }
 }

@@ -10,7 +10,7 @@ namespace SpecDrill.Adapters.WebDriver
 {
     public static class SeleniumElementLocatorExtensions
     {
-        public static OpenQA.Selenium.By ToSeleniumLocator(this IElementLocator seleniumLocator)
+        public static OpenQA.Selenium.By? ToSeleniumLocator(this IElementLocator seleniumLocator)
         {
             switch (seleniumLocator.LocatorType)
             {

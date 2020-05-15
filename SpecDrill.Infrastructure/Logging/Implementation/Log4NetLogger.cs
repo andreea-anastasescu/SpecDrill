@@ -38,7 +38,7 @@ namespace SpecDrill.Infrastructure.Logging.Implementation
             CallLogger(level, string.Format(format, args), exception);
         }
 
-        private void CallLogger(LogLevel level, object message, Exception exception = null)
+        private void CallLogger(LogLevel level, object message, Exception? exception = null)
         {
             switch (level)
             {

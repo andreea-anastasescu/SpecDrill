@@ -11,16 +11,14 @@ namespace SpecDrill.Adapters.WebDriver
     public class SeleniumWindowElement<T> : SeleniumElement, IWindowElement<T>
         where T: class, IPage
     {
-        public SeleniumWindowElement(IBrowser browser, IElement parent, IElementLocator locator) : base(browser, parent, locator)
+        public SeleniumWindowElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)
         {
-            this.browser = browser;
-            this.locator = locator;
         }
         public T Open()
         {
             Wait.NoMoreThan(TimeSpan.FromSeconds(7)).Until(() => this.IsAvailable);
             Browser.SwitchToWindow(this);
-            IPage targetPage = browser.CreatePage<T>();
+            IPage targetPage = Browser.CreatePage<T>();
             targetPage.ContextType = PageContextTypes.Window;
             Wait.NoMoreThan(TimeSpan.FromSeconds(7)).Until(() => targetPage.IsLoaded);
             targetPage.WaitForSilence();

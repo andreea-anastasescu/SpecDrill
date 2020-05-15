@@ -10,12 +10,12 @@ namespace SpecDrill.AutomationScopes
     {
         private readonly ILogger Log = Infrastructure.Logging.Log.Get<ImplicitWaitScope>();
         
-        private readonly string message = null;
-        private readonly IBrowserDriver browser = null;
-        private readonly Stack<TimeSpan> timeoutHistory = null;
-        public ImplicitWaitScope(IBrowserDriver browser, Stack<TimeSpan> timeoutHistory, TimeSpan timeout, string message = null)
+        private readonly string message;
+        private readonly IBrowserDriver browser;
+        private readonly Stack<TimeSpan> timeoutHistory;
+        public ImplicitWaitScope(IBrowserDriver browser, Stack<TimeSpan> timeoutHistory, TimeSpan timeout, string? message)
         {
-            this.message = message;
+            this.message = message ?? string.Empty;
             this.browser = browser;
             this.timeoutHistory = timeoutHistory;
             
@@ -23,7 +23,7 @@ namespace SpecDrill.AutomationScopes
             {
                 timeoutHistory.Push(timeout);
                 browser.ChangeBrowserDriverTimeout(timeout);
-                Log.Info(string.Format("ImplicitWaitScope: Set Timeout to {0}. {1}", timeout, message ?? string.Empty));
+                Log.Info(string.Format("ImplicitWaitScope: Set Timeout to {0}. {1}", timeout, message));
             }
         }
 
@@ -39,7 +39,7 @@ namespace SpecDrill.AutomationScopes
             Log.Info(string.Format("ImplicitWaitScope: Restored Timeout to {0}. {1}", previousTimeout, message ?? string.Empty));
         }
 
-        public static ImplicitWaitScope Create(IBrowserDriver driver, Stack<TimeSpan> timeoutHistory, TimeSpan timeout, string message = null)
+        public static ImplicitWaitScope Create(IBrowserDriver driver, Stack<TimeSpan> timeoutHistory, TimeSpan timeout, string? message = null)
         {
             return new ImplicitWaitScope(driver, timeoutHistory, timeout, message);
         }

@@ -62,7 +62,7 @@ namespace SpecDrill.MsTest
             try
             {
                 if (TestContext.CurrentTestOutcome == UnitTestOutcome.Failed &&
-                    ConfigurationManager.Settings.WebDriver.Screenshots.Auto)
+                    (ConfigurationManager.Settings.WebDriver.Screenshots.Auto ?? false))
                 {
                     SaveScreenshot();
                 }

@@ -7,12 +7,12 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework.Core
     public interface IBrowser
     {
         T Open<T>()
-            where T: IPage;
+            where T: class, IPage;
 
         T CreatePage<T>()
-            where T : IPage;
-        T CreateControl<T>(T fromInstance)
-            where T : IElement;
+            where T : class, IPage;
+        T CreateControl<T>(T? fromInstance)
+            where T : class, IElement;
 
         void GoToUrl(string url);
 
@@ -26,7 +26,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework.Core
         /// <param name="implicitTimeout"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        IDisposable ImplicitTimeout(TimeSpan implicitTimeout, string message = null);
+        IDisposable ImplicitTimeout(TimeSpan implicitTimeout, string? message = null);
 
         /// <summary>
         /// Switches to specified frame.
@@ -52,7 +52,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework.Core
 
         SearchResult FindNativeElement(IElementLocator locator);
 
-        object ExecuteJavascript(string script, params object[] arguments);
+        object? ExecuteJavascript(string script, params object[] arguments);
 
         void Hover(IElement element);
 

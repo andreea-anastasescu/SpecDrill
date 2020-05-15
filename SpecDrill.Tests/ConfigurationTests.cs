@@ -19,13 +19,13 @@ namespace SpecDrill.Tests
             var configuration = ConfigurationManager.Load(JsonConfigurationFileContents);
             Assert.IsNotNull(configuration);
             Assert.IsNotNull(configuration.WebDriver);
-            Assert.AreEqual("chrome", configuration.WebDriver.Browser.BrowserName);
-            Assert.AreEqual(60000, configuration.WebDriver.MaxWait);
-            Assert.AreEqual(12, configuration.Homepages.Length);
-            Assert.AreEqual("Test000LoginPage", configuration.Homepages[0].PageObjectType);
+            Assert.AreEqual("chrome", configuration?.WebDriver?.Browser?.BrowserName);
+            Assert.AreEqual(60000, configuration?.WebDriver?.MaxWait);
+            Assert.AreEqual(12, configuration?.Homepages?.Length);
+            Assert.AreEqual("Test000LoginPage", configuration?.Homepages?[0]?.PageObjectType);
 
-            configuration.WebDriver.Browser.IsRemote.Should().BeFalse();
-            configuration.WebDriver.Appium.ServerUri.Should().BeEquivalentTo("127.0.0.1:4723");
+            configuration?.WebDriver?.Browser?.IsRemote.Should().BeFalse();
+            configuration?.WebDriver?.Appium?.ServerUri.Should().BeEquivalentTo("127.0.0.1:4723");
         }
 
         private static string JsonConfigurationFileContents

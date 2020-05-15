@@ -11,10 +11,8 @@ namespace SpecDrill.Adapters.WebDriver
         where T: class, IPage
     {
 
-        public SeleniumNavigationElement(IBrowser browser, IElement parent, IElementLocator locator) : base(browser, parent, locator)
+        public SeleniumNavigationElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)
         {
-            this.browser = browser;
-            this.locator = locator;
         }
 
         private T Click(ClickType clickType)
@@ -24,7 +22,7 @@ namespace SpecDrill.Adapters.WebDriver
                 switch (clickType)
                 {
                     case ClickType.Double:
-                        this.browser.DoubleClick(this); break;
+                        Browser.DoubleClick(this); break;
                     case ClickType.Single:
                     default:
                         this.Element.Click(); break;
@@ -32,7 +30,7 @@ namespace SpecDrill.Adapters.WebDriver
             }
 
             Wait.Until(() => this.IsAvailable);
-            IPage targetPage = browser.CreatePage<T>();
+            IPage targetPage = Browser.CreatePage<T>();
             Wait.WithRetry().Doing(() => {
                 Click();
                 }).Until(

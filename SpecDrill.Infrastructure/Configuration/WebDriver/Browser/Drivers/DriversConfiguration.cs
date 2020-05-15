@@ -7,11 +7,11 @@ namespace SpecDrill.Infrastructure.Configuration.WebDriver.Browser
 {
     public class DriversConfiguration
     {
-        public ChromeConfiguration Chrome { get; set; }
-        public IeConfiguration Ie { get; set; }
-        public OperaConfiguration Opera { get; set; }
-        public FirefoxConfiguration Firefox { get; set; }
-        public SafariConfiguration Safari { get; set; }
-        public EdgeConfiguration Edge { get; set; }
+        public ChromeConfiguration? Chrome { get; set; }
+        public IeConfiguration? Ie { get; set; }
+        public OperaConfiguration? Opera { get; set; }
+        public FirefoxConfiguration? Firefox { get; set; }
+        public SafariConfiguration? Safari { get; set; }
+        public EdgeConfiguration? Edge { get; set; }
     }
 }

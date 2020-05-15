@@ -8,9 +8,12 @@ namespace SpecDrill.Infrastructure
 {
     public static class Converters
     {
-        public static T ToEnum<T>(this string enumValue)
+        public static T? ToEnum<T>(this string? enumValue)
             where T: struct, IConvertible
         {
+            if (string.IsNullOrWhiteSpace(enumValue))
+                return null;
+
             var result = enumValue.AsEnum<T>();
 
             if (!result.HasValue)
@@ -19,16 +22,11 @@ namespace SpecDrill.Infrastructure
             return result.Value;
         }
 
-        public static object AsEnum(this string enumValue, Type enumType)
+        public static object? AsEnum(this string enumValue, Type enumType)
         {
-            if (!enumType.IsEnum)
-                return null;
+            if (!enumType.IsEnum) return null;
 
-            object parsedEnumValue = null;
-
-            try { parsedEnumValue = Enum.Parse(enumType, enumValue); } catch { }
-
-            return parsedEnumValue;
+            return Enum.TryParse(enumType, enumValue, out object result) ? result : null;
         }
 
         public static bool OfEnum(this string enumValue, Type enumType)
@@ -36,11 +34,7 @@ namespace SpecDrill.Infrastructure
             if (! enumType.IsEnum)
                 return false;
 
-            object parsedOrientation = null;
-
-            try { parsedOrientation = Enum.Parse(enumType, enumValue); } catch { }
-
-            return (parsedOrientation != null);
+            return Enum.TryParse(enumType, enumValue, out object _);
         }
 
         public static bool OfEnum<T>(this string enumValue)
@@ -48,6 +42,6 @@ namespace SpecDrill.Infrastructure
             => enumValue.OfEnum(typeof(T));
         public static T? AsEnum<T>(this string enumValue)
             where T : struct, IConvertible
-            => (T)enumValue.AsEnum(typeof(T));
+            => (T?)enumValue.AsEnum(typeof(T));
     }
 }

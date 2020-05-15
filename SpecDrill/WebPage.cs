@@ -31,18 +31,17 @@ namespace SpecDrill
         {
             get
             {
-                string retrievedTitle = null;
+                string retrievedTitle = "";
                 try
                 {
-                    using (this.Browser.ImplicitTimeout(TimeSpan.FromSeconds(3)))
-                        retrievedTitle = this.Browser.ExecuteJavascript("return document.title;") as string;
+                    using (Browser.ImplicitTimeout(TimeSpan.FromSeconds(3)))
+                        retrievedTitle = (this.Browser.ExecuteJavascript("return document.title;") as string) ?? "";
                 }
                 catch (Exception e)
                 {
                     Log.Error("Cannot read page Title!", e);
                 }
                 return retrievedTitle;
-                //return this.Browser.PageTitle;
             }
         }
         
@@ -107,7 +106,7 @@ namespace SpecDrill
 
         public void RefreshPage()
         {
-            browser.RefreshPage();
+            Browser.RefreshPage();
             Wait.Until(() => this.IsLoaded);
             this.WaitForSilence();
         }
@@ -120,11 +119,11 @@ namespace SpecDrill
         {
             if (this.ContextType == PageContextTypes.Frame)
             {
-                browser.SwitchToDocument();
+                Browser.SwitchToDocument();
             }
             else if (this.ContextType == PageContextTypes.Window)
             {
-                browser.CloseLastWindow();
+                Browser.CloseLastWindow();
             }
 
 

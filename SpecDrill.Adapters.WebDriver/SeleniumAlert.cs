@@ -11,26 +11,26 @@ namespace SpecDrill.Adapters.WebDriver
 {
     public class SeleniumAlert : IBrowserAlert
     {
-        private Func<IAlert> alert;
-        public SeleniumAlert(Func<IAlert> alert)
+        private Func<IAlert?> alert;
+        public SeleniumAlert(Func<IAlert?> alert)
         {
             this.alert = alert;
         }
 
-        public string Text => this.alert().Text;
+        public string Text => this.alert()?.Text ?? "";
 
         public void Accept()
         {
-            this.alert().Accept();
+            this.alert()?.Accept();
             Wait.Until(() => alert() == null);
         }
 
         public void Dismiss()
         {
-            this.alert().Dismiss();
+            this.alert()?.Dismiss();
             Wait.Until(() => alert() == null);
         }
 
-        public void SendKeys(string keys) => alert().SendKeys(keys);
+        public void SendKeys(string keys) => alert()?.SendKeys(keys);
     }
 }

@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using log4net;
 using log4net.Config;
 using log4net.Repository;
-using Newtonsoft.Json;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure.Logging;
 
@@ -24,7 +24,7 @@ namespace SpecDrill.Infrastructure.Configuration
             Log = Logging.Log.Get<ConfigurationManager>();
         }
 
-        public static Settings Load(string jsonConfiguration = null)
+        public static Settings Load(string? jsonConfiguration = null)
         {
             if (string.IsNullOrWhiteSpace(jsonConfiguration))
             {
@@ -52,7 +52,14 @@ namespace SpecDrill.Infrastructure.Configuration
 
                 jsonConfiguration = File.ReadAllText(jsonConfigurationFilePath);
             }
-            var configuration =  JsonConvert.DeserializeObject<Settings>(jsonConfiguration);
+            Settings configuration = JsonSerializer.Deserialize<Settings>(
+                jsonConfiguration,
+                new JsonSerializerOptions()
+                {
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true,
+                    PropertyNameCaseInsensitive = true
+                }); ;
 
             //var configuration = new Configuration();
             //configuration.Selenium = new SeleniumConfiguration();
@@ -80,7 +87,7 @@ namespace SpecDrill.Infrastructure.Configuration
                     continue;
                 }
              
-                return null;
+                return Tuple.Create("", "");
             }
         }
 

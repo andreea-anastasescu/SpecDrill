@@ -8,10 +8,10 @@ namespace SpecDrill
     public class ElementBase : IElement
     {
         protected IElementLocator locator;
-        protected IBrowser browser => SpecDrill.Browser.Instance;
-        protected IElement parent;
+        protected IBrowser? browser => SpecDrill.Browser.Instance;
+        protected IElement? parent;
         protected IElement rootElement;
-        public ElementBase(IElement parent, IElementLocator locator)
+        public ElementBase(IElement? parent, IElementLocator locator)
         {
             
             this.parent = parent;
@@ -65,7 +65,7 @@ namespace SpecDrill
         {
             get
             {
-                return this.browser;
+                return this.browser ?? throw new Exception("Browser could not be instantiated!");
             }
         }
 
@@ -77,7 +77,7 @@ namespace SpecDrill
             }
         }
 
-        public IElement Parent
+        public IElement? Parent
         {
             get
             {
@@ -87,7 +87,7 @@ namespace SpecDrill
 
         public IElementLocator Locator => this.locator;
 
-        public IPage ContainingPage => this.rootElement.ContainingPage;
+        public IPage? ContainingPage => this.rootElement.ContainingPage;
 
         public int Count
         {

@@ -61,19 +61,19 @@ namespace SpecDrill.Adapters.WebDriver
         })(arguments[0], arguments[1]);";
 
         #endregion
-        private IWebDriver seleniumDriver = null;
+        private readonly IWebDriver seleniumDriver;
 
         private readonly ILogger Log = Infrastructure.Logging.Log.Get<SeleniumBrowserDriver>();
 
-        private readonly Settings configuration;
+        private readonly Settings? configuration;
 
-        public SeleniumBrowserDriver(IWebDriver seleniumDriver, Settings configuration)
+        public SeleniumBrowserDriver(IWebDriver seleniumDriver, Settings? configuration)
         {
             this.seleniumDriver = seleniumDriver;
             this.configuration = configuration;
         }
 
-        public static IBrowserDriver Create(IWebDriver seleniumDriver, Settings configuration)
+        public static IBrowserDriver Create(IWebDriver seleniumDriver, Settings? configuration)
         {
             return new SeleniumBrowserDriver(seleniumDriver, configuration);
         }
@@ -93,7 +93,7 @@ namespace SpecDrill.Adapters.WebDriver
             get { return seleniumDriver.Title; }
         }
 
-        private Func<IAlert> WdAlert => () =>
+        private Func<IAlert?> WdAlert => () =>
         {
             try
             {
@@ -105,7 +105,7 @@ namespace SpecDrill.Adapters.WebDriver
             return null;
         };
 
-        public IBrowserAlert Alert
+        public IBrowserAlert? Alert
         {
             get
             {
@@ -144,7 +144,7 @@ namespace SpecDrill.Adapters.WebDriver
         //    return elements[0];
         //}
 
-        public object ExecuteJavaScript(string js, params object[] arguments)
+        public object? ExecuteJavaScript(string js, params object[] arguments)
         {
             var javaScriptExecutor = (seleniumDriver as IJavaScriptExecutor);
 
@@ -167,20 +167,24 @@ namespace SpecDrill.Adapters.WebDriver
 
         public void MoveToElement(IElement element)
         {
+            var se = element as SeleniumElement;
+            if (se == null)
+                return;
             var actions = new Actions(this.seleniumDriver);
-            actions.MoveToElement((element as SeleniumElement).Element);
+            actions.MoveToElement(se.Element);
             actions.Build().Perform();
         }
 
         public void Click(IElement element)
         {
-            (element as SeleniumElement).Element.Click();
+            var se = element as SeleniumElement;
+            if (se != null) se.Element.Click();
         }
 
         public void DoubleClick(IElement element)
         {
-            var mode = configuration.WebDriver.Mode.ToEnum<Modes>();
-            var browserName = configuration.WebDriver.Browser.BrowserName.ToEnum<BrowserNames>();
+            var mode = configuration?.WebDriver?.Mode.ToEnum<Modes>();
+            var browserName = configuration?.WebDriver?.Browser?.BrowserName.ToEnum<BrowserNames>();
 
             if (mode == Modes.browser && browserName == BrowserNames.firefox)
             {
@@ -255,7 +259,9 @@ namespace SpecDrill.Adapters.WebDriver
 
         public void SwitchToFrame(IElement seleniumFrameElement)
         {
-            seleniumDriver.SwitchTo().Frame((seleniumFrameElement as SeleniumElement).Element);
+            var sfe = (seleniumFrameElement as SeleniumElement);
+            if (sfe == null) return;
+            seleniumDriver.SwitchTo().Frame(sfe.Element);
         }
 
         public void SetWindowSize(int initialWidth, int initialHeight)
@@ -348,7 +354,7 @@ namespace SpecDrill.Adapters.WebDriver
 
         public Dictionary<string, object> GetCapabilities()
         {
-            void TryCopyCapability(ICapabilities from, IDictionary<string, object> to, string key)
+            void TryCopyCapability(ICapabilities? from, IDictionary<string, object> to, string key)
             {
                 if (from?.HasCapability(key) is object)
                 {
@@ -356,9 +362,10 @@ namespace SpecDrill.Adapters.WebDriver
                 }
             }
             var capabilities = new Dictionary<string, object>();
-
-            foreach (var kvp in configuration.WebDriver.Browser.Capabilities)
-                capabilities[kvp.Key] = kvp.Value;
+            var configCapabilities = configuration?.WebDriver?.Browser?.Capabilities ?? new Dictionary<string, object>();
+            
+            foreach (var kvp in configCapabilities)
+                capabilities[kvp.Key] = kvp.Value.ToString();
 
             var remoteDriver = (this.seleniumDriver as OpenQA.Selenium.Remote.RemoteWebDriver);
             if (remoteDriver != null)

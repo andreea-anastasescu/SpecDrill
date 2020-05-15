@@ -14,10 +14,8 @@ namespace SpecDrill.Adapters.WebDriver
 
         //protected IBrowser browser;
         //protected IElementLocator locator;
-        public SeleniumSelectElement(IBrowser browser, IElement parent, IElementLocator locator) : base(browser, parent, locator)
+        public SeleniumSelectElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)
         {
-            this.browser = browser;
-            this.locator = locator;
         }
 
         private SelectElement SelectElement

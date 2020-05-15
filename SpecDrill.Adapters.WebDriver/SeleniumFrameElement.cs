@@ -11,10 +11,8 @@ namespace SpecDrill.Adapters.WebDriver
     public class SeleniumFrameElement<T> : SeleniumElement, IFrameElement<T>
         where T: class, IPage
     {
-        public SeleniumFrameElement(IBrowser browser, IElement parent, IElementLocator locator) : base(browser, parent, locator)
+        public SeleniumFrameElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)
         {
-            this.browser = browser;
-            this.locator = locator;
         }
 
         public T SwitchTo() => Open();
@@ -22,7 +20,7 @@ namespace SpecDrill.Adapters.WebDriver
         {
             Wait.NoMoreThan(TimeSpan.FromSeconds(30)).Until(() => this.IsAvailable);
             Browser.SwitchToFrame(this);
-            IPage targetPage = browser.CreatePage<T>();
+            IPage targetPage = Browser.CreatePage<T>();
             targetPage.ContextType = PageContextTypes.Frame;
             Wait.Until(() => targetPage.IsLoaded);
             targetPage.WaitForSilence();

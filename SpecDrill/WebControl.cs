@@ -9,7 +9,7 @@ namespace SpecDrill
 {
     public class WebControl : ElementBase, IControl
     {
-        public WebControl(IElement parent, IElementLocator locator) : base(parent, locator)
+        public WebControl(IElement? parent, IElementLocator locator) : base(parent, locator)
         {
         }
 

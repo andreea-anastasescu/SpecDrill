@@ -91,7 +91,7 @@ namespace SpecDrill
     {
         protected static readonly ILogger Log = Infrastructure.Logging.Log.Get<MaxWaitContext>();
         public TimeSpan MaximumWait { get; set; }
-        private Func<Func<bool>, bool, Tuple<bool,Exception>> safeWait = (waitCondition, throwException) =>
+        private Func<Func<bool>, bool, Tuple<bool,Exception?>> safeWait = (waitCondition, throwException) =>
         {
             // exception is null =>
             // true, null -> true
@@ -99,7 +99,6 @@ namespace SpecDrill
             // exception is not null
             // => exception (inconclusive)
             bool result = false;
-            Exception exception = null;
             try
             {
                 result = waitCondition();
@@ -107,19 +106,19 @@ namespace SpecDrill
             catch (Exception e)
             {
                 Log.Error(e, "Error on wait");
-                exception = e;
                 if (throwException)
                     throw;
+                return Tuple.Create<bool, Exception?>(result, e);
             }
-            return Tuple.Create(result, exception);
+            return Tuple.Create<bool, Exception?>(result, null);
         };
 
         public void Until(Func<bool> waitCondition, bool throwExceptionOnTimeout = true)
         {   
-            Func<Tuple<bool, Exception>> safeWaitCondition = () => safeWait(waitCondition, false);
+            Func<Tuple<bool, Exception?>> safeWaitCondition = () => safeWait(waitCondition, false);
             bool conclusive = false;
             bool conditionMet = false;
-            Exception lastError = null;
+            Exception? lastError = null;
 
             Stopwatch sw = new Stopwatch();
 
@@ -170,7 +169,7 @@ namespace SpecDrill
         {
             new MaxWaitContext
             {
-                MaximumWait = TimeSpan.FromMilliseconds(Globals.Configuration.WebDriver.MaxWait)
+                MaximumWait = TimeSpan.FromMilliseconds(Globals.Configuration?.WebDriver?.MaxWait ?? 60000)
             }.Until(waitCondition);
         }
     }

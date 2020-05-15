@@ -16,7 +16,7 @@ namespace SpecDrill.WebControls
     public class ListElement<T> : WebControl, IListElement<T>
         where T : /*WebControl,*/ class, IElement
     {
-        public ListElement(IElement parent, IElementLocator locator) : base(parent, locator)
+        public ListElement(IElement? parent, IElementLocator locator) : base(parent, locator)
         {
             this.parent = parent;
             this.locator = locator;
@@ -38,7 +38,7 @@ namespace SpecDrill.WebControls
             }
         }
 
-        public T GetElementByIndex(int index)
+        public T? GetElementByIndex(int index)
         {
             return this[index];
         }

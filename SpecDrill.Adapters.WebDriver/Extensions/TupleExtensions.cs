@@ -8,7 +8,7 @@ namespace SpecDrill.Adapters.WebDriver.Extensions
 {
     internal static class TupleExtensions
     {
-        public static bool Evaluate(this Tuple<bool, Exception> testResult, bool throwException = false)
+        public static bool Evaluate(this Tuple<bool, Exception?> testResult, bool throwException = false)
         {
             if (testResult == null || testResult.Item2 != null)
             {

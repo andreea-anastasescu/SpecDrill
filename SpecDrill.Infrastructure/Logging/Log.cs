@@ -16,20 +16,9 @@ namespace SpecDrill.Infrastructure.Logging
         }
 
         public static ILogger Get<T>()
-        {
-            return GetLogger(loggerFactory.Get(typeof(T)));
-        }
+            => loggerFactory.Get(typeof(T));
 
         public static ILogger Get(Type type)
-        {
-            return GetLogger(loggerFactory.Get(type));
-        }
-        private static ILogger GetLogger(ILogger logger)
-        {
-            if (logger == null)
-                Trace.Write($"Logger is null!");
-            return logger;
-        }
-
+            => loggerFactory.Get(type);
     }
 }
