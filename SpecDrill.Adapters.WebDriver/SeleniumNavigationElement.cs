@@ -7,7 +7,7 @@ using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public class SeleniumNavigationElement<T> : SeleniumElement, INavigationElement<T>
+    internal class SeleniumNavigationElement<T> : SeleniumElement, INavigationElement<T>
         where T: class, IPage
     {
 

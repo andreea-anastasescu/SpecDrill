@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public static class SeleniumElementLocatorExtensions
+    internal static class SeleniumElementLocatorExtensions
     {
         public static OpenQA.Selenium.By? ToSeleniumLocator(this IElementLocator seleniumLocator)
         {

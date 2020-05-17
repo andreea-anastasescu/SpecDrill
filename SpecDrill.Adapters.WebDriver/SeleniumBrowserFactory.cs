@@ -27,7 +27,7 @@ using Castle.Core;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public static class DesiredCapabilitiesExtensions
+    internal static class DesiredCapabilitiesExtensions
     {
         private static ILogger Log = Infrastructure.Logging.Log.Get(typeof(DesiredCapabilitiesExtensions));
 
@@ -85,7 +85,7 @@ namespace SpecDrill.Adapters.WebDriver
         //    return driverOptions;
         //}
     }
-    public class SeleniumBrowserFactory : IBrowserDriverFactory
+    internal class SeleniumBrowserFactory : IBrowserDriverFactory
     {
         private static ILogger Log = Infrastructure.Logging.Log.Get<SeleniumBrowserFactory>();
         private readonly Dictionary<BrowserNames, Func<IBrowserDriver>> driverFactory;

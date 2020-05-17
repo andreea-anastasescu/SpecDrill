@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public class SeleniumElementLocator : IElementLocator
+    internal class SeleniumElementLocator : IElementLocator
     {
         private readonly By locatorType;
         private readonly string locatorValue;

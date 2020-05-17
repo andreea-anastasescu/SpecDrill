@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpecDrill.Adapters.WebDriver;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Infrastructure.Logging.Interfaces;
@@ -42,7 +43,7 @@ namespace SpecDrill.MsTest
         {
             try
             {
-                browser = new Browser(ConfigurationManager.Settings);
+                browser = new Browser(Runtime.GetServices(), ConfigurationManager.Settings);
                 TestSetup();
             }
             catch (Exception e)

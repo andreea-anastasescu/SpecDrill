@@ -8,7 +8,7 @@ using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public class SeleniumSelectElement : SeleniumElement, ISelectElement
+    internal class SeleniumSelectElement : SeleniumElement, ISelectElement
     {
         //protected static ILogger Log = Infrastructure.Logging.Log.Get<SeleniumSelectElement>();
 

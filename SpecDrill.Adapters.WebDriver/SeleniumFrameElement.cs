@@ -8,7 +8,7 @@ using SpecDrill.SecondaryPorts.AutomationFramework.Model;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public class SeleniumFrameElement<T> : SeleniumElement, IFrameElement<T>
+    internal class SeleniumFrameElement<T> : SeleniumElement, IFrameElement<T>
         where T: class, IPage
     {
         public SeleniumFrameElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)

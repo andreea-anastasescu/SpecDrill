@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SpecDrill.Adapters.WebDriver;
 using SpecDrill.AutomationScopes;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
@@ -20,7 +19,6 @@ using SpecDrill.Exceptions;
 
 namespace SpecDrill
 {
-    //TODO : introduce a DI container to remove dependency from Adapters.
     public sealed class Browser : IBrowser
     {
         private static IBrowser? browserInstance;
@@ -33,14 +31,14 @@ namespace SpecDrill
 
         private static readonly Stack<TimeSpan> timeoutHistory = new Stack<TimeSpan>();
 
-        public Browser(Settings configuration)
+        public Browser(IRuntimeServices runtimeServices, Settings configuration)
         {
             Trace.Write($"Configuration = {(configuration?.ToString() ?? "(null)")}");
 
             this.configuration = configuration ?? throw new MissingConfigurationException("Configuration is missing!");
-            
+
             Log.Info("Initializing Driver...");
-            SeleniumBrowserFactory driverFactory = new SeleniumBrowserFactory(configuration);
+            var driverFactory = runtimeServices.GetBrowserFactoryBuilder(configuration);
 
             var browserName = this.configuration?.WebDriver?.Browser?.BrowserName.ToEnum<BrowserNames>();
             Log.Info($"WebDriver.BrowserDriver = {(browserName)}");
@@ -73,7 +71,14 @@ namespace SpecDrill
                 browserDriver.ChangeBrowserDriverTimeout(cfgMaxWait);
             }
 
+            FrameworkInit(runtimeServices);
+        }
+
+        private void FrameworkInit(IRuntimeServices runtimeServices)
+        {
             browserInstance = this;
+            WebElement.ElementFactory = runtimeServices.GetElementFactory(this);
+            ElementLocator.ElementLocatorFactory = runtimeServices.ElementLocatorFactory;
         }
 
         public void SetWindowSize(int initialWidth, int initialHeight)

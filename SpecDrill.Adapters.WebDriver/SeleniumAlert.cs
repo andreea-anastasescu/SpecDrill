@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpecDrill.Adapters.WebDriver
 {
-    public class SeleniumAlert : IBrowserAlert
+    internal class SeleniumAlert : IBrowserAlert
     {
         private Func<IAlert?> alert;
         public SeleniumAlert(Func<IAlert?> alert)

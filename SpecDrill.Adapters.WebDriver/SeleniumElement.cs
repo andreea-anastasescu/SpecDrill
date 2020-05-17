@@ -20,13 +20,13 @@ namespace SpecDrill.Adapters.WebDriver
     }
 
     [Flags]
-    public enum ElementStateFlags
+    internal enum ElementStateFlags
     {
         None = 0,
         Displayed = 1,
         Enabled = 2
     }
-    public class SeleniumElement : IElement
+    internal class SeleniumElement : IElement
     {
         protected static readonly ILogger Log = Infrastructure.Logging.Log.Get<SeleniumElement>();
 
@@ -415,7 +415,7 @@ namespace SpecDrill.Adapters.WebDriver
         {
             get
             {
-                Wait.NoMoreThan(TimeSpan.FromSeconds(10)).Until(() => this.IsAvailable);
+                Wait.NoMoreThan(TimeSpan.FromSeconds(14)).Until(() => this.IsAvailable);
                 var nativeElement = this.NativeElementSearchResult.NativeElement;
                 if (nativeElement == null)
                     return 0;

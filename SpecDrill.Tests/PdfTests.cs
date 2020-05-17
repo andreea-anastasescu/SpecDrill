@@ -19,6 +19,7 @@ namespace SomeTests
     public class Pdftests : TestBase
     {
         [TestMethod]
+        [Ignore]
         public void ShouldReadPdfText()
         {
             var alertPage = Browser.Open<PdfIndexPage>();

@@ -1,4 +1,5 @@
-﻿using SpecDrill.Infrastructure.Configuration;
+﻿using SpecDrill.Adapters.WebDriver;
+using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 using System;
@@ -17,7 +18,7 @@ namespace SpecDrill.SpecFlow.MsTest
         {
             try
             {
-                return new Browser(ConfigurationManager.Settings);
+                return new Browser(Runtime.GetServices(), ConfigurationManager.Settings);
             }
             catch (Exception e)
             {
