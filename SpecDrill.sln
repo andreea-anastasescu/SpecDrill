@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30105.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill", "SpecDrill\SpecDrill.csproj", "{E9223B33-98FC-4D5A-8C0E-E63011FD454E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill", "SpecDrill\SpecDrill.csproj", "{E9223B33-98FC-4D5A-8C0E-E63011FD454E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{634E48B4-FBA8-43CD-9F5D-2183640BD9D8}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Adapters.WebDriver", "SpecDrill.Adapters.WebDriver\SpecDrill.Adapters.WebDriver.csproj", "{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.SecondaryPorts.AutomationFramework", "SpecDrill.Ports\SpecDrill.SecondaryPorts.AutomationFramework.csproj", "{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.SecondaryPorts.AutomationFramework", "SpecDrill.Ports\SpecDrill.SecondaryPorts.AutomationFramework.csproj", "{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Infrastructure", "SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj", "{9A59519A-1464-436E-B059-AF2BEEFFE96F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{DA1F62FA-67D6-4246-9AFA-018D72165657}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.MsTest", "SpecDrill.MsTest\SpecDrill.MsTest.csproj", "{405307ED-862C-4A6F-97A8-67EDFC9F3D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.MsTest", "SpecDrill.MsTest\SpecDrill.MsTest.csproj", "{405307ED-862C-4A6F-97A8-67EDFC9F3D0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.SpecFlow", "SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj", "{A2DF5CDA-1556-4F7F-91A5-0678964FB65B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.SpecFlow", "SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj", "{A2DF5CDA-1556-4F7F-91A5-0678964FB65B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9FD44086-1371-4E5C-B6F7-CC4B7229D93F}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9FD440
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecDrill.Tests", "SpecDrill.Tests\SpecDrill.Tests.csproj", "{CC0EA0EE-E6E9-45F5-878B-3DE42FB8FEBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Tests", "SpecDrill.Tests\SpecDrill.Tests.csproj", "{CC0EA0EE-E6E9-45F5-878B-3DE42FB8FEBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,7 +14,7 @@ namespace SpecDrill.MsTest
         protected static ILogger Log = Infrastructure.Logging.Log.Get<TestBase>();
         private IBrowser browser;
 
-        public IBrowser Browser => browser;
+        protected IBrowser Browser => browser;
         [ClassInitialize]
         public static void _ClassSetup(TestContext testContext)
         {

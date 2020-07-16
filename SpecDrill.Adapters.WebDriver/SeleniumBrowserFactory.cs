@@ -217,6 +217,7 @@ namespace SpecDrill.Adapters.WebDriver
 
         private string GetBrowserDriversPath(string driverPath)
         {
+            driverPath = Environment.ExpandEnvironmentVariables(driverPath);
             if (!driverPath.Contains(":\\"))
             {
                 var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
