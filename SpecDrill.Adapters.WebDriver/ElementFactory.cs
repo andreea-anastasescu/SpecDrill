@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpecDrill.Adapters.WebDriver
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal class ElementFactory : IElementFactory
     {

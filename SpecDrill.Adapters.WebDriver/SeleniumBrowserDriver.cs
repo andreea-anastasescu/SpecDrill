@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using SpecDrill.Adapters.WebDriver.Extensions;
+using SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions;
 using SpecDrill.Infrastructure.Logging;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.Infrastructure.Logging.Interfaces;
@@ -17,7 +17,7 @@ using SpecDrill.Configuration;
 using SpecDrill.Infrastructure.Enums;
 using SpecDrill.Infrastructure;
 
-namespace SpecDrill.Adapters.WebDriver
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal class SeleniumBrowserDriver : IBrowserDriver
     {

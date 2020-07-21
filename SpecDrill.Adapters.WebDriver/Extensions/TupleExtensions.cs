@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpecDrill.Adapters.WebDriver.Extensions
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions
 {
     internal static class TupleExtensions
     {

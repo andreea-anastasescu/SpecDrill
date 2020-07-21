@@ -31,7 +31,7 @@ namespace SpecDrill.Infrastructure.Configuration
                 Log.Info($"Searching Configuration file {ConfigurationFileName}...");
                 var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory);
                 
-                if (configurationPaths == null)
+                if (configurationPaths == ("", ""))
                     throw new FileNotFoundException("Configuration file not found");
 
                 var configurationFilePath = configurationPaths.Item1;
@@ -61,12 +61,10 @@ namespace SpecDrill.Infrastructure.Configuration
                     PropertyNameCaseInsensitive = true
                 }); ;
 
-            //var configuration = new Configuration();
-            //configuration.Selenium = new SeleniumConfiguration();
             return configuration;
         }
 
-        private static Tuple<string, string> FindConfigurationFile(string folder)
+        private static (string folder, string result) FindConfigurationFile(string folder)
         {
             while (true)
             {
@@ -80,14 +78,14 @@ namespace SpecDrill.Infrastructure.Configuration
                     if (!string.IsNullOrWhiteSpace(result))
                     {
                         Log.Info($"Found configuration file at {result}");
-                        return Tuple.Create(folder, result);
+                        return (folder, result);
                     }
 
                     folder = GetParentFolder(folder);
                     continue;
                 }
              
-                return Tuple.Create("", "");
+                return ("", "");
             }
         }
 

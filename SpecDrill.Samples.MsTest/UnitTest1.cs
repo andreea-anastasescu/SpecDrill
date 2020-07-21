@@ -1,27 +1,18 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SomeTests.PageObjects.Test002;
-using SpecDrill;
 using SpecDrill.MsTest;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using SpecDrill.Samples.MsTest.PageObjects;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SomeTests
+namespace SpecDrill.Samples.MsTest
 {
     [TestClass]
-    public class GoogleSearchTests : MsTestBase
+    public class UnitTest1 : MsTestBase
     {
         [ClassInitialize]
         public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-
         [TestMethod]
-        //[Ignore("Google search and search results page changed. New selectors have to be applied. Postponed for later.")]
-
-       public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
+        public void TestMethod1()
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             googleSearchPage.TxtSearch.SendKeys("drill wiki");

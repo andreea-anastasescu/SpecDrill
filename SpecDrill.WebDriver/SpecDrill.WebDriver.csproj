@@ -1,17 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-	<Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SpecDrill" Version="1.1.1-v3" />
-    <PackageReference Include="SpecFlow" Version="3.3.30" />
+    <ProjectReference Include="..\SpecDrill.Adapters.WebDriver\SpecDrill.SecondaryPorts.Adapters.WebDriver.csproj" />
+    <ProjectReference Include="..\SpecDrill\SpecDrill.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SpecDrill.Adapters.WebDriver\SpecDrill.SecondaryPorts.Adapters.WebDriver.csproj" />
-  </ItemGroup>
-  
 </Project>

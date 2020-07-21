@@ -15,8 +15,11 @@ using SpecDrill.SecondaryPorts.AutomationFramework;
 namespace SomeTests
 {
     [TestClass]
-    public class SpecDrillTests : TestBase
+    public class SpecDrillTests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
         [TestMethod]
         public void ShouldOpenBrowserWhenHomepageIsOpened()
         {

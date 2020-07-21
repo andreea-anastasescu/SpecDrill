@@ -17,8 +17,11 @@ using SpecDrill.SecondaryPorts.AutomationFramework.Exceptions;
 namespace SomeTests
 {
     [TestClass]
-    public class ElementStatusTests : TestBase
+    public class ElementStatusTests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
         [TestMethod]
         public void ShouldWaitForElementToBecomeDisabled()
         {

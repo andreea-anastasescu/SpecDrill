@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Selenium = OpenQA.Selenium;
 
 
-namespace SpecDrill.Adapters.WebDriver.ElementLocatorExtensions
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver.ElementLocatorExtensions
 {
     public static class IElementLocatorExtensions
     {

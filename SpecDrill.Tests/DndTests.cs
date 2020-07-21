@@ -15,8 +15,11 @@ using SpecDrill.SecondaryPorts.AutomationFramework;
 namespace SomeTests
 {
     [TestClass]
-    public class DndTests : TestBase
+    public class DndTests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
         [TestMethod]
         public void ShouldHtml5DragAndDropSuccessfuly()
         {

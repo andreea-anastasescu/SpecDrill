@@ -6,7 +6,7 @@ using SpecDrill.Infrastructure.Logging;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 
-namespace SpecDrill.Adapters.WebDriver
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal class SeleniumSelectElement : SeleniumElement, ISelectElement
     {

@@ -1,36 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpecDrill;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpecDrill.MsTest;
 
 namespace SomeTests
 {
     [TestClass]
-    public class TestBaseTests : TestBase
+    public class TestBaseTests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
         
         private int methodInitCount = 0;
         private int methodTearDownCount = 0;
 
        
-        public override void TestSetup()
+        protected override void ScenarioSetup()
         {
-            base.TestSetup();
             Assert.AreEqual(0, methodInitCount);
             methodInitCount++;
             Assert.AreEqual(1, methodInitCount);
         }
 
-        public override void TestCleanup()
+        protected override void ScenarioTeardown()
         {
             Assert.AreEqual(0, methodTearDownCount);
             methodTearDownCount++;
             Assert.AreEqual(1, methodTearDownCount);
-            base.TestCleanup();
         }
 
         [TestMethod]

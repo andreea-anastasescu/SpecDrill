@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" />
-    <ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.AutomationFramework.csproj" />
+    <ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.csproj" />
   </ItemGroup>
 
 </Project>

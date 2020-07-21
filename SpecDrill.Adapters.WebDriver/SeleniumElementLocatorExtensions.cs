@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpecDrill.Adapters.WebDriver
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal static class SeleniumElementLocatorExtensions
     {

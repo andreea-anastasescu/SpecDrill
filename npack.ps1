@@ -1,0 +1,1 @@
+dotnet pack .\SpecDrill\SpecDrill.csproj

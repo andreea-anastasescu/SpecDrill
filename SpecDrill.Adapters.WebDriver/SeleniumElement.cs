@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using SpecDrill.SecondaryPorts.AutomationFramework.Model;
 using System.Linq;
 using OpenQA.Selenium.Interactions;
-using SpecDrill.Adapters.WebDriver.Extensions;
+using SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions;
 using SpecDrill.SecondaryPorts.AutomationFramework.Exceptions;
 
-namespace SpecDrill.Adapters.WebDriver
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal enum ClickType
     {

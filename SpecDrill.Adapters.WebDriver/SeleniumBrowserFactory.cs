@@ -25,7 +25,7 @@ using Castle.Core;
 
 //using OpenQA.Selenium.Appium.Enums;
 
-namespace SpecDrill.Adapters.WebDriver
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal static class DesiredCapabilitiesExtensions
     {

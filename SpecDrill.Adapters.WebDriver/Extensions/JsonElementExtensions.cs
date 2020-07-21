@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace SpecDrill.Adapters.WebDriver.Extensions
+namespace SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions
 {
     public static class JsonElementExtensions
     {

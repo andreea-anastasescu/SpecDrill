@@ -5,21 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SpecDrill.MsTest;
 
 namespace SomeTests
 {
     [TestClass]
-    public class ScreenshotTests : TestBaseTests
+    public class ScreenshotTests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
         [TestMethod]
         public void ShouldSaveScreenshotSuccessfully()
         {
             var randomPage = Browser.Open<Test001CalculatorPage>();
-        }
-
-        public override void TestCleanup()
-        {
-            base.SaveScreenshot();
+            SaveScreenshot(TestContext.TestName);
         }
     }
 }

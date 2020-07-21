@@ -15,8 +15,11 @@ using SpecDrill.SecondaryPorts.AutomationFramework;
 namespace SomeTests
 {
     [TestClass]
-    public class AlertTests : TestBase
+    public class AlertTests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
         [TestMethod]
         public void ShouldWaitForAlertAndAccept()
         {

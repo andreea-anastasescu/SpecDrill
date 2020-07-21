@@ -16,9 +16,12 @@ using SomeTests.PageObjects.Test001;
 namespace SomeTests
 {
     [TestClass]
-    public class BrowserTests : TestBase
+    public class BrowserTests : MsTestBase
     {
-      [TestMethod]
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
+        [TestMethod]
         public void ShouldCorrectlyReadCapabilities()
         {
             var capabilities = Browser.GetCapabilities();

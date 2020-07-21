@@ -16,8 +16,11 @@ using SomeTests.PageObjects.Pdf;
 namespace SomeTests
 {
     [TestClass]
-    public class Pdftests : TestBase
+    public class Pdftests : MsTestBase
     {
+        [ClassInitialize]
+        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
+
         [TestMethod]
         [Ignore]
         public void ShouldReadPdfText()

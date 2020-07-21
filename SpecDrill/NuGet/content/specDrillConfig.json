@@ -4,7 +4,7 @@
     "maxWait": 60000,
     "waitPollingFrequency": 200,
     "screenshots": {
-      "path": "C:\\", // make sure path exists
+      "path": "C:\\screenshots",
       "auto":  true // automatically save screenshot when test fails
     },
     "browser": { // settings for browser mode -> targets browser drivers or selenium server
@@ -14,12 +14,12 @@
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "..\\..\\..\\packages\\Selenium.WebDriver.ChromeDriver.2.32.0\\driver\\win32", //"C:\\Your Browser Drivers Path"//
-          "arguments": ["--incognito"]
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\83.0.4103.3915\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "arguments": [ "--incognito" ] //add , "headless" for headles test run
         },
         "ie": { "path": "" },
         "firefox": {
-          "path": "..\\..\\..\\packages\\Selenium.WebDriver.GeckoDriver.Win64.0.19.0\\driver", 
+          "path": "",
           "browserBinaryPath": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"
         },
         "opera": { "path": "" },
@@ -30,7 +30,9 @@
         "initialWidth": 1280, // defaults to 800
         "initialHeight": 800 // defaults to 600
       },
+      "screenshots": { "path": "D:\\" },
       "capabilities": {
+        "x":  "yy"
       }
     },
     "appium": { // settings for appium mode -> targets Appium server
@@ -41,8 +43,8 @@
         "deviceName": "192.168.166.101:5555",
         "browserName": "Chrome",
         "udid": "192.168.166.101:5555",
-        "orientation": "PORTRAIT", // LANDSCAPE, PORTRAIT
-        // platform-specific capabilities : work in progress !
+        "orientation": "PORTRAIT" // LANDSCAPE, PORTRAIT
+        // platform-specific capabilities : not implemented !
         //"android": {}, 
         //"iOS": {},
         //"firefoxOS": {}
@@ -51,9 +53,9 @@
   },
   "homepages": [
     {
-      "pageObjectType": "GoogleSearchPage",
-      "url": "http://www.google.com",
-      "isFileSystemPath": false
+      "pageObjectType": "", // PageObject class name of starting page
+      "url": "", // url of starting page
+      "isFileSystemPath": false // set true for local html file. leave false for URLs
     }
   ]
 }

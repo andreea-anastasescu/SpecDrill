@@ -19,7 +19,7 @@
         },
         "ie": { "path": "" },
         "firefox": {
-          "path": "..\\..\\..\\..\\packages\\Selenium.WebDriver.GeckoDriver.Win64.0.24.0\\driver",
+          "path": "",
           "browserBinaryPath": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"
         },
         "opera": { "path": "" },
