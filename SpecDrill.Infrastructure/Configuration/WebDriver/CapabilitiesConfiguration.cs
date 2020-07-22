@@ -1,13 +1,4 @@
-﻿using SpecDrill.Infrastructure.Configuration.WebDriver.Appium.Capabilities.Android;
-using SpecDrill.Infrastructure.Configuration.WebDriver.Appium.Capabilities.FirefoxOS;
-using SpecDrill.Infrastructure.Configuration.WebDriver.Appium.Capabilities.IOS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpecDrill.Infrastructure.Configuration.WebDriver
+﻿namespace SpecDrill.Infrastructure.Configuration.WebDriver
 {
     //public class CapabilitiesConfiguration
     //{

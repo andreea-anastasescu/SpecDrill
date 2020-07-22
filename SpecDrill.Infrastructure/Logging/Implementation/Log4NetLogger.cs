@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
+﻿using log4net;
 using SpecDrill.Infrastructure.Logging.Interfaces;
+using System;
 using System.Diagnostics;
 
 namespace SpecDrill.Infrastructure.Logging.Implementation

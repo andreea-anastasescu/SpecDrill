@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace SpecDrill.SecondaryPorts.AutomationFramework
+﻿namespace SpecDrill.SecondaryPorts.AutomationFramework
 {
     public interface IWindowElement<out T> : IElement
-        where T: IPage
+        where T : IPage
     {
         T Open();
     }

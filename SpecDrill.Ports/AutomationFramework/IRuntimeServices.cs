@@ -1,8 +1,5 @@
 ﻿using SpecDrill.Configuration;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpecDrill.SecondaryPorts.AutomationFramework
 {

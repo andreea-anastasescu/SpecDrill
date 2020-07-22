@@ -1,27 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.IE;
-using SpecDrill.Configuration;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Opera;
-using OpenQA.Selenium.Safari;
+﻿using Castle.Core;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using SpecDrill.Infrastructure.Enums;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using OpenQA.Selenium.Appium.Android;
+using OpenQA.Selenium.Appium.iOS;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Opera;
 //using OpenQA.Selenium.Appium.Android;
 //using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Safari;
+using SpecDrill.Configuration;
+using SpecDrill.Infrastructure;
+using SpecDrill.Infrastructure.Enums;
 using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
-using SpecDrill.Infrastructure;
-using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Appium.iOS;
-using OpenQA.Selenium.Edge;
+using SpecDrill.SecondaryPorts.AutomationFramework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Castle.Core;
 
 //using OpenQA.Selenium.Appium.Enums;
 
@@ -142,7 +142,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 
         public IBrowserDriver Create(BrowserNames browserName)
         {
-            var mode = (configuration?.WebDriver?.Mode??"").ToEnum<Modes>();
+            var mode = (configuration?.WebDriver?.Mode ?? "").ToEnum<Modes>();
             Log.Info($"Browser mode:{mode}");
             switch (mode)
             {
@@ -201,7 +201,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
                     switch (configuredCapabilities![PLATFORM_NAME].ToString().ToEnum<PlatformNames>())
                     {
                         case PlatformNames.Android:
-                            
+
                             driver = new AndroidDriver<AndroidElement>(new Uri(appiumServerUri), appiumOptions);
                             return SeleniumBrowserDriver.Create(driver, this.configuration);
                         case PlatformNames.iOS:
@@ -248,7 +248,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         }
 
         private void ExtendCapabilities<T>(T options, Dictionary<string, object>? configuredCapabilities)
-            where T: DriverOptions
+            where T : DriverOptions
         {
             if (configuredCapabilities == null)
             {
@@ -261,9 +261,9 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
                 {
                     var type = typeof(T);
                     var addAdditionalCapabilityMethodInfo = type.GetMethod("AddAdditionalCapability",
-                        new Type[] {typeof(string), typeof(object), typeof(bool)});
+                        new Type[] { typeof(string), typeof(object), typeof(bool) });
                     if (addAdditionalCapabilityMethodInfo == null) throw new InvalidCastException($"Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
-                    addAdditionalCapabilityMethodInfo.Invoke(options, new object[] {kvp.Key, kvp.Value, true});
+                    addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value, true });
                     //options.AddAdditionalCapability(kvp.Key, kvp.Value);
                 }
                 catch (ArgumentException)
@@ -339,7 +339,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
             var chromeOptions = new ChromeOptions();
             var driverArguments = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Arguments ?? new List<string>();
             chromeOptions.AddArguments(driverArguments);
-            Log.Info($"configuration.WebDriver.Browser.Drivers.Chrome.Arguments: {driverArguments.Aggregate((a,b) => $"{a} {b}")}");
+            Log.Info($"configuration.WebDriver.Browser.Drivers.Chrome.Arguments: {driverArguments.Aggregate((a, b) => $"{a} {b}")}");
             chromeOptions.AddArgument($"window-size={configuration?.WebDriver?.Browser?.Window?.InitialWidth},{configuration?.WebDriver?.Browser?.Window?.InitialHeight}");
 
             ExtendCapabilities(chromeOptions, configuration?.WebDriver?.Browser?.Capabilities);

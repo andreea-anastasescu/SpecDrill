@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using SpecDrill.AutomationScopes;
-using SpecDrill.Infrastructure.Logging;
+﻿using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.AutomationFramework;
-using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 using SpecDrill.SecondaryPorts.AutomationFramework.Model;
+using System;
+using System.Text.RegularExpressions;
 
 namespace SpecDrill
 {
@@ -21,7 +12,7 @@ namespace SpecDrill
         protected ILogger Log = Infrastructure.Logging.Log.Get<WebPage>();
         private string titlePattern;
 
-        public WebPage() : this(string.Empty) {  }
+        public WebPage() : this(string.Empty) { }
         public WebPage(string titlePattern) : base(null, ElementLocator.Create(By.TagName, "html"))
         {
             this.titlePattern = titlePattern;
@@ -44,7 +35,7 @@ namespace SpecDrill
                 return retrievedTitle;
             }
         }
-        
+
 
         //public IElement Element
         //{

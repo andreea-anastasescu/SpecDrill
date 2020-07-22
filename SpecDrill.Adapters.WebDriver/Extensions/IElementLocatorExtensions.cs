@@ -13,7 +13,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions
     {
         private static readonly Dictionary<By, Func<string, Selenium.By>> LocatorMap = new Dictionary<By, Func<string, Selenium.By>>()
                                                                                  {
-                                                                                     { By.Id , Selenium.By.Id},    
+                                                                                     { By.Id , Selenium.By.Id},
                                                                                      { By.ClassName, Selenium.By.ClassName},
                                                                                      { By.CssSelector , Selenium.By.CssSelector},
                                                                                      { By.XPath , Selenium.By.XPath},

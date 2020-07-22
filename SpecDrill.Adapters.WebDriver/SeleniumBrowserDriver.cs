@@ -1,21 +1,21 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using SpecDrill.Configuration;
+using SpecDrill.Infrastructure;
+using SpecDrill.Infrastructure.Enums;
+using SpecDrill.Infrastructure.Logging;
+using SpecDrill.Infrastructure.Logging.Interfaces;
+using SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions;
+using SpecDrill.SecondaryPorts.AutomationFramework;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
-using SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.SecondaryPorts.AutomationFramework;
-using SpecDrill.Infrastructure.Logging.Interfaces;
-using System.Net;
-using System.Text;
-using System.Net.Http;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
-using SpecDrill.Configuration;
-using SpecDrill.Infrastructure.Enums;
-using SpecDrill.Infrastructure;
+using System.Text;
 
 namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
@@ -200,7 +200,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 
         private void DoubleClickJs(IElement element)
         {
-            var jsDoubleClick = 
+            var jsDoubleClick =
                 @"var event = new MouseEvent('dblclick', {
                             'view': window,
                             'bubbles': true,
@@ -216,7 +216,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 
             var builder = new Actions(this.seleniumDriver);
             var size = fromElement.Size;
-            
+
             builder.MoveToElement(fromElement);
             builder.ClickAndHold(fromElement);
             builder.MoveByOffset(offsetX, offsetY);
@@ -273,7 +273,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         {
             var windowCount = seleniumDriver.WindowHandles.Count();
             Wait.WithRetry().Doing(() => seleniumWindowElement.Click()).Until(() => seleniumDriver.WindowHandles.Count() > windowCount);
-            
+
             var mostRecentWindow = seleniumDriver.WindowHandles.LastOrDefault();
             if (mostRecentWindow != default(string))
             {
@@ -285,7 +285,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         {
             seleniumDriver.Close();
         }
-        
+
         public string GetPdfText()
         {
             //StringBuilder pdfText = new StringBuilder();
@@ -363,7 +363,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
             }
             var capabilities = new Dictionary<string, object>();
             var configCapabilities = configuration?.WebDriver?.Browser?.Capabilities ?? new Dictionary<string, object>();
-            
+
             foreach (var kvp in configCapabilities)
                 capabilities[kvp.Key] = kvp.Value.ToString();
 
@@ -374,7 +374,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
                 TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "platformName");
                 TryCopyCapability(remoteDriver?.Capabilities, to: capabilities, "browserVersion");
             }
-            
+
             return capabilities;
         }
     }

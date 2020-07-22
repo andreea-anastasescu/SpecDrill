@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpecDrill.Infrastructure.Logging;
+﻿using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
+using System;
+using System.Diagnostics;
 
 namespace SpecDrill.AutomationScopes
 {
@@ -26,7 +22,8 @@ namespace SpecDrill.AutomationScopes
             stopwatch.Start();
         }
 
-        public TimeSpan Elapsed {
+        public TimeSpan Elapsed
+        {
             get { return stopwatch.Elapsed; }
         }
 

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Diagnostics;
+﻿using log4net;
+using log4net.Config;
+using SpecDrill.Configuration;
+using SpecDrill.Infrastructure.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using log4net;
-using log4net.Config;
-using log4net.Repository;
-using SpecDrill.Configuration;
-using SpecDrill.Infrastructure.Logging;
 
 namespace SpecDrill.Infrastructure.Configuration
 {
@@ -30,7 +28,7 @@ namespace SpecDrill.Infrastructure.Configuration
             {
                 Log.Info($"Searching Configuration file {ConfigurationFileName}...");
                 var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory);
-                
+
                 if (configurationPaths == ("", ""))
                     throw new FileNotFoundException("Configuration file not found");
 
@@ -43,7 +41,7 @@ namespace SpecDrill.Infrastructure.Configuration
                 XmlConfigurator.Configure(logRepository, log4NetConfig);
 
                 var jsonConfigurationFilePath = configurationPaths.Item2;
-                
+
                 if (string.IsNullOrWhiteSpace(jsonConfigurationFilePath))
                 {
                     Log.Info("Configuration file not found.");
@@ -84,7 +82,7 @@ namespace SpecDrill.Infrastructure.Configuration
                     folder = GetParentFolder(folder);
                     continue;
                 }
-             
+
                 return ("", "");
             }
         }

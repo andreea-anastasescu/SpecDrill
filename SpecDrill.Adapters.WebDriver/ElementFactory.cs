@@ -22,7 +22,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
             where T : class, IPage
             => new SeleniumFrameElement<T>(this.browser, parent, locator);
         public IWindowElement<T> CreateWindow<T>(IElement? parent, IElementLocator locator)
-            where T: class, IPage
+            where T : class, IPage
             => new SeleniumWindowElement<T>(this.browser, parent, locator);
 
     }

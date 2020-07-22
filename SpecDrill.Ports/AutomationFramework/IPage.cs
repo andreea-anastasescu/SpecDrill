@@ -1,6 +1,5 @@
-﻿using System;
-using SpecDrill;
-using SpecDrill.SecondaryPorts.AutomationFramework.Model;
+﻿using SpecDrill.SecondaryPorts.AutomationFramework.Model;
+using System;
 
 namespace SpecDrill.SecondaryPorts.AutomationFramework
 {

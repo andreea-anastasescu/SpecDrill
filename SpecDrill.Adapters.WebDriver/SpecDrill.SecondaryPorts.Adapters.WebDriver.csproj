@@ -1,22 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-	<Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageIcon>specdrill.png</PackageIcon>
+		<Version>1.1.2</Version>
+		<Description>SpecDrill.SecondaryPorts.Adapters.WebDriver - WebDriver adapter for SpecDrill</Description>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Appium.WebDriver" Version="4.1.1" />
+		<PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+		<ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.csproj" PrivateAssets="all"/>
+		
+		<None Include="..\LICENSE" Pack="true" PackagePath=".\" />
+		<None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+		<None Include="bin\$(Configuration)\netstandard2.1\SpecDrill.Infrastructure.dll;bin\$(Configuration)\netstandard2.1\SpecDrill.SecondaryPorts.dll" Pack="true" PackagePath=".\lib\netstandard2.1\" />
+		<None Include="bin\$(Configuration)\netstandard2.1\SpecDrill.Infrastructure.dll;bin\$(Configuration)\netstandard2.1\SpecDrill.SecondaryPorts.dll" Pack="true" PackagePath=".\lib\netcoreapp3.1\" />
+	</ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Appium.WebDriver" Version="4.1.1" />
-    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" />
-    <ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.csproj" />
-  </ItemGroup>
 
 </Project>

@@ -39,7 +39,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         {
             if (index < 1)
                 throw new IndexOutOfRangeException("SpecDrill: SeleniumElementLocator.CopyWithIndex(idx) index is 1-based!");
-            
+
             return new SeleniumElementLocator(this.locatorType, this.LocatorValue, index);
         }
 

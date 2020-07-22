@@ -4,10 +4,11 @@
 	<TargetFramework>netstandard2.1</TargetFramework>
 	<Nullable>enable</Nullable>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<Version>1.1.1</Version>
+	<PackageIcon>specdrill.png</PackageIcon>
+	<Version>1.1.2</Version>
 	<Description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</Description>
 	<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-	<PackageReleaseNotes>v1.1.1
+	<PackageReleaseNotes>v1.1.2
                 - Migrated to .NET Core 3.1/.NET Standard 2.1
             v1.0.32
                 - Moved Browser initialization in _TestInitialize virtual method.
@@ -91,11 +92,10 @@
 	<ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\SpecDrill.Ports\SpecDrill.SecondaryPorts.csproj" PrivateAssets="all" />
 	<None Include="..\LICENSE" Pack="true" PackagePath=".\" />
-	<None Include="bin\$(Configuration)\netstandard2.1\SpecDrill.Infrastructure.dll" Pack="true" PackagePath=".\lib\netstandard2.1\SpecDrill.Infrastructure.dll" />
-    <None Include="bin\$(Configuration)\netstandard2.1\SpecDrill.SecondaryPorts.dll" Pack="true" PackagePath=".\lib\netstandard2.1\SpecDrill.SecondaryPorts.dll" />
-    <None Include="..\SpecDrill.Adapters.WebDriver\bin\$(Configuration)\netstandard2.1\SpecDrill.SecondaryPorts.Adapters.WebDriver.dll" Pack="true" PackagePath="lib\netstandard2.1\SpecDrill.SecondaryPorts.Adapters.WebDriver.dll" />
-	  <None Include="NuGet\SpecDrill.targets" Pack="true" PackagePath="build" />
-	  <Content Include="NuGet\content\*.*" Pack="true" PackagePath="content" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
-	  <Content Include="NuGet\content\*.*" Pack="true" PackagePath="contentFiles/any/any" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
+	<None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+	<None Include="bin\$(Configuration)\netstandard2.1\SpecDrill.Infrastructure.dll;bin\$(Configuration)\netstandard2.1\SpecDrill.SecondaryPorts.dll" Pack="true" PackagePath=".\lib\netstandard2.1\" />
+	<None Include="NuGet\SpecDrill.targets" Pack="true" PackagePath=".\" />
+	<Content Include="NuGet\content\*.config;NuGet\content\*.json" Pack="true" PackagePath="content" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
+	<Content Include="NuGet\content\*.config;NuGet\content\*.json" Pack="true" PackagePath="contentFiles/any/any" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
   </ItemGroup>
 </Project>

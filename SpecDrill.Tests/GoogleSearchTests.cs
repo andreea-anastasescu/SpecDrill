@@ -4,11 +4,7 @@ using SomeTests.PageObjects.Test002;
 using SpecDrill;
 using SpecDrill.MsTest;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SomeTests
 {
@@ -21,7 +17,7 @@ namespace SomeTests
         [TestMethod]
         //[Ignore("Google search and search results page changed. New selectors have to be applied. Postponed for later.")]
 
-       public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
+        public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             googleSearchPage.TxtSearch.SendKeys("drill wiki");

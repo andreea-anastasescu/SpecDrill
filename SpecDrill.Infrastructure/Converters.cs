@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpecDrill.Infrastructure
 {
     public static class Converters
     {
         public static T? ToEnum<T>(this string? enumValue)
-            where T: struct, IConvertible
+            where T : struct, IConvertible
         {
             if (string.IsNullOrWhiteSpace(enumValue))
                 return null;
@@ -31,7 +27,7 @@ namespace SpecDrill.Infrastructure
 
         public static bool OfEnum(this string enumValue, Type enumType)
         {
-            if (! enumType.IsEnum)
+            if (!enumType.IsEnum)
                 return false;
 
             return Enum.TryParse(enumType, enumValue, out object _);

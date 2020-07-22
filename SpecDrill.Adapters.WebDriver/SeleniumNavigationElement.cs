@@ -1,14 +1,14 @@
-﻿using System;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
+using System;
 
 namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal class SeleniumNavigationElement<T> : SeleniumElement, INavigationElement<T>
-        where T: class, IPage
+        where T : class, IPage
     {
 
         public SeleniumNavigationElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)
@@ -31,12 +31,14 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 
             Wait.Until(() => this.IsAvailable);
             IPage targetPage = Browser.CreatePage<T>();
-            Wait.WithRetry().Doing(() => {
+            Wait.WithRetry().Doing(() =>
+            {
                 Click();
-                }).Until(
-                () => {
+            }).Until(
+                () =>
+                {
                     return targetPage.IsLoaded;
-                    });
+                });
             targetPage.WaitForSilence();
             return (T)targetPage;
         }

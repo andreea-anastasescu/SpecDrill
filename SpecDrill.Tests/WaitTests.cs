@@ -14,7 +14,7 @@ namespace SomeTests
         public void ShouldThrowExceptionWhenConditionRemainsFalseAfterMaxWait()
         {
             var maxWait = TimeSpan.FromMilliseconds(300);
-            
+
             Wait.NoMoreThan(maxWait).Until(() => false);
         }
 
@@ -43,9 +43,9 @@ namespace SomeTests
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            
-                Wait.NoMoreThan(maxWait).Until(() => stopwatch.Elapsed >= timeUntilConditionIsTrue);
-            
+
+            Wait.NoMoreThan(maxWait).Until(() => stopwatch.Elapsed >= timeUntilConditionIsTrue);
+
             stopwatch.Stop();
             stopwatch.Elapsed.Should().BeCloseTo(timeUntilConditionIsTrue, 50);
         }
@@ -65,7 +65,7 @@ namespace SomeTests
             var retryInterval = TimeSpan.FromMilliseconds(100);
             const int retryCount = 3;
             var stopwatch = new Stopwatch();
-            
+
             try
             {
                 stopwatch.Start();
@@ -75,7 +75,7 @@ namespace SomeTests
             {
                 stopwatch.Stop();
             }
-            
+
             Assert.IsTrue(stopwatch.Elapsed > TimeSpan.FromMilliseconds(retryInterval.Milliseconds * (retryCount + 1) /*initial call*/), string.Format("Elapsed was {0}", stopwatch.Elapsed));
         }
 
@@ -96,7 +96,7 @@ namespace SomeTests
             }
             catch
             {
-                
+
             }
 
             stopwatch.Elapsed.Should().BeCloseTo(timeUntilConditionBecomesTrue, 50);
@@ -111,7 +111,7 @@ namespace SomeTests
             const int retryCount = 3;
 
             Wait.WithRetry(retryCount, retryInterval).Doing(() => retriesDone++).Until(() => retriesDone == 2);
-            
+
             Assert.IsTrue(retriesDone == 2, "Retries Count is different than expected");
         }
 
@@ -139,7 +139,7 @@ namespace SomeTests
             stopwatch.Start();
             Wait.NoMoreThan(TimeSpan.FromSeconds(1.0d)).Until(() => false, throwExceptionOnTimeout: false);
             stopwatch.Stop();
-            
+
             stopwatch.Elapsed.Should().BeCloseTo(timeLimit, 50);
         }
     }

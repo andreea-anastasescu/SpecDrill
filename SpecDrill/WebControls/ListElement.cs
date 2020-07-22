@@ -1,14 +1,13 @@
 ﻿using SpecDrill.SecondaryPorts.AutomationFramework;
 using System;
-using System.Collections.Generic;
-using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 using System.Collections;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SpecDrill.WebControls
 {
-    public interface IListElement<T> : IReadOnlyList<T> 
+    public interface IListElement<T> : IReadOnlyList<T>
         where T : class, IElement
     {
         T GetElementByText(string regex);
@@ -76,7 +75,8 @@ namespace SpecDrill.WebControls
 
         private IEnumerator<T> Enumerator
         {
-            get {
+            get
+            {
                 if (this.Count > 0)
                 {
                     for (int i = 1; i <= this.Count; i++)

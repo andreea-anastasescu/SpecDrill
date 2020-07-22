@@ -1,9 +1,4 @@
 ﻿using SpecDrill.SecondaryPorts.AutomationFramework;
-using System;
-using System.Collections.Generic;
-using SpecDrill.SecondaryPorts.AutomationFramework.Core;
-using System.Collections;
-using System.Text.RegularExpressions;
 
 namespace SpecDrill
 {

@@ -1,15 +1,15 @@
-﻿using System;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
+using SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
-using System.Collections.Generic;
-using SpecDrill.SecondaryPorts.AutomationFramework.Model;
-using System.Linq;
-using OpenQA.Selenium.Interactions;
-using SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions;
 using SpecDrill.SecondaryPorts.AutomationFramework.Exceptions;
+using SpecDrill.SecondaryPorts.AutomationFramework.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
@@ -52,8 +52,8 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         private bool AvailabilityTest(Func<IWebElement?> locateElement)
         => Test(locateElement, "AvailabilityTest", (state) => state.HasFlag(ElementStateFlags.Displayed) && state.HasFlag(ElementStateFlags.Enabled)).Evaluate();
 
-        public bool IsDisplayed => Test(() => this.ToWebElement(), "VisibilityTest", (state) => state.HasFlag(ElementStateFlags.Displayed)).Evaluate(throwException : true);
-        public bool IsEnabled => Test(() => this.ToWebElement(), "IsEnabledTest", (state) => state.HasFlag(ElementStateFlags.Enabled)).Evaluate(throwException : true);
+        public bool IsDisplayed => Test(() => this.ToWebElement(), "VisibilityTest", (state) => state.HasFlag(ElementStateFlags.Displayed)).Evaluate(throwException: true);
+        public bool IsEnabled => Test(() => this.ToWebElement(), "IsEnabledTest", (state) => state.HasFlag(ElementStateFlags.Enabled)).Evaluate(throwException: true);
 
         private Tuple<ElementStateFlags, Exception?> InternalElementState
         {

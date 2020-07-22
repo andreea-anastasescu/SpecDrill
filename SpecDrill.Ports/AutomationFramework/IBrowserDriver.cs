@@ -11,7 +11,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework
         /// </summary>
         /// <param name="url"></param>
         void GoToUrl(string url);
-        
+
         /// <summary>
         /// Closes Browser Window
         /// </summary>
@@ -69,7 +69,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework
 
         void SetWindowSize(int initialWidth, int initialHeight);
 
-        void SwitchToWindow<T>(IWindowElement<T> seleniumWindowElement) where T:IPage;
+        void SwitchToWindow<T>(IWindowElement<T> seleniumWindowElement) where T : IPage;
         void CloseLastWindow();
         string GetPdfText();
         void SaveScreenshot(string fileName);

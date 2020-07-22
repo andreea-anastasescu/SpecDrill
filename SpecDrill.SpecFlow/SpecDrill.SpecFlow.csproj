@@ -1,17 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-	<Nullable>enable</Nullable>
+	  <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+	  <Nullable>enable</Nullable>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageIcon>specdrill.png</PackageIcon>
+	  <Version>1.1.2</Version>
+	  <Description>SpecDrill.SpecFlow - SpecDrill integration with SpecFlow </Description>
+	  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SpecDrill" Version="1.1.1-v3" />
-    <PackageReference Include="SpecFlow" Version="3.3.30" />
+	  <PackageReference Include="SpecDrill.SecondaryPorts.Adapters.WebDriver" Version="1.1.2" />
+	  <PackageReference Include="SpecFlow" Version="3.3.30" />
+	  <PackageReference Include="SpecDrill" Version="1.1.2" />
+	  <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
+	  <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+	  <None Include="NuGet\SpecDrill.SpecFlow.targets" Pack="true" PackagePath=".\" />
+	  <Content Include="bin\$(Configuration)\netstandard2.1\log4net.config;bin\$(Configuration)\netstandard2.1\specDrillConfig.json" Pack="true" PackagePath="content" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
+	  <Content Include="bin\$(Configuration)\netstandard2.1\log4net.config;bin\$(Configuration)\netstandard2.1\specDrillConfig.json" Pack="true" PackagePath="contentFiles/any/any" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SpecDrill.Adapters.WebDriver\SpecDrill.SecondaryPorts.Adapters.WebDriver.csproj" />
-  </ItemGroup>
-  
 </Project>

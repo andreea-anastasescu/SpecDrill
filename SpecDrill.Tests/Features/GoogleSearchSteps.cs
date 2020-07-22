@@ -1,9 +1,7 @@
-﻿using System;
-using TechTalk.SpecFlow;
-using SpecDrill.SpecFlow;
+﻿using FluentAssertions;
 using SomeTests.PageObjects.Test002;
-using System.Linq;
-using FluentAssertions;
+using SpecDrill.SpecFlow;
+using TechTalk.SpecFlow;
 
 namespace SomeTests.Features
 {
@@ -11,7 +9,7 @@ namespace SomeTests.Features
     public class GoogleSearchSteps : SpecFlowBase
     {
         public GoogleSearchSteps(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);
-    
+
         [Given(@"I have entered ""(.*)"" into Google search")]
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)
         {

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using SpecDrill.Infrastructure;
+﻿using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace SpecDrill
 {
@@ -91,30 +86,30 @@ namespace SpecDrill
     {
         protected static readonly ILogger Log = Infrastructure.Logging.Log.Get<MaxWaitContext>();
         public TimeSpan MaximumWait { get; set; }
-        private Func<Func<bool>, bool, Tuple<bool,Exception?>> safeWait = (waitCondition, throwException) =>
-        {
+        private Func<Func<bool>, bool, Tuple<bool, Exception?>> safeWait = (waitCondition, throwException) =>
+         {
             // exception is null =>
             // true, null -> true
             // false, null -> false
             // exception is not null
             // => exception (inconclusive)
             bool result = false;
-            try
-            {
-                result = waitCondition();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "Error on wait");
-                if (throwException)
-                    throw;
-                return Tuple.Create<bool, Exception?>(result, e);
-            }
-            return Tuple.Create<bool, Exception?>(result, null);
-        };
+             try
+             {
+                 result = waitCondition();
+             }
+             catch (Exception e)
+             {
+                 Log.Error(e, "Error on wait");
+                 if (throwException)
+                     throw;
+                 return Tuple.Create<bool, Exception?>(result, e);
+             }
+             return Tuple.Create<bool, Exception?>(result, null);
+         };
 
         public void Until(Func<bool> waitCondition, bool throwExceptionOnTimeout = true)
-        {   
+        {
             Func<Tuple<bool, Exception?>> safeWaitCondition = () => safeWait(waitCondition, false);
             bool conclusive = false;
             bool conditionMet = false;
@@ -126,7 +121,7 @@ namespace SpecDrill
             while (sw.Elapsed < MaximumWait)
             {
                 var waitResult = safeWaitCondition();
-                
+
                 lastError = waitResult.Item2;
                 conclusive = lastError == null;
                 conditionMet = waitResult.Item1;
@@ -135,7 +130,7 @@ namespace SpecDrill
                 {
                     return;
                 }
-                
+
                 Thread.Sleep(33);
             }
             sw.Stop();

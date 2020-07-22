@@ -26,7 +26,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework
         bool IsAvailable { get; }
         bool IsEnabled { get; }
         bool IsDisplayed { get; }
-       
+
         /// <summary>
         /// Underlying Browser object responsible with browser interaction
         /// </summary>

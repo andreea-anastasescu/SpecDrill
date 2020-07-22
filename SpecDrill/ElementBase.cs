@@ -1,7 +1,7 @@
-﻿using System;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+﻿using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 using SpecDrill.SecondaryPorts.AutomationFramework.Model;
+using System;
 
 namespace SpecDrill
 {
@@ -13,7 +13,7 @@ namespace SpecDrill
         protected IElement rootElement;
         public ElementBase(IElement? parent, IElementLocator locator)
         {
-            
+
             this.parent = parent;
             this.locator = locator;
             this.rootElement = WebElement.Create(parent, locator);
@@ -109,7 +109,7 @@ namespace SpecDrill
         public void Blur(bool waitForSilence = false)
         {
             this.rootElement.Blur(waitForSilence);
-            
+
         }
 
         public IElement Clear(bool waitForSilence = false)

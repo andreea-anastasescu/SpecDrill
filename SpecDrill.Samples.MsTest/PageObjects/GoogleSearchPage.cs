@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using SpecDrill;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+﻿using SpecDrill.SecondaryPorts.AutomationFramework;
 
 namespace SpecDrill.Samples.MsTest.PageObjects
 {

@@ -8,11 +8,11 @@ namespace SomeTests
     {
         [ClassInitialize]
         public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-        
+
         private int methodInitCount = 0;
         private int methodTearDownCount = 0;
 
-       
+
         protected override void ScenarioSetup()
         {
             Assert.AreEqual(0, methodInitCount);

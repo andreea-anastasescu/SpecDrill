@@ -1,15 +1,15 @@
-﻿using System;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 using SpecDrill.SecondaryPorts.AutomationFramework.Model;
+using System;
 
 namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {
     internal class SeleniumWindowElement<T> : SeleniumElement, IWindowElement<T>
-        where T: class, IPage
+        where T : class, IPage
     {
         public SeleniumWindowElement(IBrowser? browser, IElement? parent, IElementLocator locator) : base(browser, parent, locator)
         {
@@ -22,7 +22,7 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
             targetPage.ContextType = PageContextTypes.Window;
             Wait.NoMoreThan(TimeSpan.FromSeconds(7)).Until(() => targetPage.IsLoaded);
             targetPage.WaitForSilence();
-            return (T) targetPage;
+            return (T)targetPage;
         }
     }
 }

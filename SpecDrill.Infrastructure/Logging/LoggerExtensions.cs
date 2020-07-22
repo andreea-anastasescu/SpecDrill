@@ -1,5 +1,5 @@
-﻿using System;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using SpecDrill.Infrastructure.Logging.Interfaces;
+using System;
 using System.Diagnostics;
 
 namespace SpecDrill.Infrastructure.Logging

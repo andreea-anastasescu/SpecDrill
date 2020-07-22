@@ -1,7 +1,4 @@
-﻿using SpecDrill.Configuration.WebDriver;
-using SpecDrill.Configuration.Homepages;
-using SpecDrill.Infrastructure.Configuration;
-using SpecDrill.Infrastructure.Configuration.WebDriver.Browser.Window;
+﻿using SpecDrill.Configuration.Homepages;
 
 namespace SpecDrill.Configuration
 {

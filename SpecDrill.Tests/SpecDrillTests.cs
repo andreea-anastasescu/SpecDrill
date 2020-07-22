@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SomeTests.PageObjects.Alerts;
 using SomeTests.PageObjects.Test000;
 using SpecDrill;
-using SpecDrill.MsTest;
-using FluentAssertions;
 using SpecDrill.AutomationScopes;
-using SomeTests.PageObjects.Alerts;
+using SpecDrill.MsTest;
 using SpecDrill.SecondaryPorts.AutomationFramework;
+using System;
 
 namespace SomeTests
 {
@@ -113,7 +109,7 @@ namespace SomeTests
             using (var benchmark = new BenchmarkScope("timing Wait.NoMoreThan(...)"))
             {
                 var timeLimit = TimeSpan.FromSeconds(1);
-                
+
                 Action waitForNonExistingElement = () =>
                 Wait.NoMoreThan(timeLimit).Until(() => nonExistingElement.IsAvailable);
                 waitForNonExistingElement.Should().Throw<TimeoutException>();

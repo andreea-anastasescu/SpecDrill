@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SpecDrill.AutomationScopes;
+﻿using SpecDrill.AutomationScopes;
 using SpecDrill.Configuration;
+using SpecDrill.Exceptions;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Enums;
+using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 using SpecDrill.SecondaryPorts.AutomationFramework.Model;
-using System.IO;
-
-using System.Reflection;
 using SpecDrill.WebControls;
-using SpecDrill.Infrastructure.Logging;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using SpecDrill.Exceptions;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace SpecDrill
 {
@@ -327,7 +326,7 @@ namespace SpecDrill
             }
         }
 
-        public bool IsJQueryDefined => ((bool?)ExecuteJavascript("if (window.jQuery) return true else return false;"))??false;
+        public bool IsJQueryDefined => ((bool?)ExecuteJavascript("if (window.jQuery) return true else return false;")) ?? false;
 
         public Uri Url => browserDriver.Url;
 
@@ -484,7 +483,7 @@ namespace SpecDrill
                 screenshotsPath = this.configuration?.WebDriver?.Screenshots?.Path ?? "C:\\";
                 var now = DateTime.Now;
                 fileName = string.Format("{0}\\{1}_{2:00}_{3:00}_{4:0000}_{5:00}_{6:00}_{7:00}_{8:000}.png",
-                                         screenshotsPath, 
+                                         screenshotsPath,
                                          string.Format($"{testClassName}_{testMethodName}"),
                                          now.Day, now.Month, now.Year, now.Hour, now.Minute, now.Second, now.Millisecond);
                 this.browserDriver.SaveScreenshot(fileName);
@@ -496,7 +495,7 @@ namespace SpecDrill
         }
 
         public Dictionary<string, object> GetCapabilities()
-            =>  this.browserDriver.GetCapabilities();
-        
+            => this.browserDriver.GetCapabilities();
+
     }
 }

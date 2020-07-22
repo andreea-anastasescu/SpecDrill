@@ -7,7 +7,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework.Core
     public interface IBrowser
     {
         T Open<T>()
-            where T: class, IPage;
+            where T : class, IPage;
 
         T CreatePage<T>()
             where T : class, IPage;
@@ -74,7 +74,7 @@ namespace SpecDrill.SecondaryPorts.AutomationFramework.Core
         void DoubleClick(IElement element);
 
         IBrowserAlert Alert { get; }
-        
+
         bool IsAlertPresent { get; }
         Uri Url { get; }
 

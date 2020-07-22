@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SomeTests.PageObjects.Test000;
+using SomeTests.PageObjects.Alerts;
 using SpecDrill;
 using SpecDrill.MsTest;
-using FluentAssertions;
-using SpecDrill.AutomationScopes;
-using SomeTests.PageObjects.Alerts;
 using SpecDrill.SecondaryPorts.AutomationFramework;
+using System;
 
 namespace SomeTests
 {
@@ -28,7 +22,7 @@ namespace SomeTests
             hoverPage.DivDraggable.DragAndDropTo(hoverPage.DivDropTarget);
 
             var droppedElement = WebElement.Create(null, ElementLocator.Create(By.CssSelector, "#div1>#drag1"));
-            
+
             Wait.NoMoreThan(TimeSpan.FromSeconds(2)).Until(() => droppedElement.IsAvailable);
 
             droppedElement.IsAvailable.Should().BeTrue();
@@ -39,7 +33,7 @@ namespace SomeTests
         {
             var hoverPage = Browser.Open<DndJQueryPage>();
 
-           hoverPage.DivCard5.DragAndDropTo(hoverPage.DivDropTargetCard5);
+            hoverPage.DivCard5.DragAndDropTo(hoverPage.DivDropTargetCard5);
 
             hoverPage.DivDropTargetCard5.GetAttribute("aria-disabled").Should().Be("true");
         }

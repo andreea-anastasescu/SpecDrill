@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SomeTests.PageObjects.Test000;
 using SpecDrill;
 using SpecDrill.MsTest;
-using FluentAssertions;
-using SpecDrill.AutomationScopes;
-using SomeTests.PageObjects.Alerts;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using System;
 
 namespace SomeTests
 {
@@ -31,7 +23,7 @@ namespace SomeTests
                     fs(window.TEMPORARY, 100, () => { alert('FALSE') }, () => { alert('TRUE') });
                 }
             ");
-           
+
             Wait.NoMoreThan(TimeSpan.FromSeconds(2)).Until(() => Browser.IsAlertPresent);
             Browser.IsAlertPresent.Should().BeTrue();
             Browser.Alert.Text.Should().Contain("TRUE");

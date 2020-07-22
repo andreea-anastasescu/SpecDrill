@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpecDrill.Infrastructure.Configuration.WebDriver.Browser.Drivers.Chrome
+﻿namespace SpecDrill.Infrastructure.Configuration.WebDriver.Browser.Drivers.Chrome
 {
     public class ChromeConfiguration : DriverConfiguration
     {

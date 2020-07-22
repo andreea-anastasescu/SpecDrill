@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
-using log4net.Config;
+﻿using log4net;
 using SpecDrill.Infrastructure.Logging.Interfaces;
-using L4nHierarchy = log4net.Repository.Hierarchy;
-using log4net.Layout;
-using log4net.Appender;
-using System.IO;
+using System;
+using System.Collections.Generic;
 
 namespace SpecDrill.Infrastructure.Logging.Implementation
 {
     internal class Log4NetFactory : ILoggerFactory
     {
         private object SyncRoot = new object();
-        private static Dictionary<string, ILogger> loggers = new Dictionary<string,ILogger>();
+        private static Dictionary<string, ILogger> loggers = new Dictionary<string, ILogger>();
 
         //static Log4NetFactory()
         //{
@@ -50,7 +42,7 @@ namespace SpecDrill.Infrastructure.Logging.Implementation
 
         //    MemoryAppender memory = new MemoryAppender();
         //    memory.ActivateOptions();
-            
+
         //    hierarchy.Root.AddAppender(memory);
 
         //    hierarchy.Root.Level = log4net.Core.Level.Info;

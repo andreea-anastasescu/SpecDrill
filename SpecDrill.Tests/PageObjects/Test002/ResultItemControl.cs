@@ -1,11 +1,5 @@
 ﻿using SpecDrill;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpecDrill.SecondaryPorts.AutomationFramework;
-using SpecDrill.SecondaryPorts.AutomationFramework.Core;
 
 namespace SomeTests.PageObjects.Test002
 {

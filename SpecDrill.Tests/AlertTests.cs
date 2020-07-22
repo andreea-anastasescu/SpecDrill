@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SomeTests.PageObjects.Test000;
+using SomeTests.PageObjects.Alerts;
 using SpecDrill;
 using SpecDrill.MsTest;
-using FluentAssertions;
-using SpecDrill.AutomationScopes;
-using SomeTests.PageObjects.Alerts;
 using SpecDrill.SecondaryPorts.AutomationFramework;
+using System;
 
 namespace SomeTests
 {

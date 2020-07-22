@@ -16,6 +16,6 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver.Extensions
                 JsonValueKind.True => true,
                 _ => null
             };
-           
+
     }
 }

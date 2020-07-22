@@ -1,10 +1,10 @@
-﻿using System;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using SpecDrill.Infrastructure.Logging;
 //using SpecDrill.Infrastructure.Logging.Interface;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using SpecDrill.SecondaryPorts.AutomationFramework.Core;
+using System;
 
 namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
 {

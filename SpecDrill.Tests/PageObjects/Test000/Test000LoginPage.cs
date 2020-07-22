@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using SpecDrill;
+﻿using SpecDrill;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 
 namespace SomeTests.PageObjects.Test000
@@ -32,7 +26,7 @@ namespace SomeTests.PageObjects.Test000
         //public Test000LoginPage()
         //    : base("Virtual Store - Login")
         //{
-            
+
         //}
     }
 }

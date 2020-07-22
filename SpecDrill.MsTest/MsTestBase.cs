@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.Adapters.WebDriver;
 using SpecDrill.Tests;
@@ -9,7 +8,6 @@ namespace SpecDrill.MsTest
 {
     public class MsTestBase : ScenarioBase
     {
-        object syncRoot = new object();
         protected static TestContext? TestContext;
         [ClassInitialize]
         public static void _ClassSetup(TestContext testContext)
@@ -46,7 +44,7 @@ namespace SpecDrill.MsTest
         public void _TestCleanup()
         {
             if (TestContext == null) throw new Exception("TextContext is not initialized. SpecDrill.MsTest.TestBase.ClassSetup() was not invoked yet!\n Please add following code snippet to your test class:\n[ClassInitialize]\npublic static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);\n");
-            _ScenarioTeardown(scenarioName: TestContext.TestName, isTestError : TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
+            _ScenarioTeardown(scenarioName: TestContext.TestName, isTestError: TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
         }
 
     }

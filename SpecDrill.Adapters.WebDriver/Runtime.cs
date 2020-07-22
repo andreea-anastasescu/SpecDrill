@@ -20,6 +20,6 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
             public IElementFactory GetElementFactory(IBrowser browser) => new ElementFactory(browser);
         }
         public static IRuntimeServices GetServices()
-            => new RuntimeServices( new ElementLocatorFactory());
+            => new RuntimeServices(new ElementLocatorFactory());
     }
 }

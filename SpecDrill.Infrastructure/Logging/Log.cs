@@ -1,8 +1,7 @@
-﻿using System;
-using SpecDrill.Infrastructure.Logging.Implementation;
+﻿using SpecDrill.Infrastructure.Logging.Implementation;
 using SpecDrill.Infrastructure.Logging.Interfaces;
+using System;
 using ILoggerFactory = SpecDrill.Infrastructure.Logging.Interfaces.ILoggerFactory;
-using System.Diagnostics;
 
 namespace SpecDrill.Infrastructure.Logging
 {
@@ -10,7 +9,7 @@ namespace SpecDrill.Infrastructure.Logging
     {
         private static readonly ILoggerFactory loggerFactory;
 
-        static  Log()
+        static Log()
         {
             loggerFactory = new Log4NetFactory();
         }
