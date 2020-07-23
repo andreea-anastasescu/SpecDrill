@@ -8,6 +8,7 @@ packages/
 artifacts/
 .vs/
 .sonarqube/
+NuGetPackages/
 **/wwwroot/lib/
 debugSettings.json
 project.lock.json
