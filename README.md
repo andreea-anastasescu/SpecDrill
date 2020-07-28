@@ -1,6 +1,6 @@
 
 # ![alt text](https://github.com/CosminSontu/SpecDrill/raw/master/specdrill.ico "SpecDrill Logo") SpecDrill
-An opinionated web test atuomation framework based on Selenium WebDriver
+An opinionated web test automation framework based on Selenium WebDriver
 
 Please check the [Wiki](https://github.com/CosminSontu/SpecDrill/wiki) for setup instructions and tutorials.
 
