@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+	<ContentFilesPath>$(MSBuildThisFileDirectory)..\contentFiles\any\any\</ContentFilesPath>
+	</PropertyGroup>
+	<Target Name="CopyConfigs" BeforeTargets="PreBuildEvent">
+		<Message Text="Copying scripts to project" />
+	<Copy SourceFiles="$(ContentFilesPath)log4net.template.config" DestinationFiles="$(ProjectDir)log4net.config" SkipUnchangedFiles="true" Condition="!Exists('$(ProjectDir)log4net.config')"></Copy>
+	<Copy SourceFiles="$(ContentFilesPath)specDrillConfig.template.json" DestinationFiles="$(ProjectDir)specDrillConfig.json" SkipUnchangedFiles="true" Condition="!Exists('$(ProjectDir)specDrillConfig.json')"></Copy>
+		
+	</Target>	
+	<ItemGroup>
+		<None Include="$(ProjectDir)log4net.config" />
+		<None Include="$(ProjectDir)specDrillConfig.json" />
+	</ItemGroup>
+</Project>

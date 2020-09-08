@@ -13,7 +13,7 @@ namespace SomeTests
         [TestMethod]
         public void ShouldSaveScreenshotSuccessfully()
         {
-            var randomPage = Browser.Open<Test001CalculatorPage>();
+            Browser.Open<Test001CalculatorPage>();
             SaveScreenshot(TestContext.TestName);
         }
     }

@@ -1,23 +1,20 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SomeTests.PageObjects.Test002;
-using SpecDrill;
-using SpecDrill.MsTest;
-using System;
+using FluentAssertions;using NUnit.Allure.Core;
+using NUnit.Framework;
+using SpecDrill.NUnit3;
+using SpecDrill.Samples.NUnit3.PageObjects;
 using System.Linq;
 
-namespace SomeTests
+namespace SpecDrill.Samples.NUnit3
 {
-    [TestClass]
-    public class GoogleSearchTests : MsTestBase
+    [TestFixture]
+    [AllureNUnit]
+    public class UnitTest1 : NUnitBase
     {
-        [ClassInitialize]
-        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-
-        [TestMethod]
-        //[Ignore("Google search and search results page changed. New selectors have to be applied. Postponed for later.")]
-
-        public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
+        [OneTimeSetUp]
+        public void ClassInitializer() => _ClassSetup();
+        
+        [Test]
+        public void TestMethod1()
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             googleSearchPage.TxtSearch.SendKeys("drill wiki");

@@ -48,7 +48,7 @@ namespace SomeTests
         [TestMethod]
         public void ShouldNotCrashIfElementNotAvailable()
         {
-            var elStatusPage = Browser.Open<ElementStatusPage>();
+            Browser.Open<ElementStatusPage>();
 
             var unrealElement = WebElement.Create(null, ElementLocator.Create(By.Id, "doesNotExist"));
 

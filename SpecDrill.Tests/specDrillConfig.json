@@ -1,0 +1,115 @@
+{
+  "webdriver": {
+    "mode": "browser", // master switch:  browser, appium
+    "maxWait": 60000,
+    "waitPollingFrequency": 200,
+    "screenshots": {
+      "path": "C:\\screenshots",
+      "auto": true // automatically save screenshot when test fails
+    },
+    "browser": { // settings for browser mode -> targets browser drivers or selenium server
+      "engine": "webdriver", // webdriver, watin (not supported for now) ...
+      "browserName": "chrome", // targeted browser name : chrome, ie, firefox, opera, safari
+      "isRemote": false, // when true, seleniumServerUri must be set
+      "seleniumServerUri": "http://localhost:5555/wd/hub",
+      "drivers": {
+        "chrome": {
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\85.0.4183.8300\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "arguments": [ "--incognito" ] //add , "headless" for headles test run
+        },
+        "ie": { "path": "" },
+        "firefox": {
+          "path": "",
+          "browserBinaryPath": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"
+        },
+        "opera": { "path": "" },
+        "safari": { "path": "" }
+      },
+      "window": {
+        "isMaximized": false, // if true, remaining browserWindow properties will be ignored
+        "initialWidth": 1280, // defaults to 800
+        "initialHeight": 800 // defaults to 600
+      },
+      "screenshots": { "path": "D:\\" },
+      "capabilities": {
+        "x": "yy"
+      }
+    },
+    "appium": { // settings for appium mode -> targets Appium server
+      "serverUri": "http://127.0.0.1:4723/wd/hub",
+      "capabilities": {
+        "automationName": "Appium", // Appium, Selendroid
+        "platformName": "Android", // Android, iOS, FirefoxOS
+        "deviceName": "192.168.166.101:5555",
+        "browserName": "Chrome",
+        "udid": "192.168.166.101:5555",
+        "orientation": "PORTRAIT" // LANDSCAPE, PORTRAIT
+        // platform-specific capabilities : not implemented !
+        //"android": {}, 
+        //"iOS": {},
+        //"firefoxOS": {}
+      }
+    }
+  },
+  "homepages": [
+    {
+      "pageObjectType": "Test000LoginPage",
+      "url": "../../../../WebsiteMocks/Test000/login.html", // relative url path to executing assembly's location
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "Test000GatewayPage",
+      "url": "../../../../WebsiteMocks/Test000/gateway.html", // relative url path to executing assembly's location
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "Test001CalculatorPage",
+      "url": "../../../../WebsiteMocks/Test001/calculator.html", // relative url path to executing assembly's location
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "PdfIndexPage",
+      "url": "../../../../WebsiteMocks/Pdf/pdfIndex.html", // relative url path to executing assembly's location
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "HoverCssPage",
+      "url": "../../../../WebsiteMocks/hover_css.html", // relative url path to executing assembly's location
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "AlertPage",
+      "url": "../../../../WebsiteMocks/Alerts/alert.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "DndHtml5Page",
+      "url": "../../../../WebsiteMocks/dnd_html5.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "DndJQueryPage",
+      "url": "../../../../WebsiteMocks/dnd_jquery.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "ElementStatusPage",
+      "url": "../../../../WebsiteMocks/element_status.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "DndJsPlumbPage",
+      "url": "https://jsplumbtoolkit.com/community/demo/flowchart/index.html"
+    },
+    {
+      "pageObjectType": "GoogleSearchPage",
+      "url": "http://www.google.com",
+      "isFileSystemPath": false
+    },
+    {
+      "pageObjectType": "HomeWindowPage",
+      "url": "../../../../WebsiteMocks/Windows/home_window.html",
+      "isFileSystemPath": true
+    }
+  ]
+}

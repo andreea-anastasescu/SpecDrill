@@ -1,0 +1,61 @@
+﻿{
+  "webdriver": {
+    "mode": "browser", // master switch:  browser, appium
+    "maxWait": 60000,
+    "waitPollingFrequency": 200,
+    "screenshots": {
+      "path": "C:\\screenshots",
+      "auto": true // automatically save screenshot when test fails
+    },
+    "browser": { // settings for browser mode -> targets browser drivers or selenium server
+      "engine": "webdriver", // webdriver, watin (not supported for now) ...
+      "browserName": "chrome", // targeted browser name : chrome, ie, firefox, opera, safari
+      "isRemote": false, // when true, seleniumServerUri must be set
+      "seleniumServerUri": "http://localhost:5555/wd/hub",
+      "drivers": {
+        "chrome": {
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\85.0.4183.8300\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "arguments": [ "--incognito" ] //add , "headless" for headles test run
+        },
+        "ie": { "path": "" },
+        "firefox": {
+          "path": "",
+          "browserBinaryPath": "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"
+        },
+        "opera": { "path": "" },
+        "safari": { "path": "" }
+      },
+      "window": {
+        "isMaximized": false, // if true, remaining browserWindow properties will be ignored
+        "initialWidth": 1280, // defaults to 800
+        "initialHeight": 800 // defaults to 600
+      },
+      "screenshots": { "path": "D:\\" },
+      "capabilities": {
+        "x": "yy"
+      }
+    },
+    "appium": { // settings for appium mode -> targets Appium server
+      "serverUri": "http://127.0.0.1:4723/wd/hub",
+      "capabilities": {
+        "automationName": "Appium", // Appium, Selendroid
+        "platformName": "Android", // Android, iOS, FirefoxOS
+        "deviceName": "192.168.166.101:5555",
+        "browserName": "Chrome",
+        "udid": "192.168.166.101:5555",
+        "orientation": "PORTRAIT" // LANDSCAPE, PORTRAIT
+        // platform-specific capabilities : not implemented !
+        //"android": {}, 
+        //"iOS": {},
+        //"firefoxOS": {}
+      }
+    }
+  },
+  "homepages": [
+    {
+      "pageObjectType": "GoogleSearchPage", // PageObject class name of starting page
+      "url": "https://www.google.com", // url of starting page
+      "isFileSystemPath": false // set true for local html file. leave false for URLs
+    }
+  ]
+}

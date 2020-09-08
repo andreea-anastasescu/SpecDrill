@@ -27,7 +27,7 @@ namespace SomeTests
         [TestMethod]
         public void ShouldReadCorrectUrl()
         {
-            var calculatorPage = Browser.Open<Test001CalculatorPage>();
+            Browser.Open<Test001CalculatorPage>();
             Uri currentUrl = Browser.Url;
 
             currentUrl.IsFile.Should().BeTrue();

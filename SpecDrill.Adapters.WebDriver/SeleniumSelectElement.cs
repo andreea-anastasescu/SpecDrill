@@ -22,9 +22,9 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         {
             get
             {
-                var element = this.Element as IWebElement;
-                if (element == null)
+                if (!(this.Element is IWebElement element))
                     throw new NullReferenceException("cast to IWebElement failed!");
+
                 return new SelectElement(element);
             }
         }
