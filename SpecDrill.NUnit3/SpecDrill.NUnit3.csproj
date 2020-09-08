@@ -9,6 +9,9 @@
 		<Description>SpecDrill.NUnit - SpecDrill integration with NUnit 3</Description>
 		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 		<OutputType>Library</OutputType>
+		<PackageReleaseNotes>
+			v1.1.20 - Initial Version
+		</PackageReleaseNotes>
 	</PropertyGroup>
 
   <ItemGroup>
