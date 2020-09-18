@@ -480,12 +480,12 @@ namespace SpecDrill
             string screenshotsPath = "";
             try
             {
-                screenshotsPath = this.configuration?.WebDriver?.Screenshots?.Path ?? "C:\\";
+                screenshotsPath = this.configuration?.WebDriver?.Screenshots?.Path ?? System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
                 var now = DateTime.Now;
-                fileName = string.Format("{0}\\{1}_{2:00}_{3:00}_{4:0000}_{5:00}_{6:00}_{7:00}_{8:000}.png",
-                                         screenshotsPath,
+                fileName = Path.Combine(string.Format("{0}", screenshotsPath),
+                                        string.Format("\\{0}_{1:00}_{2:00}_{3:0000}_{4:00}_{5:00}_{6:00}_{7:000}.png",
                                          string.Format($"{testClassName}_{testMethodName}"),
-                                         now.Day, now.Month, now.Year, now.Hour, now.Minute, now.Second, now.Millisecond);
+                                         now.Day, now.Month, now.Year, now.Hour, now.Minute, now.Second, now.Millisecond));
                 this.browserDriver.SaveScreenshot(fileName);
             }
             catch (Exception e)

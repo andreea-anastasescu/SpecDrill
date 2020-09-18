@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="specDrillConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="specflow_.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

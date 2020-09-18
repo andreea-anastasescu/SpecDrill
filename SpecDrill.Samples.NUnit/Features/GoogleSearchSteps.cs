@@ -16,6 +16,7 @@ namespace SpecDrill.Samples.NUnit3.Features
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             googleSearchPage.TxtSearch.SendKeys(searchTerm + "\x1B");
             googleSearchPage.TxtSearch.Blur();
+
             scenarioContext.Add("googleSearchPage", googleSearchPage);
         }
         

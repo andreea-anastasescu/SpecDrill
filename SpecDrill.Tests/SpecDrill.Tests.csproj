@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <Content Include="specDrillConfig.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

@@ -20,6 +20,7 @@ using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.SecondaryPorts.AutomationFramework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -218,10 +219,13 @@ namespace SpecDrill.SecondaryPorts.Adapters.WebDriver
         private string GetBrowserDriversPath(string driverPath)
         {
             driverPath = Environment.ExpandEnvironmentVariables(driverPath);
-            if (!driverPath.Contains(":\\"))
+            bool isUnixPath = driverPath.Contains("/");
+            bool isWindowsRelativePath = !driverPath.Contains(":\\");
+
+            if (!isUnixPath && isWindowsRelativePath)
             {
                 var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                return $"{currentPath}\\{driverPath}";
+                return Path.Combine(currentPath,driverPath);
             }
 
             return driverPath;

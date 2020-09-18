@@ -2,6 +2,7 @@ using FluentAssertions;using NUnit.Allure.Core;
 using NUnit.Framework;
 using SpecDrill.NUnit3;
 using SpecDrill.Samples.NUnit3.PageObjects;
+using System;
 using System.Linq;
 
 namespace SpecDrill.Samples.NUnit3
