@@ -21,7 +21,8 @@
             "--incognito",
             "--enable-javascript",
             "--disable-gpu",
-            "--disable-dev-shm-usage"
+            "--disable-dev-shm-usage",
+            "--ignore-certificate-errors"
             //"enable-features=NetworkServiceInProcess",
             //"disable-features=NetworkService"
           ]
