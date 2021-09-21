@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;/nuget</RestoreSources>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>specdrill.png</PackageIcon>
+    <BuildNumber>496</BuildNumber>
+    <AssemblyVersion>1.2.0.$(BuildNumber)</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <Description>SpecDrill.Secondary.Ports - SpecDrill Automation Framework plug-in interface</Description>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
+    <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+    <PackageReference Include="SpecDrill.Infrastructure" Version="[1.1.8.*,)" />
+  </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="pwsh ../incver.ps1 -csproj $(ProjectFileName)" />
+  </Target>
+</Project>

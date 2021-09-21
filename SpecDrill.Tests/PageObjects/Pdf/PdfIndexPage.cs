@@ -1,5 +1,5 @@
 ﻿using SpecDrill;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 
 namespace SomeTests.PageObjects.Pdf
 {

@@ -14,8 +14,15 @@
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\85.0.4183.8300\\driver\\win32", //"C:\\Your Browser Drivers Path"//
-          "arguments": [ "--incognito" ] //add , "headless" for headles test run
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\91.0.4472.10100\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "arguments": [
+            "--disable-extensions",
+            "disable-features=VizDisplayCompositor",
+            "--incognito",
+            "--enable-javascript",
+            "--disable-gpu",
+            "--disable-dev-shm-usage"
+          ] //add , "headless" for headles test run
         },
         "ie": { "path": "" },
         "firefox": {

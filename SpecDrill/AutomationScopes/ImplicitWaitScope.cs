@@ -1,6 +1,6 @@
 ﻿using SpecDrill.Infrastructure.Logging;
 using SpecDrill.Infrastructure.Logging.Interfaces;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Collections.Generic;
 

@@ -4,8 +4,8 @@ using SomeTests.PageObjects;
 using SpecDrill;
 using SpecDrill.AutomationScopes;
 using SpecDrill.MsTest;
-using SpecDrill.SecondaryPorts.AutomationFramework;
-using SpecDrill.SecondaryPorts.AutomationFramework.Exceptions;
+using SpecDrill.Secondary.Ports.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework.Exceptions;
 using System;
 
 namespace SomeTests
@@ -21,13 +21,13 @@ namespace SomeTests
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
 
-            var disablingElement = WebElement.Create(null, ElementLocator.Create(By.Id, "willBeDisabled"));
+            var disablingElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.Id, "willBeDisabled"));
 
             using (var benchmark = new BenchmarkScope("Time Until Disable"))
             {
                 //Wait.NoMoreThan(TimeSpan.FromSeconds(2)).Until(() => disablingElement.IsAvailable);
                 Wait.NoMoreThan(TimeSpan.FromSeconds(3)).Until(() => !disablingElement.IsEnabled);
-                benchmark.Elapsed.Should().BeCloseTo(TimeSpan.FromSeconds(2), 300);
+                benchmark.Elapsed.Should().BeCloseTo(TimeSpan.FromSeconds(2), TimeSpan.FromMilliseconds(300));
             }
         }
 
@@ -36,12 +36,12 @@ namespace SomeTests
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
 
-            var disablingElement = WebElement.Create(null, ElementLocator.Create(By.Id, "willBeDisplayed"));
+            var disablingElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.Id, "willBeDisplayed"));
 
             using (var benchmark = new BenchmarkScope("Time Until Display"))
             {
                 Wait.NoMoreThan(TimeSpan.FromSeconds(3)).Until(() => disablingElement.IsDisplayed);
-                benchmark.Elapsed.Should().BeCloseTo(TimeSpan.FromSeconds(2), 300);
+                benchmark.Elapsed.Should().BeCloseTo(TimeSpan.FromSeconds(2), TimeSpan.FromMilliseconds(300));
             }
         }
 
@@ -50,7 +50,7 @@ namespace SomeTests
         {
             Browser.Open<ElementStatusPage>();
 
-            var unrealElement = WebElement.Create(null, ElementLocator.Create(By.Id, "doesNotExist"));
+            var unrealElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.Id, "doesNotExist"));
 
             Assert.IsFalse(unrealElement.IsAvailable);
         }
@@ -59,7 +59,7 @@ namespace SomeTests
         public void ShouldThrowExceptionWhenTestingDisplayedAndElementNotPresent()
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
-            var unrealElement = WebElement.Create(null, ElementLocator.Create(By.Id, "doesNotExist"));
+            var unrealElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.Id, "doesNotExist"));
 
             Action checkDisplayed = () => { var displayed = unrealElement.IsDisplayed; };
 
@@ -71,7 +71,7 @@ namespace SomeTests
         public void ShouldThrowExceptionWhenTestingEnabledAndElementNotPresent()
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
-            var unrealElement = WebElement.Create(null, ElementLocator.Create(By.Id, "doesNotExist"));
+            var unrealElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.Id, "doesNotExist"));
 
             Action checkDisplayed = () => { var displayed = unrealElement.IsEnabled; };
 

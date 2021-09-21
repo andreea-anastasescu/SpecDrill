@@ -1,6 +1,11 @@
-del .\NuGetPackages\*.nupkg
-dotnet pack .\SpecDrill.Adapters.WebDriver\SpecDrill.SecondaryPorts.Adapters.WebDriver.csproj -o NuGetPackages
-dotnet pack .\SpecDrill\SpecDrill.csproj -o NuGetPackages
-dotnet pack .\SpecDrill.MsTest\SpecDrill.MsTest.csproj -o NuGetPackages
-dotnet pack .\SpecDrill.NUnit3\SpecDrill.NUnit3.csproj -o NuGetPackages
-dotnet pack .\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj -o NuGetPackages
+del c:\nuget\*.nupkg
+del c:\nuget\*.snupkg
+dotnet pack .\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+dotnet pack .\SpecDrill.Secondary.Ports\SpecDrill.Secondary.Ports.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+dotnet pack .\SpecDrill.Secondary.Adapters.WebDriver\SpecDrill.Secondary.Adapters.WebDriver.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+dotnet pack .\SpecDrill\SpecDrill.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+dotnet pack .\SpecDrill.MsTest\SpecDrill.MsTest.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+dotnet pack .\SpecDrill.NUnit3\SpecDrill.NUnit3.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+dotnet pack .\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj -o C:\nuget -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+
+ 

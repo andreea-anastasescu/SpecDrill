@@ -20,7 +20,7 @@ namespace SomeTests
             Assert.AreEqual(1, methodInitCount);
         }
 
-        protected override void ScenarioTeardown()
+        protected override void ScenarioTeardown(string scenarioName, bool isTestError)
         {
             Assert.AreEqual(0, methodTearDownCount);
             methodTearDownCount++;

@@ -2,7 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SomeTests.PageObjects.Test002;
 using SpecDrill;
+using SpecDrill.Infrastructure.Logging;
 using SpecDrill.MsTest;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Linq;
 
@@ -20,9 +22,16 @@ namespace SomeTests
         public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
+            Wait.NoMoreThan(TimeSpan.FromSeconds(7))
+                .Until(() => acceptButton.IsAvailable);
+            if (acceptButton.IsAvailable)
+                acceptButton.Click();
             googleSearchPage.TxtSearch.SendKeys("drill wiki");
             googleSearchPage.TxtSearch.Blur();
-            Wait.Until(() => googleSearchPage.BtnSearch.IsDisplayed);
+            Wait.Until(() =>
+                googleSearchPage.BtnSearch.IsDisplayed
+            );
             var resultsPage = googleSearchPage.BtnSearch.Click();
 
             #region Option 1: assuming it's first result
@@ -30,10 +39,16 @@ namespace SomeTests
             #endregion
 
             #region Option 2: searching through search results
-            Wait.Until(() => resultsPage.SearchResults.IsDisplayed);
-            var wikiResult = resultsPage.SearchResults.FirstOrDefault(r => r.Link.Text.Contains("Wikipedia"));
-            wikiResult.Should().NotBeNull();
+            resultsPage.SearchResults
+                .FirstOrDefault(r => r.Link.Text.Contains("Drill"))
+                .Should().NotBeNull();
             #endregion
+
+            //#region Option3
+            //resultsPage.SearchResults.GetElementByText("Wikipedia").Count.Should().BeGreaterThan(0);
+            //#endregion
         }
+
+
     }
 }

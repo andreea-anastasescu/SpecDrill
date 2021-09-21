@@ -1,0 +1,8 @@
+﻿namespace SpecDrill.Secondary.Ports.AutomationFramework
+{
+    public interface IPage : IElement
+    {
+        string Title { get; }
+        bool IsLoaded { get; }
+    }
+}

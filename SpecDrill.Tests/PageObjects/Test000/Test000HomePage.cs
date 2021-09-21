@@ -1,5 +1,5 @@
 ﻿using SpecDrill;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 
 namespace SomeTests.PageObjects.Test000
 {
@@ -16,9 +16,9 @@ namespace SomeTests.PageObjects.Test000
         public Test000HomePage()
             : base("Virtual Store - Home")
         {
-            this.LblUserName = WebElement.Create(this, ElementLocator.Create(By.Id, "username"));
-            this.BtnLogin = WebElement.CreateNavigation<Test000HomePage>(this, ElementLocator.Create(By.Id, "login"));
-            this.CtlMenu = WebElement.CreateControl<MenuListItemControl>(this, ElementLocator.Create(By.Id, "menu"));
+            this.LblUserName = ElementFactory.Create(this, ElementLocatorFactory.Create(By.Id, "username"));
+            this.BtnLogin = ElementFactory.CreateNavigation<Test000HomePage>(this, ElementLocatorFactory.Create(By.Id, "login"), null); // reconsider nullability of targetLocator
+            this.CtlMenu = ElementFactory.CreateControl<MenuListItemControl>(this, ElementLocatorFactory.Create(By.Id, "menu"));
         }
     }
 }

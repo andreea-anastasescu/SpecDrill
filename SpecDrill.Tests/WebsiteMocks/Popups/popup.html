@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .popup {
+            border: 1px solid blue;
+        }
+    </style>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <input id="btnOpenPN" type="button" value="Open Popup" onclick="document.getElementsByClassName('popup')[0].style='display:block;'">
+    <input id="btnOpenS" type="button" value="Open Popup" onclick="document.getElementsByClassName('popup')[0].style='display:block;'">
+    <div class="popup" style="display:none">
+        <span id="txt">Hello people!!</span>
+        <input id="btnClose" type="button" value="Close" onclick="document.getElementsByClassName('popup')[0].style = 'display: none;'"
+    </div>
+    <script>
+
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SomeTests.PageObjects.Alerts;
 using SpecDrill;
 using SpecDrill.MsTest;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 
 namespace SomeTests
@@ -21,7 +21,7 @@ namespace SomeTests
 
             hoverPage.DivDraggable.DragAndDropTo(hoverPage.DivDropTarget);
 
-            var droppedElement = WebElement.Create(null, ElementLocator.Create(By.CssSelector, "#div1>#drag1"));
+            var droppedElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.CssSelector, "#div1>#drag1"));
 
             Wait.NoMoreThan(TimeSpan.FromSeconds(2)).Until(() => droppedElement.IsAvailable);
 

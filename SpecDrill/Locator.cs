@@ -1,13 +1,13 @@
-﻿using SpecDrill.SecondaryPorts.AutomationFramework;
+﻿using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 
 namespace SpecDrill
 {
-    public class ElementLocator
+    public class ElementLocatorFactory
     {
-        public static IElementLocatorFactory? ElementLocatorFactory { get; set; }
-        private static IElementLocatorFactory Factory
-            => ElementLocatorFactory ?? throw new Exception($"WebElement.ElementFactory was not provided with a IElementFactory instance!");
+        internal static IElementLocatorFactory? Instance { get; set; }
+        public static IElementLocatorFactory Factory
+            => Instance ?? throw new Exception($"WebElement.ElementFactory was not provided with a IElementFactory instance!");
         public static IElementLocator Create(By locatorKind, string locatorValue)
             => Factory.Create(locatorKind, locatorValue);
     }

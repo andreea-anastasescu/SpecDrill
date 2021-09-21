@@ -1,28 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
-		<Nullable>enable</Nullable>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageIcon>specdrill.png</PackageIcon>
-		<Version>1.1.20</Version>
-		<Description>SpecDrill.NUnit - SpecDrill integration with NUnit 3</Description>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-		<OutputType>Library</OutputType>
-		<PackageReleaseNotes>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;/nuget</RestoreSources>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>specdrill.png</PackageIcon>
+    <BuildNumber>106</BuildNumber>
+    <AssemblyVersion>1.1.23.$(BuildNumber)</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <Description>SpecDrill.NUnit - SpecDrill integration with NUnit 3</Description>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <OutputType>Library</OutputType>
+    <PackageReleaseNotes>
+			v1.1.21 - Fixed Issue #40
 			v1.1.20 - Initial Version
 		</PackageReleaseNotes>
-	</PropertyGroup>
-
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="SpecDrill" Version="1.1.7" />
-    <PackageReference Include="SpecDrill.SecondaryPorts.Adapters.WebDriver" Version="1.1.2" />
-	<None Include="..\LICENSE" Pack="true" PackagePath=".\" />
-	<None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
-	<Content Include="..\NuGet\content\*.template.*" Pack="true" PackagePath="content" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
-	<Content Include="..\NuGet\content\*.template.*" Pack="true" PackagePath="contentFiles/any/any" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="SpecDrill" Version="[1.*,)" />
+    <PackageReference Include="SpecDrill.Secondary.Adapters.WebDriver" Version="[1.*,)" />
+    <PackageReference Include="SpecDrill.Secondary.Ports" Version="[1.*,)" />
+    <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
+    <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+    <Content Include="..\NuGet\content\*.template.*" Pack="true" PackagePath="content" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
+    <Content Include="..\NuGet\content\*.template.*" Pack="true" PackagePath="contentFiles/any/any" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
   </ItemGroup>
-
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="pwsh ../incver.ps1 -csproj $(ProjectFileName)" />
+  </Target>
 </Project>

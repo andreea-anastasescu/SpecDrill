@@ -1,11 +1,11 @@
-﻿using SpecDrill.SecondaryPorts.AutomationFramework;
+﻿using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace SpecDrill.WebControls
+namespace SpecDrill
 {
     public interface IListElement<T> : IReadOnlyList<T>
         where T : class, IElement
@@ -33,7 +33,7 @@ namespace SpecDrill.WebControls
                 if (index > Count)
                     throw new IndexOutOfRangeException("SpecDrill: ListElement<T>");
 
-                return WebElement.CreateControl<T>(parent, locator.CopyWithIndex(index));
+                return ElementFactory.CreateControl<T>(parent, locator.CopyWithIndex(index)) ;
             }
         }
 
@@ -48,7 +48,11 @@ namespace SpecDrill.WebControls
 
         public T GetElementByText(string regex)
         {
-            var match = this.FirstOrDefault(item => Regex.IsMatch(item.Text, regex));
+            var elements = this.ToArray();
+            var match = elements.FirstOrDefault(
+                item => 
+                    Regex.IsMatch(item.Text, regex)
+                    );
 
             if (match == default(T))
                 throw new Exception($"SpecDrill: No element matching '{regex}' was found!");
@@ -77,12 +81,12 @@ namespace SpecDrill.WebControls
         {
             get
             {
-                if (this.Count > 0)
+                var count = this.Count;
+                if (count > 0)
                 {
-                    for (int i = 1; i <= this.Count; i++)
+                    for (int i = 1; i <= count; i++)
                     {
-                        var currentElement = this[i];
-                        yield return currentElement;
+                        yield return this[i];
                     }
                 }
             }

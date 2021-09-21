@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpecDrill.Samples.NUnit3.Features
 {
-    [AllureNUnit]
+    //[AllureNUnit]
     //[AllureReport]
     public partial class GoogleSearchFeature
     {

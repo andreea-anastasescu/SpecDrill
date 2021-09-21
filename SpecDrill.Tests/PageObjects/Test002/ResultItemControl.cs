@@ -1,14 +1,14 @@
 ﻿using SpecDrill;
-using SpecDrill.SecondaryPorts.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 
 namespace SomeTests.PageObjects.Test002
 {
     public class SearchResultItemControl : WebControl
     {
-        [Find(By.CssSelector, "div a")]
+        [Find(By.XPath, "//div/div/div[1]/a/h3")]
         public IElement Link { get; private set; }
 
-        [Find(By.CssSelector, "div.rc>div.s>span.st")]
+        [Find(By.XPath, "//div[1]/div[1]/div[2]/div[1]")]
         public IElement Description { get; private set; }
 
         public SearchResultItemControl(IElement parent, IElementLocator locator) : base(parent, locator) { }

@@ -40,6 +40,7 @@ namespace SpecDrill
                     }
                     sw.Reset();
                 }
+                Thread.Sleep(10);
             }
             sw.Stop();
 
@@ -71,6 +72,7 @@ namespace SpecDrill
             catch (Exception e)
             {
                 Log.Error(e, "Wait with retry: retryCount={0}, retryInterval={1} / maxWait={2}", retryCount, this.RetryInterval ?? TimeSpan.FromSeconds(0), retryInterval);
+                
             }
             return false;
         }

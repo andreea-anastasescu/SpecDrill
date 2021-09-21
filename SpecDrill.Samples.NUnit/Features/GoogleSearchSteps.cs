@@ -7,16 +7,19 @@ using TechTalk.SpecFlow;
 namespace SpecDrill.Samples.NUnit3.Features
 {
     [Binding]
-    public class GoogleSearchSteps : SpecFlowBase
+    public class GoogleSearchSteps : UiSpecFlowBase
     {
         public GoogleSearchSteps(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);
+        
         [Given(@"I have entered ""(.*)"" into Google search")]
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             googleSearchPage.TxtSearch.SendKeys(searchTerm + "\x1B");
             googleSearchPage.TxtSearch.Blur();
+            Wait.NoMoreThan(TimeSpan.FromSeconds(1)).Until(() => googleSearchPage.TxtSearch.IsDisplayed);
 
+            googleSearchPage.TxtSearch.IsDisplayed.Should().BeFalse();
             scenarioContext.Add("googleSearchPage", googleSearchPage);
         }
         

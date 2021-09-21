@@ -1,24 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30105.148
+VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill", "SpecDrill\SpecDrill.csproj", "{E9223B33-98FC-4D5A-8C0E-E63011FD454E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{634E48B4-FBA8-43CD-9F5D-2183640BD9D8}"
 	ProjectSection(SolutionItems) = preProject
+		incver.ps1 = incver.ps1
+		LICENSE = LICENSE
 		log4net.config = log4net.config
 		pack.ps1 = pack.ps1
+		specdrill.png = specdrill.png
 		specDrillConfig.json = specDrillConfig.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.SecondaryPorts.Adapters.WebDriver", "SpecDrill.Adapters.WebDriver\SpecDrill.SecondaryPorts.Adapters.WebDriver.csproj", "{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Secondary.Adapters.WebDriver", "SpecDrill.Secondary.Adapters.WebDriver\SpecDrill.Secondary.Adapters.WebDriver.csproj", "{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.SecondaryPorts", "SpecDrill.Ports\SpecDrill.SecondaryPorts.csproj", "{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Infrastructure", "SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj", "{9A59519A-1464-436E-B059-AF2BEEFFE96F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{DA1F62FA-67D6-4246-9AFA-018D72165657}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Secondary", "Secondary", "{DA1F62FA-67D6-4246-9AFA-018D72165657}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.MsTest", "SpecDrill.MsTest\SpecDrill.MsTest.csproj", "{405307ED-862C-4A6F-97A8-67EDFC9F3D0F}"
 EndProject
@@ -31,6 +30,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Samples.NUnit3", "SpecDrill.Samples.NUnit\SpecDrill.Samples.NUnit3.csproj", "{BD68D623-E1B8-4A11-AA06-C73F9006F6E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.NUnit3", "SpecDrill.NUnit3\SpecDrill.NUnit3.csproj", "{D0506AA5-51E1-44E2-BCF3-B0BFDAAD80B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Infrastructure", "SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj", "{4B257C82-C439-4D79-BE02-70F7B233BA5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecDrill.Secondary.Ports", "SpecDrill.Secondary.Ports\SpecDrill.Secondary.Ports.csproj", "{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,18 +55,6 @@ Global
 		{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A8F68C17-F756-4FFB-ADA4-4F69E25D4809}.Release|x86.ActiveCfg = Release|Any CPU
-		{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD2DB2CA-0C02-4A57-A92C-5A6F76A5E2FC}.Release|x86.ActiveCfg = Release|Any CPU
-		{9A59519A-1464-436E-B059-AF2BEEFFE96F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A59519A-1464-436E-B059-AF2BEEFFE96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A59519A-1464-436E-B059-AF2BEEFFE96F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9A59519A-1464-436E-B059-AF2BEEFFE96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A59519A-1464-436E-B059-AF2BEEFFE96F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A59519A-1464-436E-B059-AF2BEEFFE96F}.Release|x86.ActiveCfg = Release|Any CPU
 		{405307ED-862C-4A6F-97A8-67EDFC9F3D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{405307ED-862C-4A6F-97A8-67EDFC9F3D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{405307ED-862C-4A6F-97A8-67EDFC9F3D0F}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -112,12 +103,29 @@ Global
 		{D0506AA5-51E1-44E2-BCF3-B0BFDAAD80B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0506AA5-51E1-44E2-BCF3-B0BFDAAD80B2}.Release|x86.ActiveCfg = Release|Any CPU
 		{D0506AA5-51E1-44E2-BCF3-B0BFDAAD80B2}.Release|x86.Build.0 = Release|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B257C82-C439-4D79-BE02-70F7B233BA5A}.Release|x86.Build.0 = Release|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Debug|x86.Build.0 = Debug|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A8F68C17-F756-4FFB-ADA4-4F69E25D4809} = {DA1F62FA-67D6-4246-9AFA-018D72165657}
+		{6B609F25-EFBC-4948-8BD1-79BA0E1C8278} = {DA1F62FA-67D6-4246-9AFA-018D72165657}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A1CD798-9F2F-48E2-8D98-68B1E6DC728E}

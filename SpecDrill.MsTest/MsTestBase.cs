@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpecDrill.Infrastructure.Logging.Interfaces;
-using SpecDrill.SecondaryPorts.Adapters.WebDriver;
+using SpecDrill.Secondary.Adapters.WebDriver;
 using SpecDrill.Tests;
 using System;
 
 namespace SpecDrill.MsTest
 {
-    public class MsTestBase : ScenarioBase
+    public class MsTestBase : UiScenarioBase
     {
         protected static TestContext? TestContext;
         [ClassInitialize]

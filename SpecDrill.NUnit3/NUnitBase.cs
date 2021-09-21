@@ -1,14 +1,14 @@
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using SpecDrill.Infrastructure.Logging.Interfaces;
-using SpecDrill.SecondaryPorts.Adapters.WebDriver;
+using SpecDrill.Secondary.Adapters.WebDriver;
 using SpecDrill.Tests;
 using System;
 using System.Collections.Generic;
 
 namespace SpecDrill.NUnit3
 {
-    public class NUnitBase : ScenarioBase
+    public class NUnitBase : UiScenarioBase
     {
         [OneTimeSetUp]
         public void _ClassSetup()

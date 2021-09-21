@@ -1,0 +1,55 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        
+    </style>
+    
+</head>
+<body>
+
+    <div id="l0shadow" style="border: 1px solid red">
+        <div id="reg" style="border: 1px solid green; width:800px; height:50px;">shadow1</div>
+    </div>
+
+    <script>
+        function attachShadowDom(element) {
+            return element.attachShadow({ mode: 'open' })
+        }
+        function createDiv(id, text) {
+            var div = document.createElement('div');
+            div.setAttribute('id', id);
+            div.setAttribute('style', 'border 1px solid red;width:800px;height:50px;');
+            div.innerText = text;
+            return div;
+        }
+
+        function createList(id) {
+            var ul = document.createElement('ul');
+            ul.setAttribute('id', id);
+            var liA = document.createElement('li');
+            liA.appendChild(document.createTextNode('A'));
+            var liB = document.createElement('li');
+            liB.appendChild(document.createTextNode('B'));
+            var liC = document.createElement('li');
+            liC.appendChild(document.createTextNode('C'));
+
+            ul.appendChild(liA);
+            ul.appendChild(liB);
+            ul.appendChild(liC);
+
+            return ul;
+        }
+        var firstLevel = document.getElementById('l0shadow');
+        var firstShadowDom = attachShadowDom(firstLevel);
+        var secondLevel = createDiv('l1regular', 'regular2');
+        var secondLevelSD = createDiv('l1shadow', 'shadow2');
+        firstShadowDom.appendChild(secondLevel);
+        firstShadowDom.appendChild(secondLevelSD);
+        firstShadowDom.appendChild(createList('list'));
+        var secondShadowDom = attachShadowDom(secondLevelSD);
+        secondShadowDom.appendChild(createDiv('l2regular', 'regular3'));
+
+    </script>
+</body>
+</html>

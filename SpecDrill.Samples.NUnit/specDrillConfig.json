@@ -8,14 +8,14 @@
       "auto": true // automatically save screenshot when test fails
     },
     "browser": { // settings for browser mode -> targets browser drivers or selenium server
-      "engine": "webdriver", // webdriver, watin (not supported for now) ...
+      "engine": "webdriver", // only "webdriver" for now
       "browserName": "chrome", // targeted browser name : chrome, ie, firefox, opera, safari
       "isRemote": false, // when true, seleniumServerUri must be set
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\85.0.4183.8300\\driver\\win32", //"C:\\Your Browser Drivers Path"//
-          "arguments": [ "--incognito" ] //add , "headless" for headles test run
+          "path": "%USERPROFILE%\\\\.nuget\\\\packages\\\\Selenium.WebDriver.ChromeDriver\\\\91.0.4472.10100\\\\driver\\\\win32", //"C:\\Your Browser Drivers Path"//
+          "arguments": [ "--incognito" ] //add , "headless" for headless test run
         },
         "ie": { "path": "" },
         "firefox": {
@@ -30,7 +30,6 @@
         "initialWidth": 1280, // defaults to 800
         "initialHeight": 800 // defaults to 600
       },
-      "screenshots": { "path": "D:\\" },
       "capabilities": {
         "x": "yy"
       }

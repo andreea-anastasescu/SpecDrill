@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>specdrill.png</PackageIcon>
+    <VersionSuffix>
+    </VersionSuffix>
+    <BuildNumber>2</BuildNumber>
+    <AssemblyVersion>1.1.8.$(BuildNumber)</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <Description>SpecDrill.Infrastructure</Description>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
+    <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.12">
+      <GeneratePathProperty>true</GeneratePathProperty>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+  </ItemGroup>
+</Project>

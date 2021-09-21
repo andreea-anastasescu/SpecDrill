@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;/nuget</RestoreSources>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>specdrill.png</PackageIcon>
+    <BuildNumber>547</BuildNumber>
+    <AssemblyVersion>1.2.0.$(BuildNumber)</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <Deterministic>true</Deterministic>
+    <Description>SpecDrill.SecondaryPorts.Adapters.WebDriver - WebDriver adapter for SpecDrill</Description>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
+    <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver" Version="4.3.1" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+    <PackageReference Include="SpecDrill.Infrastructure" Version="[1.*,)" />
+    <PackageReference Include="SpecDrill.Secondary.Ports" Version="[1.*,)" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>2</WarningLevel>
+  </PropertyGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="pwsh ../incver.ps1 -csproj $(ProjectFileName)" />
+  </Target>
+</Project>

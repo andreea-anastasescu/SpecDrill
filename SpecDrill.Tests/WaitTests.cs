@@ -47,7 +47,7 @@ namespace SomeTests
             Wait.NoMoreThan(maxWait).Until(() => stopwatch.Elapsed >= timeUntilConditionIsTrue);
 
             stopwatch.Stop();
-            stopwatch.Elapsed.Should().BeCloseTo(timeUntilConditionIsTrue, 50);
+            stopwatch.Elapsed.Should().BeCloseTo(timeUntilConditionIsTrue, TimeSpan.FromMilliseconds(50));
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace SomeTests
 
             }
 
-            stopwatch.Elapsed.Should().BeCloseTo(timeUntilConditionBecomesTrue, 50);
+            stopwatch.Elapsed.Should().BeCloseTo(timeUntilConditionBecomesTrue, TimeSpan.FromMilliseconds(50));
         }
 
         [TestMethod]
@@ -140,7 +140,7 @@ namespace SomeTests
             Wait.NoMoreThan(TimeSpan.FromSeconds(1.0d)).Until(() => false, throwExceptionOnTimeout: false);
             stopwatch.Stop();
 
-            stopwatch.Elapsed.Should().BeCloseTo(timeLimit, 50);
+            stopwatch.Elapsed.Should().BeCloseTo(timeLimit, TimeSpan.FromMilliseconds(50));
         }
     }
 }

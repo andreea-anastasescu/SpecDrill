@@ -22,12 +22,12 @@ namespace SpecDrill.Infrastructure.Configuration
             Log = Logging.Log.Get<ConfigurationManager>();
         }
 
-        public static Settings Load(string? jsonConfiguration = null)
+        public static Settings Load(string? jsonConfiguration = null, string? configurationFileName = null)
         {
             if (string.IsNullOrWhiteSpace(jsonConfiguration))
             {
-                Log.Info($"Searching Configuration file {ConfigurationFileName}...");
-                var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory);
+                Log.Info($"Searching Configuration file {configurationFileName??ConfigurationFileName}...");
+                var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory, configurationFileName ?? ConfigurationFileName);
 
                 if (configurationPaths == ("", ""))
                     throw new FileNotFoundException("Configuration file not found");
@@ -62,7 +62,7 @@ namespace SpecDrill.Infrastructure.Configuration
             return configuration;
         }
 
-        private static (string folder, string result) FindConfigurationFile(string folder)
+        private static (string folder, string result) FindConfigurationFile(string folder, string configurationFileName)
         {
             while (true)
             {
@@ -71,7 +71,7 @@ namespace SpecDrill.Infrastructure.Configuration
                 // we need at least a valid root folder path to continue
                 if (folder.Length > 2)
                 {
-                    var result = Directory.EnumerateFiles(folder, "*.json", SearchOption.TopDirectoryOnly).FirstOrDefault(file => file.ToLowerInvariant().EndsWith(ConfigurationFileName.ToLowerInvariant()));
+                    var result = Directory.EnumerateFiles(folder, "*.json", SearchOption.TopDirectoryOnly).FirstOrDefault(file => file.ToLowerInvariant().EndsWith(configurationFileName.ToLowerInvariant()));
 
                     if (!string.IsNullOrWhiteSpace(result))
                     {

@@ -1,13 +1,13 @@
-﻿using SpecDrill.SecondaryPorts.AutomationFramework;
+﻿using SpecDrill.Secondary.Ports.AutomationFramework;
 
 namespace SpecDrill.Samples.NUnit3.PageObjects
 {
     public class GoogleSearchPage : WebPage
     {
-        [Find(By.XPath, "/html//form[@id='tsf']/div/div/div/div/div/input[@role='combobox']")]
+        [Find(By.XPath, "//input[@name='q']")]
         public IElement TxtSearch { get; private set; }
 
-        [Find(By.XPath, "/html//form[@id='tsf']/div/div/div/center/input[@name='btnK']")]
+        [Find(By.XPath, "//div[contains(@class,'FPdoLc')]//input[@name='btnK']")]
         public INavigationElement<GoogleSearchResultsPage> BtnSearch { get; private set; }
     }
 }

@@ -14,8 +14,24 @@
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\85.0.4183.8300\\driver\\win32", //"C:\\Your Browser Drivers Path"//
-          "arguments": [ "--incognito" ] //add , "headless" for headles test run
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\91.0.4472.10100\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "arguments": [
+            "--disable-extensions",
+            "disable-features=VizDisplayCompositor",
+            "--incognito",
+            "--enable-javascript",
+            "--disable-gpu",
+            "--disable-dev-shm-usage"
+            //"enable-features=NetworkServiceInProcess",
+            //"disable-features=NetworkService"
+          ]
+            //[ "disable-features=VizDisplayCompositor", "--incognito", "--disable-gpu", "--disable-dev-shm-usage", "--disable-extensions" ]
+            // "--incognito", "--disable-gpu", "--disable-dev-shm-usage", "enable-automation", "--disable-infobars", "--no-sandbox", "--disable-extensions"
+            //"--incognito", "--disable-gpu", "--disable-dev-shm-usage", "--log-level=3", "enable-features=NetworkServiceInProcess", "disable-features=NetworkService" ]
+            // [ "--incognito", "start-maximized", "enable-automation", "--disable-infobars", "--no-sandbox", "--disable-extensions", "--disable-dev-shm-usage" ] //add , "headless" for headles test run
+            //"disable-features=VizDisplayCompositor",
+            // "--enable-javascript",
+            // "--disable-browser-side-navigation",
         },
         "ie": { "path": "" },
         "firefox": {
@@ -26,9 +42,9 @@
         "safari": { "path": "" }
       },
       "window": {
-        "isMaximized": false, // if true, remaining browserWindow properties will be ignored
-        "initialWidth": 1280, // defaults to 800
-        "initialHeight": 800 // defaults to 600
+        "isMaximized": true, // if true, remaining browserWindow properties will be ignored
+        "initialWidth": 640, // defaults to 800
+        "initialHeight": 720 // defaults to 600
       },
       "screenshots": { "path": "D:\\" },
       "capabilities": {
@@ -83,6 +99,26 @@
       "isFileSystemPath": true
     },
     {
+      "pageObjectType": "PopupPage",
+      "url": "../../../../WebsiteMocks/Popups/popup.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "ErrPopupPageFindTargetPropertyIsNotINavigationTargetOrHasNoFindAttribute",
+      "url": "../../../../WebsiteMocks/Popups/popup.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "ErrPopupPageMissingFindTargetIfNotAPage",
+      "url": "../../../../WebsiteMocks/Popups/popup.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "ErrPopupNoTargetLocator",
+      "url": "../../../../WebsiteMocks/Popups/popup.html",
+      "isFileSystemPath": true
+    },
+    {
       "pageObjectType": "DndHtml5Page",
       "url": "../../../../WebsiteMocks/dnd_html5.html",
       "isFileSystemPath": true
@@ -109,6 +145,15 @@
     {
       "pageObjectType": "HomeWindowPage",
       "url": "../../../../WebsiteMocks/Windows/home_window.html",
+      "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "GoogleMapsPage",
+      "url": "https://www.google.com/maps/@47.1194318,27.0852011,12.75z"
+    },
+    {
+      "pageObjectType": "ShadowDomPage",
+      "url": "../../../../WebsiteMocks/ShadowDom/shadow_dom.html",
       "isFileSystemPath": true
     }
   ]
