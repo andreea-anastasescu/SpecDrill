@@ -6,96 +6,14 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>523</BuildNumber>
+    <BuildNumber>524</BuildNumber>
     <AssemblyVersion>1.2.0.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <PackageReleaseNotes>
-		    v1.1.9
-			- Added ShadowDom support (CssSelector only)
-			- Added UIScenarioBase class, ScenarioBase is for non-ui tests.
-			v1.1.8
-			- Fixed Issue #40 ...path incorrectly handled in linux/unix environments
-			v1.1.2
-			- Migrated to .NET Core 3.1/.NET Standard 2.1
-			v1.0.32
-			- Moved Browser initialization in _TestInitialize virtual method.
-			v1.0.30
-			- Fixed Issue #34: Browser capabilities not being set properly
-			v1.0.29
-			- Fixed Issue #33: Remove AcceptInsecureCertificates from BuildInternetExplorerOptions
-			- Upgraded to WebDriver 3.13.1
-			v1.0.28
-			- Fixed Issue #32: Driver instantiation (local ChromeDriver) fails when capabilities are specified
-			v1.0.27
-			- Fixed Issue #27: Expose Driver.Url(); Now it can be accessed as Uri object calling Browser.Url property.
-			- Fixed Issue #29: Add support to Edge browser
-			- Fixed Issue #30: Expose Browser Capabilities; Now any capability is passed to target browser instance.
-			Note: Correct casing of capability name and correct json type(JavaScript) must be used in specDrillConfig.json
-			v1.0.26
-			- Added arguments support for browser driver (local runs)
-			v1.0.25
-			- Upgraded to Webdriver 3.7
-			- Added arguments parameter (string array) in configuration e.g. browser.drivers.chrome.arguments (remote runs)
-			v1.0.24
-			- Reverted to MsTest framework due to difficulties with running MsTestv2 in CI environments.
-			- You need to start with a MsTest test project before adding SpecDrill NuGetPackage
-			otherwise you have to add reference to your local version of MsTest:
-			&gt;Add Reference &gt; Extensions &gt; select Microsoft.VisualStudio.QualityTools.UnitTestFramework &gt; OK.
-			v1.0.23
-			- Added automatic screenshot on test failure setting switch. Setting: webdriver.screenshots.auto : (bool).
-			v1.0.22
-			- Added screenshot capability. Call SaveScreenshot from your TestCleanup method if screenshot needed.
-			v1.0.21
-			- Added MsTest.TestAdaptor package needed to run tests with MsTest.TestFramework v2
-			v1.0.20
-			- Fixed Issue #24: Browser should close even if the TestCleanup method has cleanup errors
-			- Switched from Visual Studio extensions to v2 Nuget packages for MsTest framework
-			v1.0.19
-			- added javascript workaround for geckodriver doubleclick bug
-			- updated sample tests
-			v1.0.18
-			- added minimal support for Appium. Supported capabilities:
-			&gt; automationName, platformName, deviceName, browserName, udid, orientation
-			v1.0.17
-			- revised element status check exception throwing behavior: element.IsAvailable (no); element.IsEnabled (yes); element.IsDisplayed(yes)
-			- fixed bug in wait logic due to throwing exception behavior changes
-			v1.0.16
-			- fixed Wait with time limit unable to prevent throwing exception regression
-			v1.0.15
-			- added doubleclick support
-			- added hover support
-			- improved drag and drop support and API
-			- added locator information to some exceptions
-			- fixed some bugs related to browser windows not being closed after test teardown
-			v1.0.14
-			- Fixed Issue #20 - Current element indicator breaks layout
-			- Fixed Issue #21 - SpecDrill is not logging
-			v1.0.13
-			- Fixed Issue #19 - Implicit wait is broken. Sometimes tests fail with Explicit wait when none is set from test code.
-			- Fixed Issue #18 - Fix hooks into MsTest lifecycle methods
-			v1.0.12
-			- Fixed Issue #17 - Fixed Drag and Drop
-			v1.0.11
-			- Added trace logging for framework initialization
-			v1.0.10
-			- Fixed Issue #15 (enhancement) - Add Ability to extract pdf text
-			v1.0.9
-			- Fixed Issue #11 - Wait.ForNoMoreThan(...) is broken
-			v1.0.8
-			- Fixed Issue #8 - log4net.config in nuget package is empty
-			- Fixed Issue #7 - Provide meaningful exception when PageObject is lacking parameterless constructor
-			- Fixed Issue #6 - ListElement is not considering indexer's index parameter
-			- Fixed Issue #1 - Startup browser window size is not configurable
-			v1.0.7
-			- Fixed Issue #4 - Support declarative (attribute based) way of declaring Page/Control objects
-			v1.0.6
-			- Refactored searching for native elements
-			- Waits are now fault tolerant
-			v1.0.5
-			- Fixed Issue #5 - Page load test fails for pages in iframe
-		</PackageReleaseNotes>
+      https://github.com/CosminSontu/SpecDrill/wiki/Release-Notes
+    </PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\LICENSE" Pack="true" PackagePath=".\" />

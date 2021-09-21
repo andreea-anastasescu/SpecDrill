@@ -5,13 +5,12 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>19</BuildNumber>
+    <BuildNumber>21</BuildNumber>
     <AssemblyVersion>1.1.15.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill.MsTest - SpecDrill integration with MsTest </Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <PackageReleaseNotes>
-		  v1.1.4 - Fixed Issue #40
 		  v1.0.0 - Initial Version
 	  </PackageReleaseNotes>
   </PropertyGroup>

@@ -20,6 +20,7 @@ namespace SomeTests
             var settings = ConfigurationManager.Load(null, "specDrillConfigCapabilitiesError.json");
             settings.Should().NotBeNull();
             var capabilities = settings.WebDriver?.Browser?.Capabilities;
+            
             capabilities.Should().NotBeNull();
             capabilities?["acceptSslCerts"].ToString().Should().Be("true");
         }

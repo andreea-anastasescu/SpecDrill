@@ -6,7 +6,7 @@
     <PackageIcon>specdrill.png</PackageIcon>
     <VersionSuffix>
     </VersionSuffix>
-    <BuildNumber>436</BuildNumber>
+    <BuildNumber>437</BuildNumber>
     <AssemblyVersion>1.1.8.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill.Infrastructure</Description>

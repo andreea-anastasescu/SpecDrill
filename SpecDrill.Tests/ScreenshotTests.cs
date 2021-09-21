@@ -14,7 +14,7 @@ namespace SomeTests
         public void ShouldSaveScreenshotSuccessfully()
         {
             Browser.Open<Test001CalculatorPage>();
-            SaveScreenshot(TestContext.TestName);
+            SaveScreenshot(TestContext!.TestName);
         }
     }
 }

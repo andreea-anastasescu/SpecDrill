@@ -231,7 +231,10 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             if (!isUnixPath && isWindowsRelativePath)
             {
-                var currentPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                var execAssemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var currentPath = System.IO.Path.GetDirectoryName(execAssemblyLocation);
+                if (currentPath == null) 
+                    throw new DirectoryNotFoundException($"Could not find executing assembly location {execAssemblyLocation}!");
                 return Path.Combine(currentPath,driverPath);
             }
 
@@ -276,7 +279,8 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                         var type = typeof(T);
                         var addAdditionalCapabilityMethodInfo = type.GetMethod("AddAdditionalCapability",
                             new Type[] { typeof(string), typeof(object), typeof(bool) });
-                        if (addAdditionalCapabilityMethodInfo == null) throw new InvalidCastException($"Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
+                        if (addAdditionalCapabilityMethodInfo == null) 
+                            throw new InvalidCastException($"Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
                         addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString(), true });
                     } 
                     else 

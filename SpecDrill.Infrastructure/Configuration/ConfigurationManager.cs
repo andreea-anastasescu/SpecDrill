@@ -50,14 +50,18 @@ namespace SpecDrill.Infrastructure.Configuration
 
                 jsonConfiguration = File.ReadAllText(jsonConfigurationFilePath);
             }
-            Settings configuration = JsonSerializer.Deserialize<Settings>(
+            if (jsonConfiguration == null) throw new InvalidDataException("jsonConfiguration not provided or could not be read from configuration file!");
+
+            Settings? configuration = JsonSerializer.Deserialize<Settings>(
                 jsonConfiguration,
                 new JsonSerializerOptions()
                 {
                     ReadCommentHandling = JsonCommentHandling.Skip,
                     AllowTrailingCommas = true,
                     PropertyNameCaseInsensitive = true
-                }); ;
+                });
+
+            if (configuration == null) throw new InvalidDataException("jsonConfiguration could not be deserialized!");
 
             return configuration;
         }

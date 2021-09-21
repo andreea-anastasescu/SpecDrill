@@ -6,13 +6,15 @@ using System.Linq;
 using System;
 using TechTalk.SpecFlow;
 using SpecDrill.Secondary.Ports.AutomationFramework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SomeTests.Features
 {
     [Binding]
     public class GoogleSearchSteps : UiSpecFlowBase
     {
-        public GoogleSearchSteps(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);
+        public GoogleSearchSteps(ScenarioContext scenarioContext, FeatureContext featureContext) 
+            : base(scenarioContext, featureContext) { }
 
         [Given(@"I have entered ""(.*)"" into Google search")]
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)
@@ -34,9 +36,13 @@ namespace SomeTests.Features
         public void WhenIPressSearchButton()
         {
             var googleSearchPage = scenarioContext["googleSearchPage"] as GoogleSearchPage;
+            
+            Assert.IsNotNull(googleSearchPage);
+            
             Wait.Until(() =>
                googleSearchPage.BtnSearch.IsDisplayed
-           );
+            );
+
             var resultsPage = googleSearchPage.BtnSearch.Click();
                         
             scenarioContext.Add("resultsPage", resultsPage);
@@ -46,6 +52,7 @@ namespace SomeTests.Features
         public void ThenYouShouldGetAEntryInSearchResults(string textToMatch)
         {
             var resultsPage = scenarioContext["resultsPage"] as GoogleSearchResultsPage;
+            Assert.IsNotNull(resultsPage);
             var wikiResult = resultsPage.SearchResults.GetElementByText(textToMatch);
             wikiResult.Should().NotBeNull();
         }

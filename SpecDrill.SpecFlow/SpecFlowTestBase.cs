@@ -7,8 +7,11 @@ namespace SpecDrill.SpecFlow
 {
     public class SpecFlowBase : ScenarioBase
     {
-        protected ScenarioContext? scenarioContext;
-        protected FeatureContext? featureContext;
+        protected ScenarioContext scenarioContext;
+        protected FeatureContext featureContext;
+
+        public SpecFlowBase(ScenarioContext scenarioContext, FeatureContext featureContext)
+            => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);
 
         [BeforeScenario]
         public void ScenarioSetUp()
@@ -33,8 +36,11 @@ namespace SpecDrill.SpecFlow
 
     public class UiSpecFlowBase : UiScenarioBase
     {
-        protected ScenarioContext? scenarioContext;
+        protected ScenarioContext scenarioContext;
         protected FeatureContext? featureContext;
+
+        public UiSpecFlowBase(ScenarioContext scenarioContext, FeatureContext featureContext)
+            => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);
 
         [BeforeScenario]
         public void ScenarioSetUp()

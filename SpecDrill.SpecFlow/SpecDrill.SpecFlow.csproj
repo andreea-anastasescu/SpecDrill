@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>158</BuildNumber>
+    <BuildNumber>159</BuildNumber>
     <AssemblyVersion>1.1.14.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill.SpecFlow - SpecDrill integration with SpecFlow </Description>
