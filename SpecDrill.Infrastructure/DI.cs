@@ -7,19 +7,18 @@ using System;
 
 namespace SpecDrill.Infrastructure
 {
-    public class DI
+    public static class DI
     {
-        private static readonly IServiceCollection serviceCollection = new ServiceCollection()
+        private static Func<IServiceCollection> DefaultServiceCollection
+                                            = () => new ServiceCollection()
                                                             .AddLogging(
                                                                 builder => builder
                                                                             .SetMinimumLevel(LogLevel.Information)
                                                                             .AddConsole());
+        private static IServiceCollection serviceCollection = DefaultServiceCollection();
 
-        private static Lazy<ServiceProvider> serviceProvider = RefreshServiceProvider();
-            
-        private static Lazy<ServiceProvider> RefreshServiceProvider()
-            => new Lazy<ServiceProvider>(() => serviceCollection.BuildServiceProvider());
-        
+        private static Lazy<ServiceProvider> serviceProvider = ReDeploy();
+
         public static ServiceProvider ServiceProvider => serviceProvider.Value;
         private static readonly ILoggerFactory LoggerFactory = DI.ServiceProvider.GetService<ILoggerFactory>()
                                 ?? throw new ArgumentNullException(nameof(LoggerFactory));
@@ -33,7 +32,17 @@ namespace SpecDrill.Infrastructure
         public static void AddConfiguration(IConfiguration configuration)
             => serviceCollection.Configure<Settings>(configuration);
         
-        public static void Apply() => serviceProvider = RefreshServiceProvider();
+        public static Lazy<ServiceProvider> ReDeploy()
+            => new(() => serviceCollection.BuildServiceProvider());
+        public static Lazy<ServiceProvider> Apply()
+            => serviceProvider = ReDeploy();
+        public static void Reset(bool apply = false)
+        {
+            serviceCollection = DefaultServiceCollection();
+            if (apply)
+                Apply();
+        }
+
         #endregion
     }
 }

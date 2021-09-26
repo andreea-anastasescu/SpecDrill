@@ -26,7 +26,7 @@ namespace SpecDrill.Infrastructure.Configuration
 
         public static SpecDrill.Configuration.Settings Load(string? jsonConfiguration = null, string? configurationFileName = null)
         {
-            IConfigurationBuilder configBuilder;
+            IConfigurationRoot? configRoot;
             if (string.IsNullOrWhiteSpace(jsonConfiguration))
             {
                 Logger.LogInformation($"Searching Configuration file {configurationFileName ?? ConfigurationFileName}...");
@@ -44,18 +44,21 @@ namespace SpecDrill.Infrastructure.Configuration
                     throw new FileNotFoundException("Configuration file not found");
                 }
 
-                configBuilder = new ConfigurationBuilder()
-                    .AddJsonFile(jsonConfigurationFilePath, false, false);
+                configRoot = new ConfigurationBuilder()
+                    .AddJsonFile(jsonConfigurationFilePath, false, false)
+                    .Build();
 
             }
             else
             {
-                using var configStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonConfiguration));
-                configBuilder = new ConfigurationBuilder()
-                    .AddJsonStream(configStream);
+                // this is for unit testing scenarios. reset is necessary for clearing the DI ServiceCollecton.
+                // it cannot be called from the unit test since first call to Load(...) is from our static constructor.
+                DI.Reset(apply: true);
+                var configStream = new MemoryStream(Encoding.ASCII.GetBytes(jsonConfiguration));
+                configRoot = new ConfigurationBuilder()
+                    .AddJsonStream(configStream)
+                    .Build();
             }
-            
-            IConfigurationRoot? configRoot = configBuilder.Build();
             
             if (configRoot == null) throw new InvalidDataException("jsonConfiguration not provided or could not be read from configuration file!");
 
