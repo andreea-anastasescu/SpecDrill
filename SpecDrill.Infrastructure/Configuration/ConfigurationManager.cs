@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SpecDrill.Configuration;
+using Microsoft.Extensions.Options;
+using SpecDrill.Configuration.WebDriver;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 
 namespace SpecDrill.Infrastructure.Configuration
@@ -14,18 +17,19 @@ namespace SpecDrill.Infrastructure.Configuration
         private const string ConfigurationFileName = "specDrillConfig.json";
         protected static readonly ILogger Logger;
 
-        public static readonly Settings Settings;
+        public static readonly SpecDrill.Configuration.Settings Settings;
         static ConfigurationManager()
         {
             Logger = DI.GetLogger<ConfigurationManager>();
             Settings = Load();
         }
 
-        public static Settings Load(string? jsonConfiguration = null, string? configurationFileName = null)
+        public static SpecDrill.Configuration.Settings Load(string? jsonConfiguration = null, string? configurationFileName = null)
         {
+            IConfigurationBuilder configBuilder;
             if (string.IsNullOrWhiteSpace(jsonConfiguration))
             {
-                Logger.LogInformation($"Searching Configuration file {configurationFileName??ConfigurationFileName}...");
+                Logger.LogInformation($"Searching Configuration file {configurationFileName ?? ConfigurationFileName}...");
                 var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory, configurationFileName ?? ConfigurationFileName);
 
                 if (configurationPaths == ("", ""))
@@ -40,33 +44,35 @@ namespace SpecDrill.Infrastructure.Configuration
                     throw new FileNotFoundException("Configuration file not found");
                 }
 
-                IConfigurationBuilder configBuilder = new ConfigurationBuilder().AddJsonFile(jsonConfigurationFilePath,false, false);
+                configBuilder = new ConfigurationBuilder()
+                    .AddJsonFile(jsonConfigurationFilePath, false, false);
 
-                IConfigurationRoot? configRoot = configBuilder.Build();
-                if (configRoot == null)
-                {
-                    Logger.LogInformation("Configuration file not found.");
-                    throw new FileNotFoundException("Configuration file not found");
-                }
-                DI.AddConfiguration(configRoot.GetSection("webdriver"));
-                DI.Apply();
-
-                jsonConfiguration = File.ReadAllText(jsonConfigurationFilePath);
             }
-            if (jsonConfiguration == null) throw new InvalidDataException("jsonConfiguration not provided or could not be read from configuration file!");
+            else
+            {
+                using var configStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonConfiguration));
+                configBuilder = new ConfigurationBuilder()
+                    .AddJsonStream(configStream);
+            }
+            
+            IConfigurationRoot? configRoot = configBuilder.Build();
+            
+            if (configRoot == null) throw new InvalidDataException("jsonConfiguration not provided or could not be read from configuration file!");
 
-            Settings? configuration = JsonSerializer.Deserialize<Settings>(
-                jsonConfiguration,
-                new JsonSerializerOptions()
-                {
-                    ReadCommentHandling = JsonCommentHandling.Skip,
-                    AllowTrailingCommas = true,
-                    PropertyNameCaseInsensitive = true
-                });
+            DI.AddConfiguration(configRoot);
+            DI.Apply();
+            IOptions<SpecDrill.Configuration.Settings>? wdc = DI.ServiceProvider.GetService<IOptions<SpecDrill.Configuration.Settings>>();
 
-            if (configuration == null) throw new InvalidDataException("jsonConfiguration could not be deserialized!");
+            if (wdc == null) throw new Exception("DI could not resolve IOptions<Settings>");
 
-            return configuration;
+            //new JsonSerializerOptions()
+            //{
+            //    ReadCommentHandling = JsonCommentHandling.Skip,
+            //    AllowTrailingCommas = true,
+            //    PropertyNameCaseInsensitive = true
+            //}
+
+            return wdc.Value;
         }
 
         private static (string folder, string result) FindConfigurationFile(string folder, string configurationFileName)

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SpecDrill.Configuration;
+using SpecDrill.Configuration.WebDriver;
 using System;
 
 namespace SpecDrill.Infrastructure
@@ -30,7 +31,7 @@ namespace SpecDrill.Infrastructure
 
         #region Modifying operations on ServiceCollection
         public static void AddConfiguration(IConfiguration configuration)
-            => serviceCollection.Configure<WebDriverConfiguration>(configuration.GetSection("webdriver"));
+            => serviceCollection.Configure<Settings>(configuration);
         
         public static void Apply() => serviceProvider = RefreshServiceProvider();
         #endregion

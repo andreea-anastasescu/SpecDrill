@@ -6,6 +6,7 @@ namespace SpecDrill.Configuration.WebDriver
 {
     public class WebDriverConfiguration
     {
+        public static readonly string SD_CONFIG_KEY = "webdriver";
         public string? Mode { get; set; }
 
         public int MaxWait { get; set; }
