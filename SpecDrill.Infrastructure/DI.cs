@@ -43,6 +43,10 @@ namespace SpecDrill.Infrastructure
                 Apply();
         }
 
+        public static void ConfigureServices(Action<IServiceCollection> configureServices)
+        {
+            /*serviceCollection = */configureServices(serviceCollection);
+        }
         #endregion
     }
 }

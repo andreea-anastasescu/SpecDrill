@@ -1,8 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpecDrill.Infrastructure;
 using SpecDrill.Secondary.Adapters.WebDriver;
+using static SpecDrill.Secondary.Adapters.WebDriver.Init;
 using SpecDrill.Tests;
 using System;
+using SpecDrill.Secondary.Ports.AutomationFramework;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SpecDrill.MsTest
 {
@@ -14,6 +18,12 @@ namespace SpecDrill.MsTest
         {
             try
             {
+                DI.ConfigureServices(services =>
+                {
+                    services.AddWebdriverSecondaryAdapter();
+                   // return services;
+                });
+                DI.Apply();
                 TestContext = testContext;
                 ClassSetup();
             }
@@ -37,7 +47,9 @@ namespace SpecDrill.MsTest
         public void _TestSetup()
         {
             if (TestContext == null) throw new Exception("TextContext is not initialized. SpecDrill.MsTest.TestBase.ClassSetup() was not invoked yet!\n Please add following code snippet to your test class:\n[ClassInitialize]\npublic static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);\n");
-            _ScenarioSetup(Runtime.GetServices(), TestContext.TestName);
+            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
+            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
+            _ScenarioSetup(runtimeServices, TestContext.TestName);
         }
 
         [TestCleanup]

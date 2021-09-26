@@ -1,5 +1,6 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -457,7 +458,7 @@ console.log('mouse click!');
 
         public void ClickAndDrag((int x, int y) from, int offsetX, int offsetY)
         {
-            var locatorFactory = Runtime.GetServices().ElementLocatorFactory;
+            var locatorFactory = DI.ServiceProvider.GetService<IElementLocatorFactory>() ?? throw new NotFoundException($"IElementLocatorFactory instance was not registered into DI ServiceCollection");
             var fromElement = FindElements(locatorFactory.Create(Ports.AutomationFramework.By.TagName, "html"));
             
             var builder = new Actions(this.seleniumDriver);

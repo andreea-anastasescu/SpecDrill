@@ -1,7 +1,10 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using SpecDrill.Infrastructure;
 using SpecDrill.Secondary.Adapters.WebDriver;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Tests;
 using System;
 using System.Collections.Generic;
@@ -15,6 +18,12 @@ namespace SpecDrill.NUnit3
         {
             try
             {
+                DI.ConfigureServices(services =>
+                {
+                    services.AddWebdriverSecondaryAdapter();
+                    return services;
+                });
+                DI.Apply();
                 ClassSetup();
             }
             catch (Exception e)
@@ -36,7 +45,9 @@ namespace SpecDrill.NUnit3
         [SetUp]
         public void _TestSetup()
         {
-            _ScenarioSetup(Runtime.GetServices(), TestContext.CurrentContext.Test.Name);
+            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
+            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
+            _ScenarioSetup(runtimeServices, TestContext.CurrentContext.Test.Name);
         }
 
         [TearDown]

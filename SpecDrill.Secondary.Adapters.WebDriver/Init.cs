@@ -1,4 +1,5 @@
-﻿using SpecDrill.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SpecDrill.Configuration;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace SpecDrill.Secondary.Adapters.WebDriver
 {
-    public static class Runtime
+    public static class Init
     {
         internal class RuntimeServices : IRuntimeServices
         {
@@ -19,7 +20,11 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             public IElementFactory GetElementFactory(IBrowser browser) => new ElementFactory(browser);
         }
-        public static IRuntimeServices GetServices()
-            => new RuntimeServices(new ElementLocatorFactory());
+        
+        public static void AddWebdriverSecondaryAdapter(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IElementLocatorFactory, ElementLocatorFactory>();
+            serviceCollection.AddScoped<IRuntimeServices, RuntimeServices>();
+        }
     }
 }

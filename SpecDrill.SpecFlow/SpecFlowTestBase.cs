@@ -1,4 +1,7 @@
-﻿using SpecDrill.Secondary.Adapters.WebDriver;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SpecDrill.Infrastructure;
+using SpecDrill.Secondary.Adapters.WebDriver;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Tests;
 using System;
 using TechTalk.SpecFlow;
@@ -18,8 +21,9 @@ namespace SpecDrill.SpecFlow
         {
             if (scenarioContext == null)
                 throw new Exception("Please set protected field ScenarioBase.scenarioContext via context injection by adding the following constructor to your [Binding] class:\n public {className}(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);\n");
-
-            _ScenarioSetup(Runtime.GetServices(), scenarioContext.ScenarioInfo.Title);
+            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
+            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
+            _ScenarioSetup(runtimeServices, scenarioContext.ScenarioInfo.Title);
         }
 
         [AfterScenario]
@@ -47,8 +51,14 @@ namespace SpecDrill.SpecFlow
         {
             if (scenarioContext == null)
                 throw new Exception("Please set protected field ScenarioBase.scenarioContext via context injection by adding the following constructor to your [Binding] class:\n public {className}(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);\n");
-
-            _ScenarioSetup(Runtime.GetServices(), scenarioContext.ScenarioInfo.Title);
+            DI.ConfigureServices(services =>
+            {
+                services.AddWebdriverSecondaryAdapter();
+            });
+            DI.Apply();
+            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
+            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
+            _ScenarioSetup(runtimeServices, scenarioContext.ScenarioInfo.Title);
         }
 
         [AfterScenario]
