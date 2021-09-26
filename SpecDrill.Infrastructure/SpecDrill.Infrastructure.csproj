@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net5.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
     <VersionSuffix>
     </VersionSuffix>
-    <BuildNumber>437</BuildNumber>
-    <AssemblyVersion>1.1.8.$(BuildNumber)</AssemblyVersion>
+    <BuildNumber>3</BuildNumber>
+    <AssemblyVersion>1.3.0.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill.Infrastructure</Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -17,9 +17,9 @@
     <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.12">
-      <GeneratePathProperty>true</GeneratePathProperty>
-    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

@@ -1,6 +1,6 @@
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.Secondary.Adapters.WebDriver;
 using SpecDrill.Tests;
 using System;
@@ -19,7 +19,7 @@ namespace SpecDrill.NUnit3
             }
             catch (Exception e)
             {
-                Log.Log(LogLevel.Error, $"Failed in ClassInitialize for test method [{TestContext.CurrentContext.Test.Name}] with {e}");
+                Logger.LogError($"Failed in ClassInitialize for test method [{TestContext.CurrentContext.Test.Name}] with {e}");
             }
         }
         protected static Action ClassSetup = () => { };

@@ -1,21 +1,19 @@
-﻿using OpenQA.Selenium;
+﻿using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
+using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Enums;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.Secondary.Adapters.WebDriver.Extensions;
 using SpecDrill.Secondary.Ports.AutomationFramework;
-using SpecDrill.Secondary.Ports.AutomationFramework.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace SpecDrill.Secondary.Adapters.WebDriver
@@ -64,7 +62,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         #endregion
         private readonly IWebDriver seleniumDriver;
 
-        private readonly ILogger Log = Infrastructure.Logging.Log.Get<SeleniumBrowserDriver>();
+        private readonly ILogger Logger = DI.GetLogger<SeleniumBrowserDriver>();
 
         private readonly Settings? configuration;
 
@@ -164,7 +162,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             if (javaScriptExecutor == null)
             {
-                Log.Error($" {nameof(seleniumDriver)} is not of type {nameof(IJavaScriptExecutor)}");
+                Logger.LogError($" {nameof(seleniumDriver)} is not of type {nameof(IJavaScriptExecutor)}");
                 return null;
             }
 
@@ -174,7 +172,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             }
             catch (Exception e)
             {
-                Log.Error(e, "Error when executing JavaScript");
+                Logger.LogError(e, "Error when executing JavaScript");
                 JsLog(e.Message);
                 return null;
             }
@@ -352,27 +350,33 @@ console.log('mouse click!');
             seleniumDriver.Close();
         }
 
+
         public string GetPdfText()
         {
-            //StringBuilder pdfText = new StringBuilder();
-            //string userAgent = (string)ExecuteJavaScript("return navigator.userAgent") ?? string.Empty;
+            StringBuilder pdfText = new();
+            string userAgent = (ExecuteJavaScript("return navigator.userAgent") as string) ?? string.Empty;
 
+            using (var webClient = new WebClient())
+            {
+                var formattedCookiesString = GetFormattedCookiesString();
 
-            //using (var webClient = new WebClient())
-            //{
-            //    var formattedCookiesString = GetFormattedCookiesString();
+                Uri uri = new Uri(seleniumDriver.Url);
+                webClient.Headers.Add(HttpRequestHeader.Host, uri.Host);
+                webClient.Headers.Add(HttpRequestHeader.UserAgent, userAgent);
+                webClient.Headers.Add(HttpRequestHeader.Cookie, formattedCookiesString);
+                webClient.Headers.Add(HttpRequestHeader.Accept, "application/pdf");
 
-            //    Uri uri = new Uri(seleniumDriver.Url);
-            //    webClient.Headers.Add(HttpRequestHeader.Host, uri.Host);
-            //    webClient.Headers.Add(HttpRequestHeader.UserAgent, userAgent);
-            //    webClient.Headers.Add(HttpRequestHeader.Cookie, formattedCookiesString);
-            //    webClient.Headers.Add(HttpRequestHeader.Accept, "application/pdf");
+                using var pdfStream = new MemoryStream(webClient.DownloadData(uri.OriginalString));
+                using var pdfDoc = new PdfDocument(new PdfReader(pdfStream));
 
-            //    using (var pdfStream = new MemoryStream(webClient.DownloadData(uri.OriginalString)))
-            //    using (var extractor = new PdfExtract.Extractor())
-            //        return extractor.ExtractToString(pdfStream);
-            //}
-            return ""; //TODO: Find .netstandard 2.0 compatible pdf extractor
+                StringBuilder allPdfText = new();
+                foreach (var page in pdfDoc.Pages())
+                {
+                    allPdfText.AppendLine(page.GetText());
+                }
+
+                return allPdfText.ToString();
+            }
         }
 
         private string GetFormattedCookiesString()
@@ -397,16 +401,16 @@ console.log('mouse click!');
                 attemptNo++;
                 if (succeeded)
                 {
-                    Log.Info($"Saved Screenshot `{fileName}`");
+                    Logger.LogInformation($"Saved Screenshot `{fileName}`");
                 }
                 else
                 {
-                    Log.Error($"Saving Screenshot `{fileName}`. Attempt #{attemptNo} failed!");
+                    Logger.LogError($"Saving Screenshot `{fileName}`. Attempt #{attemptNo} failed!");
                 }
             } while (!succeeded && attemptNo < 3);
             if (!succeeded)
             {
-                Log.Error($"Make sure the configured folder specified in `webdriver.screenshotsPath` exists!");
+                Logger.LogError($"Make sure the configured folder specified in `webdriver.screenshotsPath` exists!");
             }
         }
 
@@ -420,7 +424,7 @@ console.log('mouse click!');
             }
             catch (Exception e)
             {
-                Log.Error(string.Format("Error when saving screenshot `{0}`", fileName), e);
+                Logger.LogError(string.Format("Error when saving screenshot `{0}`", fileName), e);
             }
             return false;
         }

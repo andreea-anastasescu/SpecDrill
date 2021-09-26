@@ -1,5 +1,6 @@
-﻿using SpecDrill.Infrastructure.Configuration;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SpecDrill.Infrastructure;
+using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using System;
@@ -20,7 +21,7 @@ namespace SpecDrill.Tests
                 }
                 catch (Exception e)
                 {
-                    Log.Log(LogLevel.Fatal, e.Message);
+                    Logger.LogCritical(e.Message);
                     throw;
                 }
             });
@@ -46,14 +47,13 @@ namespace SpecDrill.Tests
         }
         protected sealed override void DriverTeardownRecovery(Exception e)
         {
-            Log.Log(LogLevel.Error, $"Failed in DriverTeardown with {e}");
+            Logger.Log(LogLevel.Error, $"Failed in DriverTeardown with {e}");
         }
         protected void SaveScreenshot(string scenarioName) => Browser.SaveScreenshot(this.GetType().Name, scenarioName);
     }
     public class ScenarioBase
     {
-
-        protected static readonly ILogger Log = Infrastructure.Logging.Log.Get<ScenarioBase>();
+        protected static readonly ILogger Logger = DI.GetLogger<ScenarioBase>();
         protected virtual void DriverInit(IRuntimeServices services) { }
         protected virtual void DriverInitRecovery(Exception e) { }
         protected void _ScenarioSetup(IRuntimeServices services, string scenarioName)
@@ -65,7 +65,7 @@ namespace SpecDrill.Tests
             }
             catch (Exception e)
             {
-                Log.Log(LogLevel.Error, $"Failed in TestInitialize for scenario: {scenarioName} with {e}");
+                Logger.LogError($"Failed in TestInitialize for scenario: {scenarioName} with {e}");
                 DriverInitRecovery(e);
                 return;
             }
@@ -77,14 +77,14 @@ namespace SpecDrill.Tests
         {
             try
             {
-                Log.Log(LogLevel.Info, $"Cleaning up after {scenarioName} scenario.");
+                Logger.Log(LogLevel.Information, $"Cleaning up after {scenarioName} scenario.");
 
                 ScenarioTeardown(scenarioName, isTestError);
                
             }
             catch (Exception e)
             {
-                Log.Log(LogLevel.Error, $"Failed in ScenarioCleanup for scenario: {scenarioName} with {e}");
+                Logger.Log(LogLevel.Error, $"Failed in ScenarioCleanup for scenario: {scenarioName} with {e}");
             }
             finally
             {

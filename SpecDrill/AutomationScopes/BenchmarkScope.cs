@@ -1,5 +1,5 @@
-﻿using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SpecDrill.Infrastructure;
 using System;
 using System.Diagnostics;
 
@@ -7,7 +7,7 @@ namespace SpecDrill.AutomationScopes
 {
     public sealed class BenchmarkScope : IDisposable
     {
-        private readonly ILogger Log = Infrastructure.Logging.Log.Get<BenchmarkScope>();
+        private readonly ILogger Logger = DI.GetLogger<BenchmarkScope>();
 
         private readonly Stopwatch stopwatch;
         private readonly string description;
@@ -17,7 +17,7 @@ namespace SpecDrill.AutomationScopes
             this.description = description;
             stopwatch = new Stopwatch();
 
-            Log.Info(string.Format("Starting Stopwatch for {0}", description));
+            Logger.LogInformation(string.Format("Starting Stopwatch for {0}", description));
 
             stopwatch.Start();
         }
@@ -30,7 +30,7 @@ namespace SpecDrill.AutomationScopes
         public void Dispose()
         {
             stopwatch.Stop();
-            Log.Info(string.Format("Stopped Stopwatch for {0}. Elapsed = {1}", description, stopwatch.Elapsed));
+            Logger.LogInformation(string.Format("Stopped Stopwatch for {0}. Elapsed = {1}", description, stopwatch.Elapsed));
         }
     }
 }

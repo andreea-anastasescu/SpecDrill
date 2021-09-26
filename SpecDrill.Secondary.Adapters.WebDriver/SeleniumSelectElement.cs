@@ -1,7 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using SpecDrill.Infrastructure.Logging;
-//using SpecDrill.Infrastructure.Logging.Interface;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using System;
@@ -31,7 +30,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             this.SelectElement.SelectByText(optionText);
 
-            Log.Info("SelectByText `{0}` @ {1}", optionText, this.locator);
+            Logger.LogInformation("SelectByText `{0}` @ {1}", optionText, this.locator);
             return this;
         }
 
@@ -39,7 +38,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             this.SelectElement.SelectByValue(optionValue);
 
-            Log.Info("SelectByValue `{0}` @ {1}", optionValue, this.locator);
+            Logger.LogInformation("SelectByValue `{0}` @ {1}", optionValue, this.locator);
             return this;
         }
 
@@ -47,7 +46,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             this.SelectElement.SelectByIndex(optionIndex);
 
-            Log.Info("SelectByIndex `{0}` @ {1}", optionIndex, this.locator);
+            Logger.LogInformation("SelectByIndex `{0}` @ {1}", optionIndex, this.locator);
             return this;
         }
 

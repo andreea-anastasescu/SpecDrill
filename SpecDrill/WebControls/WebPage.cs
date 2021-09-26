@@ -1,5 +1,5 @@
-﻿using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SpecDrill.Infrastructure;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Model;
 using System;
@@ -9,7 +9,7 @@ namespace SpecDrill
 {
     public class WebPage : Element, IPage
     {
-        protected ILogger Log = Infrastructure.Logging.Log.Get<WebPage>();
+        protected ILogger Logger = DI.GetLogger<WebPage>();
         private string titlePattern;
 
         public WebPage() : this(string.Empty) { }
@@ -30,7 +30,7 @@ namespace SpecDrill
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Cannot read page Title!", e);
+                    Logger.LogError("Cannot read page Title!", e);
                 }
                 return retrievedTitle;
             }
@@ -83,7 +83,7 @@ namespace SpecDrill
                 var isLoaded = title != null &&
                                Regex.IsMatch(title, this.titlePattern);
 
-                Log.Info("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, title ?? "(null)",
+                Logger.LogInformation("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, title ?? "(null)",
                     this.titlePattern ?? "(null)");
 
 

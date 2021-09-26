@@ -1,6 +1,4 @@
 ﻿using OpenQA.Selenium;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using SpecDrill.Secondary.Ports.AutomationFramework.Model;

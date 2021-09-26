@@ -1,5 +1,5 @@
-﻿using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SpecDrill.Infrastructure;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace SpecDrill.AutomationScopes
 {
     public sealed class ImplicitWaitScope : IDisposable
     {
-        private readonly ILogger Log = Infrastructure.Logging.Log.Get<ImplicitWaitScope>();
+        private readonly ILogger Logger = DI.GetLogger<ImplicitWaitScope>();
 
         private readonly string message;
         private readonly IBrowserDriver browser;
@@ -23,7 +23,7 @@ namespace SpecDrill.AutomationScopes
             {
                 timeoutHistory.Push(timeout);
                 browser.ChangeBrowserDriverTimeout(timeout);
-                Log.Info(string.Format("ImplicitWaitScope: Set Timeout to {0}. {1}", timeout, message));
+                Logger.LogInformation(string.Format("ImplicitWaitScope: Set Timeout to {0}. {1}", timeout, message));
             }
         }
 
@@ -36,7 +36,7 @@ namespace SpecDrill.AutomationScopes
                 browser.ChangeBrowserDriverTimeout(previousTimeout);
             }
 
-            Log.Info(string.Format("ImplicitWaitScope: Restored Timeout to {0}. {1}", previousTimeout, message ?? string.Empty));
+            Logger.LogInformation(string.Format("ImplicitWaitScope: Restored Timeout to {0}. {1}", previousTimeout, message ?? string.Empty));
         }
 
         public static ImplicitWaitScope Create(IBrowserDriver driver, Stack<TimeSpan> timeoutHistory, TimeSpan timeout, string? message = null)

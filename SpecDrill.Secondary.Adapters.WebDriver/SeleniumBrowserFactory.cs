@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.iOS;
@@ -7,15 +8,11 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Opera;
-//using OpenQA.Selenium.Appium.Android;
-//using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Safari;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Enums;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Collections.Generic;
@@ -28,18 +25,18 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 {
     internal static class DesiredCapabilitiesExtensions
     {
-        private static ILogger Log = Infrastructure.Logging.Log.Get(typeof(DesiredCapabilitiesExtensions));
+        private static ILogger Logger = DI.GetLogger(typeof(DesiredCapabilitiesExtensions));
 
         public static bool ValidateCapability(string key, object value, Type enumType)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                Log.Info($"Cannot Add Capability (key is null or whitespace)");
+                Logger.LogInformation($"Cannot Add Capability (key is null or whitespace)");
                 return false;
             }
             if (value == null)
             {
-                Log.Info($"Cannot add capability {key}. Its value is null.");
+                Logger.LogInformation($"Cannot add capability {key}. Its value is null.");
                 return false;
             }
 
@@ -47,7 +44,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             if (stringValue != null && string.IsNullOrWhiteSpace(stringValue))
             {
-                Log.Info($"Cannot add capability {key}. Its value is empty.");
+                Logger.LogInformation($"Cannot add capability {key}. Its value is empty.");
                 return false;
             }
 
@@ -55,12 +52,12 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             {
                 if (!enumType.IsEnum)
                 {
-                    Log.Info($"Expected `{enumType}` to be an enum.");
+                    Logger.LogInformation($"Expected `{enumType}` to be an enum.");
                 }
 
                 if (!stringValue.OfEnum(enumType))
                 {
-                    Log.Info($"Cannot add capability {key}. Its value is not in [{string.Join(", ", Enum.GetNames(enumType))}].");
+                    Logger.LogInformation($"Cannot add capability {key}. Its value is not in [{string.Join(", ", Enum.GetNames(enumType))}].");
                     return false;
                 }
             }
@@ -86,36 +83,36 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
     }
     internal class SeleniumBrowserFactory : IBrowserDriverFactory
     {
-        private static ILogger Log = Infrastructure.Logging.Log.Get<SeleniumBrowserFactory>();
+        private static ILogger Logger = DI.GetLogger<SeleniumBrowserFactory>();
         private readonly Dictionary<BrowserNames, Func<IBrowserDriver>> driverFactory;
 
         private readonly Settings? configuration = null;
         public SeleniumBrowserFactory(Settings configuration)
         {
             var aPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            Log.Info($"Assembly path = {aPath}");
+            Logger.LogInformation($"Assembly path = {aPath}");
             this.configuration = configuration;
             driverFactory = new Dictionary<BrowserNames, Func<IBrowserDriver>>
             {
                 { BrowserNames.chrome, () =>
                 {
-                    Log.Info("Initializig Chrome driver...");
+                    Logger.LogInformation("Initializig Chrome driver...");
                     var bdp = GetBrowserDriversPath(configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Path ?? "");
                     return SeleniumBrowserDriver.Create(new ChromeDriver(bdp, BuildChromeOptions()), this.configuration);
                 }},
                 { BrowserNames.ie, () =>
                 {
-                    Log.Info("Initializig IE driver...");
+                    Logger.LogInformation("Initializig IE driver...");
                     return SeleniumBrowserDriver.Create(new InternetExplorerDriver(GetBrowserDriversPath(configuration?.WebDriver?.Browser?.Drivers?.Ie?.Path ?? ""), BuildInternetExplorerOptions()), this.configuration);
                     } },
                 { BrowserNames.edge, () =>
                 {
-                    Log.Info("Initializig Edge driver...");
+                    Logger.LogInformation("Initializig Edge driver...");
                     return SeleniumBrowserDriver.Create(new EdgeDriver(GetBrowserDriversPath(configuration?.WebDriver?.Browser?.Drivers?.Edge?.Path ?? ""), BuildEdgeOptions()), this.configuration);
                     } },
                 { BrowserNames.firefox, () =>
                     {
-                        Log.Info("Initializig Firefox driver...");
+                        Logger.LogInformation("Initializig Firefox driver...");
                         
                         var binPath = configuration?.WebDriver?.Browser?.Drivers?.Firefox?.BrowserBinaryPath ?? "";
                         var fds = FirefoxDriverService.CreateDefaultService(configuration?.WebDriver?.Browser?.Drivers?.Firefox?.Path ?? "");
@@ -131,12 +128,12 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                         return SeleniumBrowserDriver.Create(new FirefoxDriver(fds, BuildFirefoxOptions(), TimeSpan.FromSeconds(60)), this.configuration);
                     } },
                 { BrowserNames.opera, () => {
-                    Log.Info("Initializig Opera driver...");
+                    Logger.LogInformation("Initializig Opera driver...");
                     return SeleniumBrowserDriver.Create(new OperaDriver(configuration?.WebDriver?.Browser?.Drivers?.Opera?.Path ?? "", BuildOperaOptions()), this.configuration);
                 } },
                 { BrowserNames.safari, () =>
                 {
-                    Log.Info("Initializig Safari driver...");
+                    Logger.LogInformation("Initializig Safari driver...");
                     return SeleniumBrowserDriver.Create(new SafariDriver(configuration?.WebDriver?.Browser?.Drivers?.Safari?.Path ?? "", BuildSafariOptions()), this.configuration);
                 } }
             };
@@ -145,12 +142,12 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         public IBrowserDriver Create(BrowserNames browserName)
         {
             var mode = (configuration?.WebDriver?.Mode ?? "").ToEnum<Modes>();
-            Log.Info($"Browser mode:{mode}");
+            Logger.LogInformation($"Browser mode:{mode}");
             switch (mode)
             {
                 case Modes.browser:
                     var isRemote = configuration?.WebDriver?.Browser?.IsRemote ?? false;
-                    Log.Info($"WebDriver.IsRemote = {isRemote}");
+                    Logger.LogInformation($"WebDriver.IsRemote = {isRemote}");
                     if (isRemote)
                     {
                         switch (browserName)
@@ -226,8 +223,8 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             bool isWindowsRelativePath = !driverPath.Contains(":\\");
             Console.WriteLine($"isUnixPath = {isUnixPath}, isWindowsRelativePath = {isWindowsRelativePath}");
             Console.WriteLine($"Driver Path = {driverPath}");
-            Log.Info($"isUnixPath = {isUnixPath}, isWindowsRelativePath = {isWindowsRelativePath}");
-            Log.Info($"Driver Path = {driverPath}");
+            Logger.LogInformation($"isUnixPath = {isUnixPath}, isWindowsRelativePath = {isWindowsRelativePath}");
+            Logger.LogInformation($"Driver Path = {driverPath}");
 
             if (!isUnixPath && isWindowsRelativePath)
             {
@@ -255,7 +252,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             if (configCapabilities == null)
             {
                 var message = $"Configuration section webdriver/browser/options is missing from specDrillConfig.json !";
-                Log.Warning(message);
+                Logger.LogWarning(message);
                 throw new Exception(message);
             }
             if (!configCapabilities.ContainsKey(CAPABILITY_NAME) || configCapabilities[CAPABILITY_NAME] == null || string.IsNullOrEmpty(configCapabilities[CAPABILITY_NAME].ToString()))
@@ -267,7 +264,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             if (configuredCapabilities == null)
             {
-                Log.Warning($"Configuration section webdriver/browser/options is missing from specDrillConfig.json !");
+                Logger.LogWarning($"Configuration section webdriver/browser/options is missing from specDrillConfig.json !");
                 return;
             }
             foreach (var kvp in configuredCapabilities)
@@ -290,11 +287,11 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 }
                 catch (ArgumentException)
                 {
-                    Log.Info($"Key {kvp.Key}={options.ToCapabilities().GetCapability(kvp.Key)} already exists. Dropping version with value {kvp.Value}");
+                    Logger.LogInformation($"Key {kvp.Key}={options.ToCapabilities().GetCapability(kvp.Key)} already exists. Dropping version with value {kvp.Value}");
                 }
                 catch (Exception)
                 {
-                    Log.Info($"Error adding Key {kvp.Key} with value {kvp.Value}");
+                    Logger.LogInformation($"Error adding Key {kvp.Key} with value {kvp.Value}");
                     throw;
                 }
             }
@@ -313,9 +310,9 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             var edgeOptions = new EdgeOptions();
             var edgeCommandLineArguments = configuration?.WebDriver?.Browser?.Drivers?.Edge?.Arguments;
-            if (edgeCommandLineArguments != null && edgeCommandLineArguments.Count > 0)
+            if (edgeCommandLineArguments != null && edgeCommandLineArguments.Count() > 0)
             {
-                Log.Warning($"Specified command line argument(s) for Edge were igonred !");
+                Logger.LogWarning($"Specified command line argument(s) for Edge were igonred !");
             }
             ExtendCapabilities(edgeOptions, configuration?.WebDriver?.Browser?.Capabilities, forceGlobal: false);
             return edgeOptions;
@@ -358,11 +355,11 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
         private ChromeOptions BuildChromeOptions()
         {
-            Log.Info("Building ChromeOptions.");
+            Logger.LogInformation("Building ChromeOptions.");
             var chromeOptions = new ChromeOptions();
             var driverArguments = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Arguments ?? new List<string>();
             chromeOptions.AddArguments(driverArguments);
-            Log.Info($@"configuration.WebDriver.Browser.Drivers.Chrome.Arguments: {(driverArguments.Any() ? 
+            Logger.LogInformation($@"configuration.WebDriver.Browser.Drivers.Chrome.Arguments: {(driverArguments.Any() ? 
                 driverArguments.Aggregate((a, b) => $"{a} {b}") : 
                 string.Empty)}");
             chromeOptions.AddArgument($"window-size={configuration?.WebDriver?.Browser?.Window?.InitialWidth},{configuration?.WebDriver?.Browser?.Window?.InitialHeight}");

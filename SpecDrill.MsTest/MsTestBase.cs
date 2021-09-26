@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpecDrill.Secondary.Adapters.WebDriver;
 using SpecDrill.Tests;
 using System;
@@ -19,7 +19,7 @@ namespace SpecDrill.MsTest
             }
             catch (Exception e)
             {
-                Log.Log(LogLevel.Error, $"Failed in ClassInitialize for test method [{testContext.TestName}] with {e}");
+                Logger.LogError($"Failed in ClassInitialize for test method [{testContext.TestName}] with {e}");
             }
         }
         protected static Action ClassSetup = () => { };

@@ -1,6 +1,5 @@
-﻿using SpecDrill.Infrastructure;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SpecDrill.Infrastructure;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -9,7 +8,7 @@ namespace SpecDrill
 {
     public class RetryWaitContext
     {
-        protected ILogger Log = Infrastructure.Logging.Log.Get<RetryWaitContext>();
+        protected ILogger Logger = DI.GetLogger<RetryWaitContext>();
 
         public int RetryCount { get; set; }
         public TimeSpan? RetryInterval { get; set; }
@@ -55,7 +54,7 @@ namespace SpecDrill
             }
             catch (Exception e)
             {
-                Log.Error(e, $"TryingAction: retryCount={retryCount}");
+                Logger.LogError(e, $"TryingAction: retryCount={retryCount}");
                 //HACK: workaround for https://stackoverflow.com/questions/48450594/selenium-timed-out-receiving-message-from-renderer
                 if (e.Message.Contains("timeout") && e.Message.Contains("renderer"))
                     return true;
@@ -71,7 +70,7 @@ namespace SpecDrill
             }
             catch (Exception e)
             {
-                Log.Error(e, "Wait with retry: retryCount={0}, retryInterval={1} / maxWait={2}", retryCount, this.RetryInterval ?? TimeSpan.FromSeconds(0), retryInterval);
+                Logger.LogError(e, "Wait with retry: retryCount={0}, retryInterval={1} / maxWait={2}", retryCount, this.RetryInterval ?? TimeSpan.FromSeconds(0), retryInterval);
                 
             }
             return false;
@@ -86,7 +85,7 @@ namespace SpecDrill
 
     public class MaxWaitContext
     {
-        protected static readonly ILogger Log = Infrastructure.Logging.Log.Get<MaxWaitContext>();
+        protected static readonly ILogger Logger = DI.GetLogger<MaxWaitContext>();
         public TimeSpan MaximumWait { get; set; }
         private Func<Func<bool>, bool, Tuple<bool, Exception?>> safeWait = (waitCondition, throwException) =>
          {
@@ -102,7 +101,7 @@ namespace SpecDrill
              }
              catch (Exception e)
              {
-                 Log.Error(e, "Error on wait");
+                 Logger.LogError(e, "Error on wait");
                  if (throwException)
                      throw;
                  return Tuple.Create<bool, Exception?>(result, e);
@@ -127,7 +126,8 @@ namespace SpecDrill
                 lastError = waitResult.Item2;
                 conclusive = lastError == null;
                 conditionMet = waitResult.Item1;
-                Log.Info($"c = {conclusive}, cm={conditionMet}, maxWait = {MaximumWait}");
+                Logger.LogInformation($"c = {conclusive}, cm={conditionMet}, maxWait = {MaximumWait}");
+
                 if (conclusive && conditionMet)
                 {
                     return;

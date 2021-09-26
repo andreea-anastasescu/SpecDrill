@@ -12,7 +12,6 @@ namespace SomeTests
         public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
 
         [TestMethod]
-        [Ignore]
         public void ShouldReadPdfText()
         {
             var alertPage = Browser.Open<PdfIndexPage>();

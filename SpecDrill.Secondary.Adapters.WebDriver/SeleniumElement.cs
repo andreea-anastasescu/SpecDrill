@@ -1,7 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
+using SpecDrill.Infrastructure;
 using SpecDrill.Secondary.Adapters.WebDriver.Extensions;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
@@ -31,7 +31,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
     }
     internal class SeleniumElement : IElement
     {
-        protected static readonly ILogger Log = Infrastructure.Logging.Log.Get<SeleniumElement>();
+        protected static readonly ILogger Logger = DI.GetLogger<SeleniumElement>();
 
         protected IBrowser? browser;
         protected IElementLocator locator;
@@ -106,14 +106,14 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             var locator = resultUnderTest.Locator;
             if (exception != null)
             {
-                Log.Info(string.Format($"[TEST] {testName} test result for {locator}: false ; Reason {(exception?.ToString() ?? "(null)")}"));
+                Logger.LogInformation(string.Format($"[TEST] {testName} test result for {locator}: false ; Reason {(exception?.ToString() ?? "(null)")}"));
             }
 
             var testResult = test(state);
 
             if (!testResult)
             {
-                Log.Info(string.Format($"[TEST] {testName} result for {locator}: false > displayed:{state.HasFlag(ElementStateFlags.Displayed)}, enabled:{state.HasFlag(ElementStateFlags.Enabled)}"));
+                Logger.LogInformation(string.Format($"[TEST] {testName} result for {locator}: false > displayed:{state.HasFlag(ElementStateFlags.Displayed)}, enabled:{state.HasFlag(ElementStateFlags.Enabled)}"));
             }
 
             return (testResult, exception);
@@ -145,33 +145,33 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             Exception? exception = null;
             try
             {
-                Log.Info($"Testing State for {resultUnderTest.Locator}");
+                Logger.LogInformation($"Testing State for {resultUnderTest.Locator}");
 
                 if (ResilientAccess(ref resultUnderTest, iwe => (iwe?.Displayed ?? false))) state |= ElementStateFlags.Displayed;
                 if (ResilientAccess(ref resultUnderTest, iwe => (iwe?.Enabled ?? false))) state |= ElementStateFlags.Enabled;
 
-                Log.Info($"state = {state}");
+                Logger.LogInformation($"state = {state}");
                 return (state, exception);
             }
             catch (StaleElementReferenceException sere)
             {
                 exception = sere;
-                Log.Error(exception, $"SpecDrill: State Test for {locator}");
+                Logger.LogError(exception, $"SpecDrill: State Test for {locator}");
             }
             catch (NotFoundException nfe)
             {
                 exception = nfe;
-                Log.Error(exception, $"SpecDrill: State Test for {locator}");
+                Logger.LogError(exception, $"SpecDrill: State Test for {locator}");
             }
             catch (ElementNotFoundException enfe)
             {
                 exception = enfe;
-                Log.Error(exception, $"SpecDrill: State Test for {locator}");
+                Logger.LogError(exception, $"SpecDrill: State Test for {locator}");
             }
             catch (Exception e)
             {
                 exception = e;
-                Log.Error(exception, $"SpecDrill: State Test for {locator}");
+                Logger.LogError(exception, $"SpecDrill: State Test for {locator}");
             }
 
             return (state, exception);
@@ -183,7 +183,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             if (waitForSilence) { this.ContainingPage?.WaitForSilence(); }
 
-            Log.Info("Clicking {0}", this.locator);
+            Logger.LogInformation("Clicking {0}", this.locator);
             try
             {
                 if (clickType == ClickType.Single)
@@ -197,17 +197,17 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             }
             catch (StaleElementReferenceException sere)
             {
-                Log.Error(sere, $"Click: Element {this.locator} is stale!");
+                Logger.LogError(sere, $"Click: Element {this.locator} is stale!");
                 throw;
             }
             catch (ElementNotVisibleException enve)
             {
-                Log.Error(enve, $"Element {this.locator} is not visible!");
+                Logger.LogError(enve, $"Element {this.locator} is not visible!");
                 throw;
             }
             catch (InvalidOperationException ioe)
             {
-                Log.Error(ioe, $"Clicking Element {this.locator} caused an InvalidOperationException!");
+                Logger.LogError(ioe, $"Clicking Element {this.locator} caused an InvalidOperationException!");
             }
         }
 
@@ -241,7 +241,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             }
             catch (StaleElementReferenceException sere)
             {
-                Log.Error(sere, $"GetCssValue: Element {this.locator} is stale!");
+                Logger.LogError(sere, $"GetCssValue: Element {this.locator} is stale!");
             }
 
             return "";
@@ -255,7 +255,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             }
             catch (StaleElementReferenceException sere)
             {
-                Log.Error(sere, $"GetAttribute: Element {this.locator} is stale!");
+                Logger.LogError(sere, $"GetAttribute: Element {this.locator} is stale!");
             }
             catch (Exception e)
             {
@@ -274,11 +274,11 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             }
             catch (StaleElementReferenceException sere)
             {
-                Log.Error(sere, $"GetAttribute: Element {this.locator} is stale!");
+                Logger.LogError(sere, $"GetAttribute: Element {this.locator} is stale!");
             }
             catch (Exception e)
             {
-                Log.Error(e, $"GetAttribute: Element {this.locator}.");
+                Logger.LogError(e, $"GetAttribute: Element {this.locator}.");
             }
             return false;
         }
@@ -328,8 +328,8 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             bool isParentAvailable = AvailabilityTest(previousContainer);
 
-            Log.Info($"Finding element {locator} which is nested {elementContainers.Count} level(s) deep. Its parent is{(isParentAvailable ? string.Empty : " not")} available.");
-            Log.Info($"L00>{lastContainerLocator}");
+            Logger.LogInformation($"Finding element {locator} which is nested {elementContainers.Count} level(s) deep. Its parent is{(isParentAvailable ? string.Empty : " not")} available.");
+            Logger.LogInformation($"L00>{lastContainerLocator}");
 
             if (elementContainers.Count > 1)
             {
@@ -346,7 +346,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 }
             }
 
-            Log.Info($"LOC>{locator}");
+            Logger.LogInformation($"LOC>{locator}");
 
             return SearchElementInPreviousContainer(
                 elementToSearch: this,
@@ -392,7 +392,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             if (!AvailabilityTest(previousContainer))
             {
-                Log.Error($"AvailabilityTest({previousContainer.Locator}) = False!");
+                Logger.LogError($"AvailabilityTest({previousContainer.Locator}) = False!");
                 return SearchResult.Empty;
             }
 
@@ -435,7 +435,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                                 shadowRoot = FindElementsInContainer(locator, depth++,
                                     shadowRoot ?? previousContainerNativeElement);
 
-                                Log.Info($"Reached {locator} #shadowRoot");
+                                Logger.LogInformation($"Reached {locator} #shadowRoot");
                             }
 
                             break;
@@ -472,10 +472,10 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             }
             catch (StaleElementReferenceException sere)
             {
-                Log.Error(sere, $"L{depth:00}>{elementToSearch.Locator} - Is Stale !");
+                Logger.LogError(sere, $"L{depth:00}>{elementToSearch.Locator} - Is Stale !");
                 return SearchResult.Empty;
             }
-            Log.Info($"L{depth:00}>{elementToSearch.Locator}");
+            Logger.LogInformation($"L{depth:00}>{elementToSearch.Locator}");
 
 
             return previousContainer;

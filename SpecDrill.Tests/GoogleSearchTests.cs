@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SomeTests.PageObjects.Test002;
 using SpecDrill;
-using SpecDrill.Infrastructure.Logging;
 using SpecDrill.MsTest;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;

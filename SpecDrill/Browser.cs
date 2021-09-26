@@ -1,11 +1,10 @@
-﻿using SpecDrill.AutomationScopes;
+﻿using Microsoft.Extensions.Logging;
+using SpecDrill.AutomationScopes;
 using SpecDrill.Configuration;
 using SpecDrill.Configuration.Homepages;
 using SpecDrill.Exceptions;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Enums;
-using SpecDrill.Infrastructure.Logging;
-using SpecDrill.Infrastructure.Logging.Interfaces;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using SpecDrill.Secondary.Ports.AutomationFramework.Exceptions;
@@ -25,7 +24,7 @@ namespace SpecDrill
 
         private readonly Settings configuration = new Settings();
 
-        private readonly ILogger Log = Infrastructure.Logging.Log.Get<Browser>();
+        private readonly ILogger Logger = DI.GetLogger<Browser>();
 
         private readonly IBrowserDriver browserDriver;
 
@@ -37,18 +36,18 @@ namespace SpecDrill
 
             this.configuration = configuration ?? throw new MissingConfigurationException("Configuration is missing!");
 
-            Log.Info("Initializing Driver...");
+            Logger.LogInformation("Initializing Driver...");
             var driverFactory = runtimeServices.GetBrowserFactoryBuilder(configuration);
 
             var browserName = this.configuration?.WebDriver?.Browser?.BrowserName.ToEnum<BrowserNames>();
-            Log.Info($"WebDriver.BrowserDriver = {(browserName)}");
+            Logger.LogInformation($"WebDriver.BrowserDriver = {(browserName)}");
             browserDriver = driverFactory.Create(browserName ?? BrowserNames.chrome);
 
             if (configuration?.WebDriver?.Mode.ToEnum<Modes>() == Modes.browser)
             {
                 var isMaximized = configuration?.WebDriver?.Browser?.Window?.IsMaximized ?? false;
                 // configuring browser window
-                Log.Info($"BrowserWindow.IsMaximized = {isMaximized}");
+                Logger.LogInformation($"BrowserWindow.IsMaximized = {isMaximized}");
 
                 if (isMaximized)
                 {
@@ -61,7 +60,7 @@ namespace SpecDrill
             }
             var maxWait = configuration?.WebDriver?.MaxWait;
             long waitMilliseconds = Math.Max(maxWait ?? 0, 60000L);
-            Log.Info($"MaxWait = {waitMilliseconds}ms");
+            Logger.LogInformation($"MaxWait = {waitMilliseconds}ms");
             var cfgMaxWait = TimeSpan.FromMilliseconds(waitMilliseconds);
 
             // set initial browser driver timeout to configuration or 1 minute if not defined
@@ -100,7 +99,7 @@ namespace SpecDrill
             {
                 var url = homePage.IsFileSystemPath ? BuildFileSystemPath(homePage) : homePage.Url ?? "";
 
-                Log.Info($"Browser opening {url}");
+                Logger.LogInformation($"Browser opening {url}");
                 
                 Action navigateToUrl = () => this.GoToUrl(url);
 
@@ -113,7 +112,7 @@ namespace SpecDrill
                 return targetPage;
             }
             string errMsg = $"SpecDrill: Page({ typeof(T).Name }) cannot be found in Homepages section of settings file.";
-            Log.Info(errMsg);
+            Logger.LogInformation(errMsg);
             throw new MissingHomepageConfigEntryException(errMsg);
         }
 
@@ -486,11 +485,11 @@ namespace SpecDrill
 
             if (searchRoot?.Locator?.IsShadowRoot ?? false)
             {
-                Log.Info($"DOM LOOKUP: { searchRoot.Locator } (shadowRoot)");
+                Logger.LogInformation($"DOM LOOKUP: { searchRoot.Locator } (shadowRoot)");
                 searchContext = ExecuteJavascript($"return arguments[0].shadowRoot", searchRoot.Elements.FirstOrDefault());
             }
 
-            Log.Info($"DOM LOOKUP: {searchRoot?.Locator?.ToString() ?? "ROOT"} :: {locator}");
+            Logger.LogInformation($"DOM LOOKUP: {searchRoot?.Locator?.ToString() ?? "ROOT"} :: {locator}");
             var elements = browserDriver.FindElements(locator, searchContext);
 
             if (locator.Index.HasValue)
@@ -507,7 +506,7 @@ namespace SpecDrill
 
         public void JsLog(string logEntry)
         {
-            Log.Info($"Browser.JsLog(logEntry={logEntry}");
+            Logger.LogInformation($"Browser.JsLog(logEntry={logEntry}");
             browserDriver.JsLog(logEntry);
         }
 
@@ -591,12 +590,12 @@ namespace SpecDrill
                                         string.Format("{0}_{1:00}_{2:00}_{3:0000}_{4:00}_{5:00}_{6:00}_{7:000}.png",
                                          string.Format($"{testClassName}_{testMethodName}"),
                                          now.Day, now.Month, now.Year, now.Hour, now.Minute, now.Second, now.Millisecond));
-                Log.Info($"Saving screensot `{fileName}`");
+                Logger.LogInformation($"Saving screensot `{fileName}`");
                 this.browserDriver.SaveScreenshot(fileName);
             }
             catch (Exception e)
             {
-                Log.Error(e, $"Could not save Screenshot `{fileName}`.");
+                Logger.LogError(e, $"Could not save Screenshot `{fileName}`.");
             }
         }
 
