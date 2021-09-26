@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Samples.NUnit3.PageObjects;
 using SpecDrill.SpecFlow;
 using System;
@@ -15,11 +16,18 @@ namespace SpecDrill.Samples.NUnit3.Features
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
-            googleSearchPage.TxtSearch.SendKeys(searchTerm + "\x1B");
-            googleSearchPage.TxtSearch.Blur();
-            Wait.NoMoreThan(TimeSpan.FromSeconds(1)).Until(() => googleSearchPage.TxtSearch.IsDisplayed);
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(Secondary.Ports.AutomationFramework.By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
+            Wait.NoMoreThan(TimeSpan.FromSeconds(7))
+                .Until(() => acceptButton.IsAvailable);
+            if (acceptButton.IsAvailable)
+                acceptButton.Click();
 
-            googleSearchPage.TxtSearch.IsDisplayed.Should().BeFalse();
+            googleSearchPage.TxtSearch.SendKeys("drill wiki");
+            googleSearchPage.TxtSearch.Blur();
+            Wait.Until(() =>
+                googleSearchPage.BtnSearch.IsDisplayed
+            );
+
             scenarioContext.Add("googleSearchPage", googleSearchPage);
         }
         

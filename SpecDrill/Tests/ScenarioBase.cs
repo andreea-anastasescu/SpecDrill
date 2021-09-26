@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Secondary.Ports.AutomationFramework;
@@ -11,20 +12,9 @@ namespace SpecDrill.Tests
     {
         protected IBrowser Browser => LazyBrowser.Value;
         protected Lazy<IBrowser> LazyBrowser { get; private set; } = new Lazy<IBrowser>(() => throw new Exception("Browser not initialized. _ScenarioSetup was not called yet!"));
-        protected sealed override void DriverInit(IRuntimeServices services)
+        protected sealed override void DriverInit()
         {
-            LazyBrowser = new Lazy<IBrowser>(() =>
-            {
-                try
-                {
-                    return new Browser(services, ConfigurationManager.Settings);
-                }
-                catch (Exception e)
-                {
-                    Logger.LogCritical(e.Message);
-                    throw;
-                }
-            });
+            LazyBrowser = new Lazy<IBrowser>(() => DI.ServiceProvider.GetService<IBrowser>() ?? throw new Exception("IBrowser could not be resolved by DI ServiceProvider"));
         }
         protected sealed override void DriverInitRecovery(Exception e)
         {
@@ -43,6 +33,7 @@ namespace SpecDrill.Tests
                 SaveScreenshot(scenarioName);
             }
             Browser?.Exit();
+            
             LazyBrowser = new Lazy<IBrowser>(() => throw new Exception("Browser already exited. _ScenarioTeardown was called!"));
         }
         protected sealed override void DriverTeardownRecovery(Exception e)
@@ -54,13 +45,13 @@ namespace SpecDrill.Tests
     public class ScenarioBase
     {
         protected static readonly ILogger Logger = DI.GetLogger<ScenarioBase>();
-        protected virtual void DriverInit(IRuntimeServices services) { }
+        protected virtual void DriverInit() { }
         protected virtual void DriverInitRecovery(Exception e) { }
-        protected void _ScenarioSetup(IRuntimeServices services, string scenarioName)
+        protected void _ScenarioSetup(string scenarioName)
         {
             try
             {
-                DriverInit(services);
+                DriverInit();
                 ScenarioSetup();
             }
             catch (Exception e)
@@ -72,7 +63,7 @@ namespace SpecDrill.Tests
         }
 
         protected virtual void ScenarioSetup() { }
-        
+
         protected void _ScenarioTeardown(string scenarioName, bool isTestError)
         {
             try
@@ -80,7 +71,7 @@ namespace SpecDrill.Tests
                 Logger.Log(LogLevel.Information, $"Cleaning up after {scenarioName} scenario.");
 
                 ScenarioTeardown(scenarioName, isTestError);
-               
+
             }
             catch (Exception e)
             {
@@ -98,7 +89,7 @@ namespace SpecDrill.Tests
                 }
             }
 
-            
+
         }
 
         protected virtual void DriverTeardown(string scenarioName, bool isTestError) { }

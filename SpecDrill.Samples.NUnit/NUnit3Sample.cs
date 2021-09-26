@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
+using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.NUnit3;
 using SpecDrill.Samples.NUnit3.PageObjects;
 using System;
@@ -17,6 +18,7 @@ namespace SpecDrill.Samples.NUnit3
         [Test]
         public void TestMethod1()
         {
+            ConfigurationManager.Load();
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             var acceptButton = new Element(null, ElementLocatorFactory.Create(Secondary.Ports.AutomationFramework.By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
             Wait.NoMoreThan(TimeSpan.FromSeconds(7))

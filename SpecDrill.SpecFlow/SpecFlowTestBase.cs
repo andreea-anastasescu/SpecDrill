@@ -1,9 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
+using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Secondary.Adapters.WebDriver;
 using SpecDrill.Secondary.Ports.AutomationFramework;
+using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using SpecDrill.Tests;
 using System;
+using System.Runtime.CompilerServices;
 using TechTalk.SpecFlow;
 
 namespace SpecDrill.SpecFlow
@@ -21,9 +25,7 @@ namespace SpecDrill.SpecFlow
         {
             if (scenarioContext == null)
                 throw new Exception("Please set protected field ScenarioBase.scenarioContext via context injection by adding the following constructor to your [Binding] class:\n public {className}(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);\n");
-            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
-            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
-            _ScenarioSetup(runtimeServices, scenarioContext.ScenarioInfo.Title);
+            _ScenarioSetup(scenarioContext.ScenarioInfo.Title);
         }
 
         [AfterScenario]
@@ -51,14 +53,8 @@ namespace SpecDrill.SpecFlow
         {
             if (scenarioContext == null)
                 throw new Exception("Please set protected field ScenarioBase.scenarioContext via context injection by adding the following constructor to your [Binding] class:\n public {className}(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);\n");
-            DI.ConfigureServices(services =>
-            {
-                services.AddWebdriverSecondaryAdapter();
-            });
-            DI.Apply();
-            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
-            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
-            _ScenarioSetup(runtimeServices, scenarioContext.ScenarioInfo.Title);
+           
+            _ScenarioSetup(scenarioContext.ScenarioInfo.Title);
         }
 
         [AfterScenario]
@@ -70,6 +66,19 @@ namespace SpecDrill.SpecFlow
             _ScenarioTeardown(
                 scenarioName: scenarioContext.ScenarioInfo.Title,
                 isTestError: scenarioContext.ScenarioExecutionStatus == ScenarioExecutionStatus.TestError);
+        }
+
+        [ModuleInitializer]
+        public static void AssemblyInitialize()
+        {
+            DI.ConfigureServices(services =>
+            {
+                services.AddWebdriverSecondaryAdapter();
+                services.AddSingleton<Settings>(ConfigurationManager.Settings);
+                services.AddSingleton<IBrowser, Browser>();
+            });
+            DI.Apply();
+            Console.WriteLine("SpecDrill.MsTest Module Initializer - DI Config complete!");
         }
     }
 }

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\csontu\.nuget\packages\specdrill.nunit3\1.1.23.147\contentFiles\any\any\log4net.template.config" />
+    <Content Remove="C:\Users\csontu\.nuget\packages\specdrill.specflow\1.1.14.286\contentFiles\any\any\log4net.template.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit.Allure" Version="1.0.9" />

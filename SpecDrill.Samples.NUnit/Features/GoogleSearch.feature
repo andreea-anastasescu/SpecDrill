@@ -7,4 +7,4 @@
 Scenario: Find wiki entry for searched keyword
 	Given I have entered "drill wiki" into Google search
 	When I press Search button
-	Then You should get a "Wikipedia" entry in search results
+	Then You should get a "Drill" entry in search results

@@ -7,9 +7,14 @@ using SpecDrill.Tests;
 using System;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using Microsoft.Extensions.DependencyInjection;
+using SpecDrill.Secondary.Ports.AutomationFramework.Core;
+using SpecDrill.Infrastructure.Configuration;
+using System.Runtime.CompilerServices;
+using SpecDrill.Configuration;
 
 namespace SpecDrill.MsTest
 {
+    [TestClass]
     public class MsTestBase : UiScenarioBase
     {
         protected static TestContext? TestContext;
@@ -18,12 +23,7 @@ namespace SpecDrill.MsTest
         {
             try
             {
-                DI.ConfigureServices(services =>
-                {
-                    services.AddWebdriverSecondaryAdapter();
-                   // return services;
-                });
-                DI.Apply();
+                
                 TestContext = testContext;
                 ClassSetup();
             }
@@ -47,9 +47,8 @@ namespace SpecDrill.MsTest
         public void _TestSetup()
         {
             if (TestContext == null) throw new Exception("TextContext is not initialized. SpecDrill.MsTest.TestBase.ClassSetup() was not invoked yet!\n Please add following code snippet to your test class:\n[ClassInitialize]\npublic static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);\n");
-            var runtimeServices = DI.ServiceProvider.GetService<IRuntimeServices>();
-            if (runtimeServices == null) throw new Exception("IRuntimeServices could not be resoved by DI ServiceProvider");
-            _ScenarioSetup(runtimeServices, TestContext.TestName);
+           
+            _ScenarioSetup(TestContext.TestName);
         }
 
         [TestCleanup]
@@ -57,6 +56,23 @@ namespace SpecDrill.MsTest
         {
             if (TestContext == null) throw new Exception("TextContext is not initialized. SpecDrill.MsTest.TestBase.ClassSetup() was not invoked yet!\n Please add following code snippet to your test class:\n[ClassInitialize]\npublic static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);\n");
             _ScenarioTeardown(scenarioName: TestContext.TestName, isTestError: TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
+        }
+
+        [ModuleInitializer]
+        public static void AssemblyInitialize()
+        {
+            DI.ConfigureServices(services =>
+            {
+                services.AddWebdriverSecondaryAdapter();
+                services.AddSingleton<Settings>(sp =>
+                {
+                    ConfigurationManager.Load();
+                    return ConfigurationManager.Settings;
+                });
+                services.AddTransient<IBrowser, Browser>();
+            });
+            DI.Apply();
+            Console.WriteLine("SpecDrill.MsTest Module Initializer - DI Config complete!");
         }
 
     }

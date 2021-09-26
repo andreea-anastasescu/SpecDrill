@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>99</BuildNumber>
+    <BuildNumber>126</BuildNumber>
     <AssemblyVersion>1.3.0.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill.Secondary.Ports - SpecDrill Automation Framework plug-in interface</Description>

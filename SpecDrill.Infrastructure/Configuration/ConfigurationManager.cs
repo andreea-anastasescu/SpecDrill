@@ -44,6 +44,7 @@ namespace SpecDrill.Infrastructure.Configuration
                     throw new FileNotFoundException("Configuration file not found");
                 }
 
+                Logger.LogInformation($"Configuring json fine -> path = {jsonConfigurationFilePath}");
                 configRoot = new ConfigurationBuilder()
                     .AddJsonFile(jsonConfigurationFilePath, false, false)
                     .Build();
@@ -61,7 +62,7 @@ namespace SpecDrill.Infrastructure.Configuration
             }
             
             if (configRoot == null) throw new InvalidDataException("jsonConfiguration not provided or could not be read from configuration file!");
-
+            Logger.LogInformation("DI.AddConfiguration(configRoot);");
             DI.AddConfiguration(configRoot);
             DI.Apply();
             IOptions<SpecDrill.Configuration.Settings>? wdc = DI.ServiceProvider.GetService<IOptions<SpecDrill.Configuration.Settings>>();
