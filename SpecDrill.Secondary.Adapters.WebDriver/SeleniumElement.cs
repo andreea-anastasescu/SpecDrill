@@ -131,7 +131,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             {
                 result = op(ToIWebElement(searchResult));
             }
-            catch (ElementNotFoundException enfe) { throw;  }
+            catch (ElementNotFoundException) { throw;  }
             catch
             {
                 searchResult = Browser.Find(searchResult.Locator, searchResult.Container);
@@ -340,8 +340,8 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
                     if (!previousContainer.HasResult)
                         return SearchResult.Empty;
-                    //// HERE -> wat to do with container tosearch vs previous container . why last container lcator is not used and 
-                    //// why it was introduced? shoudl be fixable.. hope so!
+                    //// HERE -> wat to do with container tosearch vs previous container . why last container locator is not used and 
+                    //// why it was introduced? 
                     //lastContainerLocator = containerToSearch.Locator;
                 }
             }
@@ -362,7 +362,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
         private List<IElement> DiscoverElementContainers()
         {
-            List<IElement> elementContainers = new List<IElement>();
+            List<IElement> elementContainers = new();
 
             IElement? current = this.Parent;
 
@@ -402,7 +402,6 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 ////////////////////////////////////
                 SearchResult? shadowRoot = null;
 
-                IElementLocator? targetSelector;
                 var selector = elementToSearch.Locator.LocatorValue;
                 var shadowDomParts = new string[0];
                 if (selector.Contains(CSS_SHADOW_DOM_TOKEN))
@@ -449,12 +448,12 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 {
                     previousContainerNativeElement = shadowRoot;
                     var finalSelector = shadowDomParts.LastOrDefault();
-                    IWebElement? targetElement;
+                    
                     if (!string.IsNullOrWhiteSpace(finalSelector))
                     {
                         elementToSearch = new SeleniumElement(elementToSearch.Browser,
                                 elementToSearch.Parent,
-                                CreateLocator(elementToSearch.Locator.LocatorType, shadowDomParts.LastOrDefault(), elementToSearch.Locator.Index));
+                                CreateLocator(elementToSearch.Locator.LocatorType, finalSelector /*shadowDomParts.Last()*/, elementToSearch.Locator.Index));
                     }
                     else
                     {
@@ -549,7 +548,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 var result = this.NativeElementSearchResult();
 
                 if (result.Elements.Any())
-                   Browser.ExecuteJavascript(@"arguments[0].style.outline='1px solid green';", result.Elements.FirstOrDefault());
+                   Browser.ExecuteJavascript(@"arguments[0].style.outline='1px solid green';", result.Elements.First());
 
                 return result.Count;
             }

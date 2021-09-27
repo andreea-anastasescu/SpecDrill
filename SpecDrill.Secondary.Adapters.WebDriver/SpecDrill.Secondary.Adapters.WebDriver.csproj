@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>229</BuildNumber>
+    <BuildNumber>230</BuildNumber>
     <AssemblyVersion>1.3.0.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Deterministic>true</Deterministic>

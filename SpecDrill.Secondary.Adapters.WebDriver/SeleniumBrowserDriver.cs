@@ -340,7 +340,7 @@ console.log('mouse click!');
             Wait.WithRetry().Doing(() => seleniumWindowElement.Click()).Until(() => seleniumDriver.WindowHandles.Count() > windowCount);
 
             var mostRecentWindow = seleniumDriver.WindowHandles.LastOrDefault();
-            if (mostRecentWindow != default(string))
+            if (mostRecentWindow != default)
             {
                 seleniumDriver.SwitchTo().Window(mostRecentWindow);
             }
@@ -382,7 +382,7 @@ console.log('mouse click!');
 
         private string GetFormattedCookiesString()
         {
-            StringBuilder strCookies = new StringBuilder();
+            StringBuilder strCookies = new();
             foreach (var cookie in (seleniumDriver.Manage().Cookies.AllCookies ?? new ReadOnlyCollection<OpenQA.Selenium.Cookie>(new List<OpenQA.Selenium.Cookie>())))
             {
                 strCookies.Append($"{cookie.Name}={cookie.Value}; ");
@@ -443,7 +443,7 @@ console.log('mouse click!');
             var configCapabilities = configuration?.WebDriver?.Browser?.Capabilities ?? new Dictionary<string, object>();
 
             foreach (var kvp in configCapabilities)
-                capabilities[kvp.Key] = kvp.Value.ToString();
+                capabilities[kvp.Key] = kvp.Value.ToString()??"";
 
             var remoteDriver = (this.seleniumDriver as OpenQA.Selenium.Remote.RemoteWebDriver);
             if (remoteDriver != null)

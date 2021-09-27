@@ -92,7 +92,7 @@ namespace SpecDrill
         {
             var homePage = configuration.Homepages.FirstOrDefault(homepage => homepage.PageObjectType == typeof(T).Name);
             string BuildFileSystemPath(HomepageConfiguration homePage) => string.Format("file:///{0}{1}",
-                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).Replace('\\', '/'),
+                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)??"".Replace('\\', '/'),
                             homePage.Url);
             
             if (homePage != null)
@@ -147,7 +147,7 @@ namespace SpecDrill
         private T CreateContainer<T>(T? containerInstance = default(T))
             where T : class, IElement
         {
-            var container = EnsureContainerInstance<T>(containerInstance);
+            var container = EnsureContainerInstance(containerInstance);
 
             Type containerType = typeof(T);
 
@@ -191,7 +191,7 @@ namespace SpecDrill
                                             var targetTypeFindAttributes = navigationTargetType.GetCustomAttributes<FindAttribute>();
                                             if (!targetTypeFindAttributes.Any())
                                             {
-                                                throw new NoFindTargetAttributeOnNavigationElementMemberNorFindAttributeOnTargetWebControlException($"Either: Member INavitationElement<{navigationTargetType.Name}> ({member.DeclaringType.Name}.{member.Name}) must have [FindTarget] attribute applied Or: Target Control class ({navigationTargetType.Name}) must have [Find] attribute applied");
+                                                throw new NoFindTargetAttributeOnNavigationElementMemberNorFindAttributeOnTargetWebControlException($"Either: Member INavitationElement<{navigationTargetType.Name}> ({member.DeclaringType?.Name ?? "N/A"}.{member.Name}) must have [FindTarget] attribute applied Or: Target Control class ({navigationTargetType.Name}) must have [Find] attribute applied");
                                             }
                                             var targetTypeFindAttribute = targetTypeFindAttributes.Last();
                                             navigationTargetLocator = ElementLocatorFactory.Create(targetTypeFindAttribute.SelectorType, targetTypeFindAttribute.SelectorValue); // locator from target Control (css window/popup) type
@@ -210,7 +210,7 @@ namespace SpecDrill
                                                 var navigationTargetMember = members[findTargetAttribute.PropertyName];
                                                 if (!typeof(INavigationTargetElement).IsAssignableFrom(GetMemberType(navigationTargetMember))) // member does not have INavigationTargetElement type (meaning it is not a Page or a Control)
                                                 { // This should not be possible due to Generic type parameter compiler check !
-                                                    throw new TargetPropertyIsNotWebControlException($"[FindTarget] applied to ({member.DeclaringType.Name}.{member.Name}) must point to a member of type WebPage or WebControl [IPage, IControl or INavigationTarget]");
+                                                    throw new TargetPropertyIsNotWebControlException($"[FindTarget] applied to ({member.DeclaringType?.Name ?? "N/A"}.{member.Name}) must point to a member of type WebPage or WebControl [IPage, IControl or INavigationTarget]");
                                                 }
 
                                                 var navigationTargetFindAttributes = navigationTargetMember.GetCustomAttributes<FindAttribute>().ToList();
@@ -286,11 +286,11 @@ namespace SpecDrill
             return element;
         }
 
-        private IElement EnsureContainerInstance<T>(T? containerInstance) where T : class, IElement
+        private static IElement EnsureContainerInstance<T>(T? containerInstance) where T : class, IElement
         {
             try
             {
-                return (containerInstance as IElement) ?? (T)Activator.CreateInstance(typeof(T));
+                return ((containerInstance as IElement) ?? (T?)Activator.CreateInstance(typeof(T))) ?? throw new Exception("Could not ensure container!");
             }
             catch (MissingMethodException mme)
             {
@@ -298,24 +298,24 @@ namespace SpecDrill
             }
         }
 
-        private static object InvokeFactoryMethod<T>(string methodName, Type[] genericTypeArguments, T page, FindAttribute findAttribute, IElementLocator? targetLocator) where T : IElement
+        private static object? InvokeFactoryMethod<T>(string methodName, Type[] genericTypeArguments, T page, FindAttribute findAttribute, IElementLocator? targetLocator) where T : IElement
         {
-            object element;
-            MethodInfo method = typeof(ElementFactory).GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
-            MethodInfo generic = method.MakeGenericMethod(genericTypeArguments);
+            object? element;
+            MethodInfo? method = typeof(ElementFactory).GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
+            MethodInfo? generic = method?.MakeGenericMethod(genericTypeArguments);
 
             element = (methodName == CREATE_NAVIGATION) ?
-                                    generic.Invoke(null, new object?[] {
+                                    generic?.Invoke(null, new object?[] {
                                     findAttribute.Nested ? page : default,
                                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue),
                                     targetLocator}) :
-                                    generic.Invoke(null, new object?[] {
+                                    generic?.Invoke(null, new object?[] {
                                     findAttribute.Nested ? page : default,
                                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue)});
             return element;
         }
 
-        private object? GetMemberValue(MemberInfo member, object instance)
+        private static object? GetMemberValue(MemberInfo member, object instance)
         {
             PropertyInfo? property = member as PropertyInfo;
             if (property != null)
@@ -325,7 +325,7 @@ namespace SpecDrill
             FieldInfo? field = member as FieldInfo;
             if (field != null)
             {
-                return field.GetValue(instance);
+                return field?.GetValue(instance);
             }
             return null;
         }
@@ -350,9 +350,9 @@ namespace SpecDrill
 
         private void SetPropertyValue(Type type, string propertyName, object instance, object? value)
         {
-            if (type != null)
+            if (type != null && type.BaseType != null)
             {
-                PropertyInfo pInfo = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                PropertyInfo? pInfo = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 var setter = pInfo?.GetSetMethod(true);
                 if (setter != null)
                 {
@@ -370,13 +370,13 @@ namespace SpecDrill
 
         private void SetFieldValue(Type type, string fieldName, object instance, object? value)
         {
-            if (type != null)
+            if (type != null && type.BaseType != null)
             {
-                FieldInfo pInfo = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                FieldInfo? pInfo = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
                 try
                 {
-                    pInfo.SetValue(instance, value);
+                    pInfo?.SetValue(instance, value);
                     return;
                 }
                 catch { }
@@ -486,7 +486,7 @@ namespace SpecDrill
             if (searchRoot?.Locator?.IsShadowRoot ?? false)
             {
                 Logger.LogInformation($"DOM LOOKUP: { searchRoot.Locator } (shadowRoot)");
-                searchContext = ExecuteJavascript($"return arguments[0].shadowRoot", searchRoot.Elements.FirstOrDefault());
+                searchContext = ExecuteJavascript($"return arguments[0].shadowRoot", searchRoot?.Elements.First() ?? throw new ElementNotFoundException("searchRoot is null. shadowRoot cannot be accessed!"));
             }
 
             Logger.LogInformation($"DOM LOOKUP: {searchRoot?.Locator?.ToString() ?? "ROOT"} :: {locator}");
@@ -581,7 +581,7 @@ namespace SpecDrill
         public void SaveScreenshot(string testClassName, string testMethodName)
         {
             string fileName = "";
-            string screenshotsPath = "";
+            string? screenshotsPath;
             try
             {
                 screenshotsPath = this.configuration?.WebDriver?.Screenshots?.Path ?? System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);

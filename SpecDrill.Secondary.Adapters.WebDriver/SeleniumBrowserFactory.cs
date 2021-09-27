@@ -278,7 +278,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                             new Type[] { typeof(string), typeof(object), typeof(bool) });
                         if (addAdditionalCapabilityMethodInfo == null) 
                             throw new InvalidCastException($"Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
-                        addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString(), true });
+                        addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString()??"", true });
                     } 
                     else 
                     {
