@@ -106,7 +106,7 @@ namespace SpecDrill.Infrastructure.Configuration
 
         private static string GetParentFolder(string folder)
         {
-            return folder.Remove(folder.LastIndexOf('\\'));
+            return folder.Remove(folder.LastIndexOf(Path.PathSeparator));
         }
     }
 }
