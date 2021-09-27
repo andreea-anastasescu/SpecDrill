@@ -12,18 +12,18 @@ using System.Text.Json;
 
 namespace SpecDrill.Infrastructure.Configuration
 {
-    public class ConfigurationManager
+    public sealed class ConfigurationManager
     {
         private const string ConfigurationFileName = "specDrillConfig.json";
-        protected static readonly ILogger Logger;
+        private static readonly ILogger Logger;
 
         public static readonly SpecDrill.Configuration.Settings Settings;
+
         static ConfigurationManager()
         {
             Logger = DI.GetLogger<ConfigurationManager>();
             Settings = Load();
         }
-
         public static SpecDrill.Configuration.Settings Load(string? jsonConfiguration = null, string? configurationFileName = null)
         {
             IConfigurationRoot? configRoot;
@@ -35,8 +35,7 @@ namespace SpecDrill.Infrastructure.Configuration
                 if (configurationPaths == ("", ""))
                     throw new FileNotFoundException("Configuration file not found");
 
-                var configurationFilePath = configurationPaths.Item1;
-                var jsonConfigurationFilePath = configurationPaths.Item2;
+                var (_, jsonConfigurationFilePath) = configurationPaths;
 
                 if (string.IsNullOrWhiteSpace(jsonConfigurationFilePath))
                 {
@@ -48,7 +47,6 @@ namespace SpecDrill.Infrastructure.Configuration
                 configRoot = new ConfigurationBuilder()
                     .AddJsonFile(jsonConfigurationFilePath, false, false)
                     .Build();
-
             }
             else
             {

@@ -10,7 +10,7 @@ namespace SpecDrill.Samples.NUnit3.Features
     [Binding]
     public class GoogleSearchSteps : UiSpecFlowBase
     {
-        public GoogleSearchSteps(ScenarioContext scenarioContext, FeatureContext featureContext) => (this.scenarioContext, this.featureContext) = (scenarioContext, featureContext);
+        public GoogleSearchSteps(ScenarioContext scenarioContext, FeatureContext featureContext) : base(scenarioContext, featureContext) { }
         
         [Given(@"I have entered ""(.*)"" into Google search")]
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)

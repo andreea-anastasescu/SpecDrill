@@ -16,6 +16,7 @@
         "chrome": {
           "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\91.0.4472.10100\\driver\\win32", //"C:\\Your Browser Drivers Path"//
           "arguments": [
+            "headless",
             "--disable-extensions",
             "disable-features=VizDisplayCompositor",
             "--incognito",

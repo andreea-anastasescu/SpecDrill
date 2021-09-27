@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SpecDrill.Tests.Features
+namespace Specdrill.Tests.Features
 {
     using TechTalk.SpecFlow;
     using System;
@@ -66,7 +66,7 @@ namespace SpecDrill.Tests.Features
             if (((testRunner.FeatureContext != null) 
                         && (testRunner.FeatureContext.FeatureInfo.Title != "GoogleSearch")))
             {
-                global::SpecDrill.Tests.Features.GoogleSearchFeature.FeatureSetup(null);
+                global::Specdrill.Tests.Features.GoogleSearchFeature.FeatureSetup(null);
             }
         }
         
