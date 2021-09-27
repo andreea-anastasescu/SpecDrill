@@ -14,7 +14,6 @@ using SpecDrill.Configuration;
 
 namespace SpecDrill.MsTest
 {
-    [TestClass]
     public class MsTestBase : UiScenarioBase
     {
         protected static TestContext? TestContext;

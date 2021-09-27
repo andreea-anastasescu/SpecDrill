@@ -49,13 +49,6 @@ namespace SomeTests
         }
 
         //TODO: Create Hover tests on css hover menu with at least 2 levels
-
-        [TestMethod]
-        public void ShouldReadListWhenListControlIsUsed()
-        {
-
-        }
-
         [TestMethod]
         public void ShouldBeAbleToNavigateWithinFrame()
         {

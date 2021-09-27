@@ -155,8 +155,8 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         //        return null;
         //    return elements[0];
         //}
-        public void JsLog(string log)
-            => (seleniumDriver as IJavaScriptExecutor)!.ExecuteScript($"console.log('{log.Replace("'", "\"").Replace("\r", "").Replace("\n", "")}')");
+        public void JsLog(string logEntry)
+            => (seleniumDriver as IJavaScriptExecutor)!.ExecuteScript($"console.log('{logEntry.Replace("'", "\"").Replace("\r", "").Replace("\n", "")}')");
         public object? ExecuteJavaScript(string js, params object[] arguments)
         {
             var javaScriptExecutor = (seleniumDriver as IJavaScriptExecutor);
@@ -392,6 +392,7 @@ console.log('mouse click!');
             return strCookies.ToString();
         }
 
+        //TODO: return bool so test can assert!
         public void SaveScreenshot(string fileName)
         {
             var attemptNo = 0;

@@ -70,13 +70,13 @@ namespace SpecDrill
                 browserDriver.ChangeBrowserDriverTimeout(cfgMaxWait);
             }
 
-            FrameworkInit(runtimeServices);
+            FrameworkInit(runtimeServices, this);
         }
 
-        private void FrameworkInit(IRuntimeServices runtimeServices)
+        private static void FrameworkInit(IRuntimeServices runtimeServices, IBrowser @this)
         {
-            browserInstance = this;
-            ElementFactory.Instance = runtimeServices.GetElementFactory(this);
+            browserInstance = @this;
+            ElementFactory.Instance = runtimeServices.GetElementFactory(@this);
             ElementLocatorFactory.Instance = runtimeServices.ElementLocatorFactory;
         }
 
@@ -478,7 +478,7 @@ namespace SpecDrill
         //    return result;
         //}
 
-        public SearchResult Find(IElementLocator locator, SearchResult? searchRoot)
+        public SearchResult Find(IElementLocator locator, SearchResult? searchRoot = null)
         {
             
             var searchContext = searchRoot?.Elements.FirstOrDefault();

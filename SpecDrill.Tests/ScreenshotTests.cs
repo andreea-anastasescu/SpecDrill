@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SomeTests.PageObjects.Test001;
 using SpecDrill.MsTest;
 
@@ -15,6 +16,7 @@ namespace SomeTests
         {
             Browser.Open<Test001CalculatorPage>();
             SaveScreenshot(TestContext!.TestName);
+            //TODO: change return type of SaveScreenshot() so test can assert on success!
         }
     }
 }

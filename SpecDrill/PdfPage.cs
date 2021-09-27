@@ -2,13 +2,8 @@
 {
     public class PdfPage : WebPage
     {
-        private string titlePattern;
-
         public PdfPage() : this(string.Empty) { }
-        public PdfPage(string titlePattern) : base(titlePattern)
-        {
-            this.titlePattern = titlePattern;
-        }
+        public PdfPage(string titlePattern) : base(titlePattern) { }
 
         public override string Text
         {
