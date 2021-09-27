@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreSources>$(RestoreSources)</RestoreSources>
     <PackageSource>bin\$(Configuration)\Package</PackageSource>
@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>171</BuildNumber>
+    <BuildNumber>172</BuildNumber>
     <AssemblyVersion>1.3.0.$(BuildNumber)</AssemblyVersion>
     <Version>$(AssemblyVersion)</Version>
     <Description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</Description>
@@ -31,8 +31,8 @@
     <Content Remove="..\NuGet\content\log4net.template.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SpecDrill.Infrastructure" Version="[1.*,)" />
-    <PackageReference Include="SpecDrill.Secondary.Ports" Version="[1.*,)" />
+    <PackageReference Include="SpecDrill.Infrastructure" Version="[1.3.*,)" />
+    <PackageReference Include="SpecDrill.Secondary.Ports" Version="[1.3.*,)" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="pwsh ../incver.ps1 -csproj $(ProjectFileName)" />
