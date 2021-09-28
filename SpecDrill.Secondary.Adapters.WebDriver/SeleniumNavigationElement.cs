@@ -39,7 +39,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             // or have [Target] attribute with nameof(Member) for page member WebControls
 
             //CreateTarget<T>();
-            INavigationTargetElement target = Browser.CreateTarget<T>(this.Parent, this.TargetLocator);
+            INavigationTargetElement target = Browser.CreateTarget<T>(null, this.TargetLocator);
                 //typeof(IPage).IsAssignableFrom(typeof(T)) ? Browser.CreatePage<T>() :
                 //targetElement ?? throw new InvalidOperationException("Navigation elements targeting WebControls must provide a target element instance!");
             Wait.WithRetry(3, TimeSpan.FromSeconds(20)).Doing(() =>

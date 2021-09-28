@@ -21,8 +21,8 @@ namespace SpecDrill
             => new NavigationElement<T>(parent, locator, targetLocator);
 
         public static ListElement<T> CreateList<T>(IElement? parent, IElementLocator elementLocator)
-            where T : WebControl
-            => new ListElement<T>(parent, elementLocator);
+            where T : class, IElement
+            => new(parent, elementLocator);
         //TODO:
         public static IFrameElement<T> CreateFrame<T>(IElement? parent, IElementLocator locator)
             where T : class, IPage

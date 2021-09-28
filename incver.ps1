@@ -10,27 +10,23 @@ function xmlPoke($filePath, $xpath, $value) {
     $fileXml.Load($filePath)
     $node = $fileXml.SelectSingleNode($xpath)
     if ($node) {
-Write-Host "Setting Nex ver to:"
-Write-Host $node.Name
-Write-Host $value
+        Write-Host "Setting Next ver: $($node.Name) <- $($value)"
         $node.InnerText = $value
-Write-Host "Value set to:"
-Write-Host $node.InnerText
-Write-Host "Saving file..."
+        Write-Host "Value set to: $($node.InnerText). Saving..."
+        
         $fileXml.Save($filePath)
-Write-Host "Saved!"
+        Write-Host "Saved!"
     }
 }
+
 $csproj = Resolve-Path $csproj
-Write-Host "Csproj:"
-Write-Host $csproj
+Write-Host "Csproj: $($csproj)"
 $xpath = "/Project/PropertyGroup/BuildNumber"
+
 [int]$currentVer = 0
 $currentVer = xmlPeek -filePath $csproj -xpath $xpath
-Write-Host "Found:"
-Write-Host $currentVer
+Write-Host "Found ver: $($currentVer)"
 $nextVer = $($currentVer + 1)
-Write-Host "Next ver will be:"
-Write-Host $nextVer
+Write-Host "Next ver will be: $($nextVer)"
 
 xmlPoke -filePath $csproj -xpath $xpath -value $nextVer
