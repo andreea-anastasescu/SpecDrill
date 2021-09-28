@@ -5,7 +5,7 @@ using SpecDrill.Infrastructure.Configuration;
 namespace SpecDrill.Tests
 {
     [TestClass]
-    public class Tests
+    public class ConfigurationTests
     {
         [TestMethod]
         public void ShouldHaveCorrectValuesWhenReadingJsonConfigurationFile()

@@ -38,6 +38,18 @@ namespace SomeTests
             popup.IsAvailable.Should().BeFalse();
         }
 
+
+        [TestMethod]
+        public void ShouldBeAbleToOpenAndClosePopupsViaListElement()
+        {
+            var popupPage = Browser.Open<PopupPage>();
+            var popup = popupPage.PopupOpeners[1].Click();
+            popup.IsAvailable.Should().BeTrue();
+            popup.Message.Text.Should().Contain("Hello");
+            popup.Close.Click();
+            popup.IsAvailable.Should().BeFalse();
+        }
+
         [TestMethod]
         public void ShouldBeAbleToOpenAndClosePopupBySelector()
         {

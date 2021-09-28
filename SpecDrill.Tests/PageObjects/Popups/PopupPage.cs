@@ -18,6 +18,9 @@ namespace SomeTests.PageObjects.Popups
 
         [Find(By.ClassName, "popup")]
         public Popup ThePopup { get; private set; }
+
+        [Find(By.CssSelector, "input")]
+        public ListElement<INavigationElement<Popup>> PopupOpeners { get; private set; }
     }
 
     public class ErrPopupPageFindTargetPropertyIsNotINavigationTargetOrHasNoFindAttribute : WebPage

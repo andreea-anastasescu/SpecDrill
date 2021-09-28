@@ -119,28 +119,40 @@ namespace SpecDrill
         public T CreatePage<T>() where T : class, INavigationTargetElement => CreateContainer<T>();
         public T CreateControl<T>(IElement? parent, IElementLocator elementLocator) where T : class, IElement
         {
-            T? fromInstance = Activator.CreateInstance(typeof(T), parent, elementLocator) as T;
+            T? fromInstance;
+            Type toInstantiate = typeof(T);
+            
+            if (toInstantiate.IsInterface)
+            {
+                if (!typeof(INavigationElement<>).MakeGenericType(toInstantiate.GenericTypeArguments).IsAssignableFrom(typeof(T)))
+                {
+                    throw new NotSupportedException("CreateControl currently can only promote to instance the following interfaces: INavigationElement<>,.");
+                }
+                toInstantiate = typeof(NavigationElement<>).MakeGenericType(toInstantiate.GenericTypeArguments);
+                var targetLocator = GetTargetLocatorFromNavigationTarget(null, toInstantiate.GenericTypeArguments[0]);
+                fromInstance = Activator.CreateInstance(toInstantiate, parent, elementLocator, targetLocator) as T;
+            }
+            else
+            {
+                fromInstance = Activator.CreateInstance(toInstantiate, parent, elementLocator) as T;
+            }
+
             return (fromInstance != default && fromInstance.GetType() == fromInstance.Parent?.GetType()) ?
                   fromInstance :
                   CreateContainer<T>(fromInstance);
         }
-        //T IBrowser.CreateTarget<T>()
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //T CreateTarget<T>()
-        //   where T : class, INavigationTarget;
+
         public T CreateTarget<T>(IElement? parent = null, IElementLocator? elementLocator = null) where T : class, INavigationTargetElement
         {
-
             if (typeof(IPage).IsAssignableFrom(typeof(T)))
             {
                 return this.CreatePage<T>();
             }
             else
             {
-                if (elementLocator == null) throw new ArgumentNullException($@"Argument {nameof(elementLocator)} of {nameof(CreateTarget)} must not be null!");
-                return this.CreateControl<T>(parent, elementLocator);
+                return elementLocator == null
+                    ? throw new ArgumentNullException($@"Argument {nameof(elementLocator)} of {nameof(CreateTarget)} must not be null!")
+                    : this.CreateControl<T>(parent, elementLocator);
             }
         }
 
@@ -157,13 +169,13 @@ namespace SpecDrill
                 .ToDictionary(mi => mi.Name, mi => mi);
                 
               members.Values.ToList().ForEach(
-              member =>
+              (Action<MemberInfo>)(member =>
                 {
                     var memberType = GetMemberType(member);
                     var memberFindAttributes = member.GetCustomAttributes<FindAttribute>(false)
-                    .ToList();
+                    .ToList<FindAttribute>();
 
-                    if (memberFindAttributes.Any())
+                    if (memberFindAttributes.Any<FindAttribute>())
                     {
                         var memberValue = GetMemberValue(member, container);
 
@@ -172,79 +184,93 @@ namespace SpecDrill
 
                         memberFindAttributes.ForEach //TODO: Currently if many attributes apply, last one wins; Should throw exception !
                         (
-                            findAttribute =>
+                            (Action<FindAttribute>)(findAttribute =>
                             {
-                                Type? navigationTargetType = null;
-                                IElementLocator? navigationTargetLocator = null;
-                                List<FindTargetAttribute>? memberFindTargetAttributes = null;
-                                
-                                if (typeof(INavigationElement<INavigationTargetElement>).IsAssignableFrom(memberType))
-                                {
-                                    navigationTargetType = memberType.GenericTypeArguments[0];
-                                    if (typeof(IControl).IsAssignableFrom(navigationTargetType))
-                                    {
-                                        memberFindTargetAttributes = member.GetCustomAttributes<FindTargetAttribute>(false).ToList();
-
-                                        //if no target attribute defined
-                                        if (!memberFindTargetAttributes.Any())
-                                        {  // must have Find at Control (WebControl derived) class level
-                                            var targetTypeFindAttributes = navigationTargetType.GetCustomAttributes<FindAttribute>();
-                                            if (!targetTypeFindAttributes.Any())
-                                            {
-                                                throw new NoFindTargetAttributeOnNavigationElementMemberNorFindAttributeOnTargetWebControlException($"Either: Member INavitationElement<{navigationTargetType.Name}> ({member.DeclaringType?.Name ?? "N/A"}.{member.Name}) must have [FindTarget] attribute applied Or: Target Control class ({navigationTargetType.Name}) must have [Find] attribute applied");
-                                            }
-                                            var targetTypeFindAttribute = targetTypeFindAttributes.Last();
-                                            navigationTargetLocator = ElementLocatorFactory.Create(targetTypeFindAttribute.SelectorType, targetTypeFindAttribute.SelectorValue); // locator from target Control (css window/popup) type
-                                        }
-                                        else
-                                        {
-                                            // We have [FindTarget]
-                                            var findTargetAttribute = memberFindTargetAttributes.Last();
-                                            var (selectorType, selectorValue) = (findTargetAttribute.SelectorType, findTargetAttribute.SelectorValue);
-
-                                            if (findTargetAttribute.PropertyName != null) // TargetProperty case
-                                            {
-                                                if (!members.ContainsKey(findTargetAttribute.PropertyName)) // member not foud (typo or class refactoring)
-                                                    throw new WebControlTargetPropertyNotFoundException($"No member named `{findTargetAttribute.PropertyName}` could be found in `{containerType.Name}` type");
-
-                                                var navigationTargetMember = members[findTargetAttribute.PropertyName];
-                                                if (!typeof(INavigationTargetElement).IsAssignableFrom(GetMemberType(navigationTargetMember))) // member does not have INavigationTargetElement type (meaning it is not a Page or a Control)
-                                                { // This should not be possible due to Generic type parameter compiler check !
-                                                    throw new TargetPropertyIsNotWebControlException($"[FindTarget] applied to ({member.DeclaringType?.Name ?? "N/A"}.{member.Name}) must point to a member of type WebPage or WebControl [IPage, IControl or INavigationTarget]");
-                                                }
-
-                                                var navigationTargetFindAttributes = navigationTargetMember.GetCustomAttributes<FindAttribute>().ToList();
-
-                                                if (!navigationTargetFindAttributes.Any()) // member has no [Find] attribute which poses a problem since we cannot get a target css window/popup locator
-                                                    throw new ArgumentException($"Member `{findTargetAttribute.PropertyName}` has no [Find] attribute applied!");
-
-                                                var navigationTargetFindAttribute = navigationTargetFindAttributes.Last();
-                                                (selectorType, selectorValue) = (navigationTargetFindAttribute.SelectorType, navigationTargetFindAttribute.SelectorValue);
-
-                                                //navigationTargetLocator = ElementLocatorFactory.Create(navigationTargetFindAttribute.SelectorType, navigationTargetFindAttribute.SelectorValue); //locator from referenced Member
-
-                                            }
-
-                                            navigationTargetLocator = (selectorType, selectorValue) switch
-                                            {
-                                                (By st, string sv) => ElementLocatorFactory.Create(st, sv), //locator from [FindTarget] attribute
-                                                (null, string _) => throw new ArgumentNullException($"[FindTarget]'s SelectorType must not be null!"),
-                                                (By _, null) => throw new ArgumentNullException($"[FindTarget]'s SelectValue must not be null!"),
-                                                (null, null) => throw new ArgumentNullException($"[FindTarget]'s SelectorType and SelectValue must not be null!")
-                                            };
-                                        }
-                                      
-                                    }
-                                }
+                                var navigationTargetLocator = FigureOutNavigationTargetLocator(member, containerType, members, memberType);
                                 object? element = InstantiateMember<T>(findAttribute, container, memberType, navigationTargetLocator);
 
                                 SetValue(containerType, member, instance: container, value: element);
-                            }
+                            })
                         );
                     }
-                });
+                }));
             return (T)container;
         }
+
+        private IElementLocator? FigureOutNavigationTargetLocator(MemberInfo member, Type containerType, Dictionary<string, MemberInfo> members, Type memberType)
+        {
+            
+            Type? navigationTargetType;
+            IElementLocator? navigationTargetLocator = null;
+
+            if (typeof(INavigationElement<INavigationTargetElement>).IsAssignableFrom(memberType))
+            {
+                navigationTargetType = memberType.GenericTypeArguments[0];
+                if (typeof(IControl).IsAssignableFrom(navigationTargetType))
+                {
+                    var memberFindTargetAttributes = member.GetCustomAttributes<FindTargetAttribute>(false).ToList();
+
+                    //if no target attribute defined
+                    if (!memberFindTargetAttributes.Any())
+                    {  // must have Find at Control (WebControl derived) class level
+                        navigationTargetLocator = GetTargetLocatorFromNavigationTarget(member, navigationTargetType);
+                    }
+                    else
+                    {
+                        // We have [FindTarget]
+                        var findTargetAttribute = memberFindTargetAttributes.Last();
+                        var (selectorType, selectorValue) = (findTargetAttribute.SelectorType, findTargetAttribute.SelectorValue);
+
+                        if (findTargetAttribute.PropertyName != null) // TargetProperty case
+                        {
+                            if (!members.ContainsKey(findTargetAttribute.PropertyName)) // member not foud (typo or class refactoring)
+                                throw new WebControlTargetPropertyNotFoundException($"No member named `{findTargetAttribute.PropertyName}` could be found in `{containerType.Name}` type");
+
+                            var navigationTargetMember = members[findTargetAttribute.PropertyName];
+                            if (!typeof(INavigationTargetElement).IsAssignableFrom(GetMemberType(navigationTargetMember))) // member does not have INavigationTargetElement type (meaning it is not a Page or a Control)
+                            { // This should not be possible due to Generic type parameter compiler check !
+                                throw new TargetPropertyIsNotWebControlException($"[FindTarget] applied to ({member.DeclaringType?.Name ?? "N/A"}.{member.Name}) must point to a member of type WebPage or WebControl [IPage, IControl or INavigationTarget]");
+                            }
+
+                            var navigationTargetFindAttributes = navigationTargetMember.GetCustomAttributes<FindAttribute>().ToList();
+
+                            if (!navigationTargetFindAttributes.Any()) // member has no [Find] attribute which poses a problem since we cannot get a target css window/popup locator
+                                throw new ArgumentException($"Member `{findTargetAttribute.PropertyName}` has no [Find] attribute applied!");
+
+                            var navigationTargetFindAttribute = navigationTargetFindAttributes.Last();
+                            (selectorType, selectorValue) = (navigationTargetFindAttribute.SelectorType, navigationTargetFindAttribute.SelectorValue);
+
+                            //navigationTargetLocator = ElementLocatorFactory.Create(navigationTargetFindAttribute.SelectorType, navigationTargetFindAttribute.SelectorValue); //locator from referenced Member
+
+                        }
+
+                        navigationTargetLocator = (selectorType, selectorValue) switch
+                        {
+                            (By st, string sv) => ElementLocatorFactory.Create(st, sv), //locator from [FindTarget] attribute
+                            (null, string _) => throw new ArgumentNullException($"[FindTarget]'s SelectorType must not be null!"),
+                            (By _, null) => throw new ArgumentNullException($"[FindTarget]'s SelectValue must not be null!"),
+                            (null, null) => throw new ArgumentNullException($"[FindTarget]'s SelectorType and SelectValue must not be null!")
+                        };
+                    }
+
+                }
+            }
+            return navigationTargetLocator;    
+        }
+
+        private static IElementLocator GetTargetLocatorFromNavigationTarget(MemberInfo? member, Type navigationTargetType)
+        {
+            IElementLocator? navigationTargetLocator;
+            var targetTypeFindAttributes = navigationTargetType.GetCustomAttributes<FindAttribute>();
+            if (!targetTypeFindAttributes.Any())
+            {
+                throw new NoFindTargetAttributeOnNavigationElementMemberNorFindAttributeOnTargetWebControlException($"Either: Member INavitationElement<{navigationTargetType.Name}> ({member?.DeclaringType?.Name ?? "N/A"}.{member?.Name??"N/A"}) must have [FindTarget] attribute applied Or: Target Control class ({navigationTargetType.Name}) must have [Find] attribute applied");
+            }
+            var targetTypeFindAttribute = targetTypeFindAttributes.Last();
+            navigationTargetLocator = ElementLocatorFactory.Create(targetTypeFindAttribute.SelectorType, targetTypeFindAttribute.SelectorValue); // locator from target Control (css window/popup) type
+            return navigationTargetLocator;
+        }
+
         private static readonly string CREATE_NAVIGATION = "CreateNavigation";
         private static object? InstantiateMember<T>(FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null) where T : IElement
         {

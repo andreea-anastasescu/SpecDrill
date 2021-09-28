@@ -50,9 +50,6 @@
     <None Update="AllureConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -60,11 +57,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\SpecDrill.MsTest\SpecDrill.MsTest.csproj" />
-	  <ProjectReference Include="..\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj" />
     <ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" />
+    <ProjectReference Include="..\SpecDrill.MsTest\SpecDrill.MsTest.csproj" />
     <ProjectReference Include="..\SpecDrill.Secondary.Adapters.WebDriver\SpecDrill.Secondary.Adapters.WebDriver.csproj" />
     <ProjectReference Include="..\SpecDrill.Secondary.Ports\SpecDrill.Secondary.Ports.csproj" />
+    <ProjectReference Include="..\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj" />
     <ProjectReference Include="..\SpecDrill\SpecDrill.csproj" />
   </ItemGroup>
 </Project>
