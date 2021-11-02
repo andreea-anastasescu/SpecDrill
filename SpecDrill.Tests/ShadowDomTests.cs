@@ -7,6 +7,8 @@ using System.Diagnostics;
 using SpecDrill.MsTest;
 using System.Windows.Markup;
 using SpecDrill.Secondary.Ports.AutomationFramework;
+using NUnit.Framework;
+using SpecDrill.NUnit3;
 
 namespace SomeTests
 {
@@ -38,12 +40,10 @@ namespace SomeTests
         public IElement DivL2Regular { get; set; } //present only in 2nd level shadow dom
 
     }
-    [TestClass]
-    public class ShadowDomTests : MsTestBase
+    [TestFixture]
+    public class ShadowDomTests : NUnitBase
     {
-        [ClassInitialize]
-        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-        [TestMethod]
+        [Test]
         //[ExpectedException(typeof(TimeoutException))]
         public void ShouldCorrectlyIdentifyRegularElementInShadowDom()
         {
@@ -53,7 +53,7 @@ namespace SomeTests
             element.IsAvailable.Should().BeTrue();
             element.Text.Should().Be("regular2");
         }
-        [TestMethod]
+        [Test]
         public void ShouldCorrectlyIdentifyShadowRoot()
         {
             var shadowDomPage = Browser.Open<ShadowDomPage>();
@@ -61,7 +61,7 @@ namespace SomeTests
                    ElementLocatorFactory.Create(SpecDrill.Secondary.Ports.AutomationFramework.By.CssSelector, "div#l0shadow >>>"));
             element.NativeElementSearchResult().Elements.Should().NotBeEmpty();
         }
-        [TestMethod]
+        [Test]
         public void ShouldCorrectlyIdentifyRegularElementIn2ndLevelShadowDom()
         {
             var shadowDomPage = Browser.Open<ShadowDomPage>();
@@ -71,7 +71,7 @@ namespace SomeTests
             element.Text.Should().Be("regular3");
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldCorrectlyIdentifyElementsInMultipleShadowDomLevelsForWebControls()
         {
             var shadowDomPage = Browser.Open<ShadowDomPage>();
@@ -81,7 +81,7 @@ namespace SomeTests
             shadowDomPage.L0ShadowRoot.L1ShadowRoot.DivL2Regular.Text.Should().Be("regular3");
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldCorrectlyAccessListInShadowDom()
         {
             var shadowDomPage = Browser.Open<ShadowDomPage>();

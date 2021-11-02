@@ -131,6 +131,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 10
  testRunner.Then("You should get a \"Wikipedia\" entry in search results", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+#line 11
+ testRunner.Then("ReOpen search page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
             }
             this.ScenarioCleanup();
         }

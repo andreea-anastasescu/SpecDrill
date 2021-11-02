@@ -14,15 +14,19 @@ namespace SpecDrill.Samples.NUnit3
     {
         [OneTimeSetUp]
         public void ClassInitializer() => _ClassSetup();
-        
+
         [Test]
-        public void TestMethod1()
+        public void Test1() => TestMethod();
+        [Test]
+        public void Test2() => TestMethod();
+
+        public void TestMethod()
         {
-            ConfigurationManager.Load();
+            //ConfigurationManager.Load();
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
             var acceptButton = new Element(null, ElementLocatorFactory.Create(Secondary.Ports.AutomationFramework.By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
-            Wait.NoMoreThan(TimeSpan.FromSeconds(7))
-                .Until(() => acceptButton.IsAvailable);
+            Wait.NoMoreThan(TimeSpan.FromSeconds(3))
+                .Until(() => acceptButton.IsAvailable, throwExceptionOnTimeout: false);
             if (acceptButton.IsAvailable)
                 acceptButton.Click();
             googleSearchPage.TxtSearch.SendKeys("drill wiki");

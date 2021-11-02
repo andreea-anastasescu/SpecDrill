@@ -4,7 +4,13 @@
 	I want to read Wikipedia page on specific search term
 
 @mytag
-Scenario: Find wiki entry for searched keyword
+Scenario: 1.Find wiki entry for searched keyword
+	Given I have entered "drill wiki" into Google search
+	When I press Search button
+	Then You should get a "Drill" entry in search results
+
+@mytag
+Scenario: 2.Find wiki entry for searched keyword
 	Given I have entered "drill wiki" into Google search
 	When I press Search button
 	Then You should get a "Drill" entry in search results

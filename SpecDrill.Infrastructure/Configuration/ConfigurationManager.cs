@@ -16,7 +16,7 @@ namespace SpecDrill.Infrastructure.Configuration
     {
         private const string ConfigurationFileName = "specDrillConfig.json";
         private static readonly ILogger Logger;
-
+       
         public static readonly SpecDrill.Configuration.Settings Settings;
 
         static ConfigurationManager()

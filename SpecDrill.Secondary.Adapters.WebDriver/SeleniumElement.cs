@@ -544,7 +544,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             get
             {
-                Wait.NoMoreThan(TimeSpan.FromSeconds(14)).Until(() => this.IsAvailable);
+                Wait.NoMoreThan(TimeSpan.FromSeconds(5)).Until(() => this.IsAvailable);
                 var result = this.NativeElementSearchResult();
 
                 if (result.Elements.Any())

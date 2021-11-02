@@ -6,24 +6,33 @@ using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.Secondary.Adapters.WebDriver;
-using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using SpecDrill.Tests;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SpecDrill.NUnit3
 {
     public class NUnitBase : UiScenarioBase
     {
+        private static NUnitBase? LastRun { get; set; }
+        public NUnitBase() : this(false) { }
+        private bool RestartDriverPerTest { get; set; } = false;
+        private bool DidFirstTestRan { get; set; } = false;
+        public NUnitBase(bool restartDriverPerTest = false)
+        {
+            RestartDriverPerTest = restartDriverPerTest;
+        }
         [OneTimeSetUp]
         public void _ClassSetup()
         {
             try
             {
                 ClassSetup();
+                if (!RestartDriverPerTest)
+                    _ScenarioSetup(TestContext.CurrentContext.Test.Name);
+
             }
             catch (Exception e)
             {
@@ -37,6 +46,7 @@ namespace SpecDrill.NUnit3
         public static void _ClassCleanup()
         {
             ClassTeardown();
+            LastRun?._ScenarioTeardown(scenarioName: TestContext.CurrentContext.Test.Name, isTestError: new HashSet<ResultState>(new ResultState[] { ResultState.Failure, ResultState.ChildFailure }).Contains(TestContext.CurrentContext.Result.Outcome));
         }
         protected static Action ClassTeardown = () => { };
 
@@ -44,30 +54,41 @@ namespace SpecDrill.NUnit3
         [SetUp]
         public void _TestSetup()
         {
-            _ScenarioSetup(TestContext.CurrentContext.Test.Name);
+            LastRun = this;
+            if (RestartDriverPerTest)
+                _ScenarioSetup(TestContext.CurrentContext.Test.Name);
+            else
+            {
+                if (!DidFirstTestRan)
+                {
+                    _ScenarioSetup(TestContext.CurrentContext.Test.Name);
+                    DidFirstTestRan = true;
+                }
+            }
         }
 
         [TearDown]
         public void _TestCleanup()
         {
+            if (RestartDriverPerTest)
             _ScenarioTeardown(scenarioName: TestContext.CurrentContext.Test.Name, isTestError: new HashSet<ResultState>(new ResultState[] {ResultState.Failure, ResultState.ChildFailure}).Contains(TestContext.CurrentContext.Result.Outcome));
         }
 
         [ModuleInitializer]
         public static void AssemblyInitialize()
         {
-            Debugger.Break();
             DI.ConfigureServices(services =>
             {
                 services.AddWebdriverSecondaryAdapter();
-                services.AddSingleton<Settings>(sp => {
+                services.AddSingleton<Settings>(sp =>
+                {
                     ConfigurationManager.Load();
                     return ConfigurationManager.Settings;
-                    });
-                services.AddSingleton<IBrowser, Browser>();
+                });
+                services.AddTransient<IBrowser, Browser>();
             });
             DI.Apply();
-            Console.WriteLine("SpecDrill.NUnit3 Module Initializer - DI Config complete!");
+            Console.WriteLine("SpecDrill.MsTest Module Initializer - DI Config complete!");
         }
 
 

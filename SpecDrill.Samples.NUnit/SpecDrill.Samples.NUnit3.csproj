@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -17,11 +16,16 @@
     <PackageReference Include="NUnit.Allure" Version="1.0.9" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="85.0.4183.8300" />
-	<PackageReference Include="SpecDrill.NUnit3" Version="[1.3.*,)" />
-	<PackageReference Include="SpecDrill.SpecFlow" Version="[1.3.*,)" />
-	<PackageReference Include="SpecFlow" Version="3.4.3" />
-	<PackageReference Include="SpecFlow.NUnit" Version="3.4.3" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="94.0.4606.6100" />
+    <PackageReference Include="SpecDrill" Version="[1.3.*,)" />
+    <PackageReference Include="SpecDrill.NUnit3" Version="[1.3.*,)" />
+	  <PackageReference Include="SpecDrill.SpecFlow" Version="[1.3.*,)" />
+	  <PackageReference Include="SpecFlow" Version="3.4.3" />
+	  <PackageReference Include="SpecFlow.NUnit" Version="3.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpecDrill.NUnit3\SpecDrill.NUnit3.csproj" />
   </ItemGroup>
 
   <ItemGroup>

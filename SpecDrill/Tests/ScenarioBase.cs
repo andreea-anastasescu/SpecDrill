@@ -11,22 +11,29 @@ namespace SpecDrill.Tests
     public class UiScenarioBase : ScenarioBase
     {
         protected IBrowser Browser => LazyBrowser.Value;
-        protected Lazy<IBrowser> LazyBrowser { get; private set; } = new Lazy<IBrowser>(() => throw new Exception("Browser not initialized. _ScenarioSetup was not called yet!"));
+        protected static bool initialized = false;
+        protected static Lazy<IBrowser> LazyBrowser { get; private set; } = new Lazy<IBrowser>(() => throw new Exception("Browser not initialized. _ScenarioSetup was not called yet!"));
         protected sealed override void DriverInit()
         {
             LazyBrowser = new Lazy<IBrowser>(() => DI.ServiceProvider.GetService<IBrowser>() ?? throw new Exception("IBrowser could not be resolved by DI ServiceProvider"));
+            initialized = true;
         }
         protected sealed override void DriverInitRecovery(Exception e)
         {
+            if (!initialized)
+                return;
             if (LazyBrowser.IsValueCreated)
             {
                 Browser.Exit();
                 LazyBrowser = new Lazy<IBrowser>(() => throw new Exception("Browser already exited. _ScenarioSetup failed!"));
+                initialized = false;
             }
             throw new Exception("Browser initialization exception!", e);
         }
         protected sealed override void DriverTeardown(string scenarioName, bool isTestError)
         {
+            if (!initialized)
+                return;
             if (isTestError &&
                   (ConfigurationManager.Settings?.WebDriver?.Screenshots?.Auto ?? false))
             {
@@ -34,7 +41,9 @@ namespace SpecDrill.Tests
             }
             Browser?.Exit();
             
+            
             LazyBrowser = new Lazy<IBrowser>(() => throw new Exception("Browser already exited. _ScenarioTeardown was called!"));
+            initialized = false;
         }
         protected sealed override void DriverTeardownRecovery(Exception e)
         {
@@ -88,8 +97,6 @@ namespace SpecDrill.Tests
                     DriverTeardownRecovery(e);
                 }
             }
-
-
         }
 
         protected virtual void DriverTeardown(string scenarioName, bool isTestError) { }

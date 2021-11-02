@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>161</BuildNumber>
+    <BuildNumber>288</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill.SpecFlow - SpecDrill integration with SpecFlow </Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -17,7 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="SpecDrill" Version="[1.3.*,)" />
     <PackageReference Include="SpecDrill.Infrastructure" Version="[1.3.*,)" />
-    <PackageReference Include="SpecDrill.Secondary.Ports" Version="[1.3.*,)" />
     <PackageReference Include="SpecDrill.Secondary.Adapters.WebDriver" Version="[1.3.*,)" />
     <PackageReference Include="SpecFlow" Version="3.3.30" IncludeAssets="All" />
     <None Include="..\LICENSE" Pack="true" PackagePath=".\" />

@@ -18,7 +18,7 @@ namespace SomeTests
         {
             var hoverPage = Browser.Open<HoverCssPage>();
             hoverPage.DivTooltip.Hover();
-
+            
             Wait.NoMoreThan(TimeSpan.FromSeconds(2)).Until(() => hoverPage.DivTooltipText.IsAvailable);
 
             hoverPage.DivTooltipText.IsAvailable.Should().BeTrue();

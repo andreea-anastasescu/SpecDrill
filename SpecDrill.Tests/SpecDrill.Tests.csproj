@@ -32,13 +32,16 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 	<PackageReference Include="FluentAssertions" Version="6.1.0" />
 	<PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
-	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="91.0.4472.10100" />
+	<PackageReference Include="NReco.Logging.File" Version="1.1.2" />
+	<PackageReference Include="NUnit" Version="3.13.2" />
+	<PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="94.0.4606.6100" />
 	<!--<PackageReference Include="SpecDrill.MsTest" Version="[1.1.15.*,)" />
 	<PackageReference Include="SpecDrill.SpecFlow" Version="[1.1.14.*,)" />-->
     <PackageReference Include="SpecFlow" Version="3.3.57" />
@@ -57,10 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpecDrill.Infrastructure\SpecDrill.Infrastructure.csproj" />
     <ProjectReference Include="..\SpecDrill.MsTest\SpecDrill.MsTest.csproj" />
+    <ProjectReference Include="..\SpecDrill.NUnit3\SpecDrill.NUnit3.csproj" />
     <ProjectReference Include="..\SpecDrill.Secondary.Adapters.WebDriver\SpecDrill.Secondary.Adapters.WebDriver.csproj" />
-    <ProjectReference Include="..\SpecDrill.Secondary.Ports\SpecDrill.Secondary.Ports.csproj" />
     <ProjectReference Include="..\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj" />
     <ProjectReference Include="..\SpecDrill\SpecDrill.csproj" />
   </ItemGroup>

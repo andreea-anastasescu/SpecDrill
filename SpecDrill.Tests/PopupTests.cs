@@ -1,20 +1,20 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SomeTests.PageObjects.Popups;
 using SpecDrill;
 using SpecDrill.Exceptions;
-using SpecDrill.MsTest;
-using SpecDrill.Secondary.Ports.AutomationFramework;
+using SpecDrill.Infrastructure;
+using SpecDrill.NUnit3;
 using System;
 
 namespace SomeTests
 {
-    [TestClass]
-    public class PopupTests : MsTestBase
+    [TestFixture]
+    public class PopupTests : NUnitBase
     {
-        [ClassInitialize]
-        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-
+        public PopupTests() : base(false) {
+        
+        }
         // Test Cases:
         // Success
         // 1 - [FindTarget] - property [implemented]
@@ -25,9 +25,7 @@ namespace SomeTests
         // 1 - property exists but type not supported
         // 3 - Control class has no Find attribute defined
 
-        
-
-        [TestMethod]
+        [Test]
         public void ShouldBeAbleToOpenAndClosePopupByPropertyName()
         {
             var popupPage = Browser.Open<PopupPage>();
@@ -39,7 +37,7 @@ namespace SomeTests
         }
 
 
-        [TestMethod]
+        [Test]
         public void ShouldBeAbleToOpenAndClosePopupsViaListElement()
         {
             var popupPage = Browser.Open<PopupPage>();
@@ -50,7 +48,7 @@ namespace SomeTests
             popup.IsAvailable.Should().BeFalse();
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldBeAbleToOpenAndClosePopupBySelector()
         {
             var popupPage = Browser.Open<PopupPage>();
@@ -61,18 +59,27 @@ namespace SomeTests
             popup.IsAvailable.Should().BeFalse();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(NoFindTargetAttributeOnNavigationElementMemberNorFindAttributeOnTargetWebControlException))]
+        [Test]
         public void ShouldThrowWenAttemptingToOpenPopupWithoutFindNorFindTargetAttributes()
         {
-            var popupPage = Browser.Open<ErrPopupNoTargetLocator>();
+            Action @try = () =>
+            {
+                var popupPage = Browser.Open<ErrPopupNoTargetLocator>();
+            };
+
+            @try.Should()
+               .Throw<NoFindTargetAttributeOnNavigationElementMemberNorFindAttributeOnTargetWebControlException>();
+
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TargetPropertyIsNotWebControlException))]
+        [Test]
         public void ShouldThrowWenPopupPageFindTargetPropertyIsNotINavigationTargetOrHasNoFindAttribute()
         {
-            var popupPage = Browser.Open<ErrPopupPageFindTargetPropertyIsNotINavigationTargetOrHasNoFindAttribute>();
+            Action @try = () =>
+            {
+                var popupPage = Browser.Open<ErrPopupPageFindTargetPropertyIsNotINavigationTargetOrHasNoFindAttribute>();
+            };
+            @try.Should().Throw<TargetPropertyIsNotWebControlException>();
         }
     }
 }

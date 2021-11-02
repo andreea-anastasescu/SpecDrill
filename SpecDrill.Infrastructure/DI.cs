@@ -14,7 +14,13 @@ namespace SpecDrill.Infrastructure
                                                             .AddLogging(
                                                                 builder => builder
                                                                             .SetMinimumLevel(LogLevel.Information)
-                                                                            .AddConsole());
+                                                                            .AddConsole()
+                                                                            .AddFile("app.log", append: true)
+                                                                                        
+                                                                //.AddFile("c:\\apps\\app_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts => {
+                                                                            //    fileLoggerOpts.FormatLogFileName = fName => String.Format(fName, DateTime.UtcNow);
+                                                                            //})
+                                                                );
         private static IServiceCollection serviceCollection = DefaultServiceCollection();
 
         private static Lazy<ServiceProvider> serviceProvider = ReDeploy();

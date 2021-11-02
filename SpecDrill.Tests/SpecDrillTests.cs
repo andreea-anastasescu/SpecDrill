@@ -1,23 +1,22 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SomeTests.PageObjects.Alerts;
 using SomeTests.PageObjects.Test000;
 using SpecDrill;
 using SpecDrill.AutomationScopes;
 using SpecDrill.MsTest;
+using SpecDrill.NUnit3;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Linq;
 
 namespace SomeTests
 {
-    [TestClass]
-    public class SpecDrillTests : MsTestBase
+    [TestFixture]
+    public class SpecDrillTests : NUnitBase
     {
-        [ClassInitialize]
-        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-
-        [TestMethod]
+        [Test]
         public void ShouldOpenBrowserWhenHomepageIsOpened()
         {
             var virtualStoreLoginPage = Browser.Open<Test000LoginPage>();
@@ -28,28 +27,28 @@ namespace SomeTests
             virtualStoreLoginPage.TxtUserName.Clear().SendKeys("cosmin");
             virtualStoreLoginPage.TxtPassword.SendKeys("abc123");
 
-            Assert.AreEqual(virtualStoreLoginPage.DdlCountry.GetOptionsText().Count(), virtualStoreLoginPage.DdlCountry.OptionsCount);
+            virtualStoreLoginPage.DdlCountry.GetOptionsText().Count().Should().Be(virtualStoreLoginPage.DdlCountry.OptionsCount);
             virtualStoreLoginPage.DdlCountry.SelectByValue("md");
-            Assert.AreEqual("Moldova", virtualStoreLoginPage.DdlCountry.SelectedOptionText);
+            virtualStoreLoginPage.DdlCountry.SelectedOptionText.Should().Be("Moldova");
 
             virtualStoreLoginPage.DdlCity.SelectByText("Chisinau");
-            Assert.AreEqual("Chisinau", virtualStoreLoginPage.DdlCity.SelectedOptionText);
+            virtualStoreLoginPage.DdlCity.SelectedOptionText.Should().Be("Chisinau");
 
             virtualStoreLoginPage.DdlCountry.SelectByIndex(1);
-            Assert.AreEqual("Romania", virtualStoreLoginPage.DdlCountry.SelectedOptionText);
+            virtualStoreLoginPage.DdlCountry.SelectedOptionText.Should().Be("Romania");
 
             var homePage = virtualStoreLoginPage.BtnLogin.Click();
 
-            Assert.AreEqual("Virtual Store - Home", homePage.Title);
+            homePage.Title.Should().Be("Virtual Store - Home");
 
-            Assert.AreEqual("Cosmin", homePage.LblUserName.Text);
+            homePage.LblUserName.Text.Should().Be("Cosmin");
             var loginPage = homePage.CtlMenu.LnkLogin.Click();
 
-            Assert.AreEqual("Virtual Store - Login", loginPage.Title);
+            loginPage.Title.Should().Be("Virtual Store - Login");
         }
 
         //TODO: Create Hover tests on css hover menu with at least 2 levels
-        [TestMethod]
+        [Test]
         public void ShouldBeAbleToNavigateWithinFrame()
         {
             var gatewayPage = Browser.Open<Test000GatewayPage>();
@@ -62,22 +61,22 @@ namespace SomeTests
                 virtualStoreLoginPage.TxtPassword.SendKeys("abc123");
 
                 virtualStoreLoginPage.DdlCountry.SelectByValue("md");
-                Assert.AreEqual("Moldova", virtualStoreLoginPage.DdlCountry.SelectedOptionText);
+                virtualStoreLoginPage.DdlCountry.SelectedOptionText.Should().Be("Moldova");
 
                 virtualStoreLoginPage.DdlCity.SelectByText("Chisinau");
-                Assert.AreEqual("Chisinau", virtualStoreLoginPage.DdlCity.SelectedOptionText);
+                virtualStoreLoginPage.DdlCity.SelectedOptionText.Should().Be("Chisinau");
 
                 virtualStoreLoginPage.DdlCountry.SelectByIndex(1);
-                Assert.AreEqual("Romania", virtualStoreLoginPage.DdlCountry.SelectedOptionText);
+                virtualStoreLoginPage.DdlCountry.SelectedOptionText.Should().Be("Romania");
 
                 var homePage = virtualStoreLoginPage.BtnLogin.Click();
 
-                Assert.AreEqual("Virtual Store - Home", homePage.Title);
+                homePage.Title.Should().Be("Virtual Store - Home");
 
-                Assert.AreEqual("Cosmin", homePage.LblUserName.Text);
+                homePage.LblUserName.Text.Should().Be("Cosmin");
                 var loginPage = homePage.CtlMenu.LnkLogin.Click();
 
-                Assert.AreEqual("Virtual Store - Login", loginPage.Title);
+                loginPage.Title.Should().Be("Virtual Store - Login");
             }
 
             Wait.Until(() => gatewayPage.LblGwText.IsAvailable);
@@ -85,7 +84,7 @@ namespace SomeTests
             gatewayPage.LblGwText.Text.Should().Contain("Gateway");
         }
 
-        [TestMethod]
+        [Test]
         public void Issue_6_ShouldCorrectlySelectItemsWhenAccessedByIndex()
         {
             var gatewayPage = Browser.Open<Test000GatewayPage>();
@@ -95,15 +94,16 @@ namespace SomeTests
             item2Text.Should().Be("O2");
         }
 
-        [TestMethod]
+        [Test]
         public void Issue_11_ShouldNoBlockForLongerThanSpecifiedWhenCallingWaitForNoMoreThan()
         {
             var gatewayPage = Browser.Open<Test000GatewayPage>();
             var nonExistingElement = ElementFactory.Create(null, ElementLocatorFactory.Create(SpecDrill.Secondary.Ports.AutomationFramework.By.CssSelector, ".abc-xyz"));
-
-            using (var wait = Browser.ImplicitTimeout(TimeSpan.FromSeconds(3)))
+            var seconds = 2;
+            using (var wait = Browser.ImplicitTimeout(TimeSpan.FromSeconds(.25))) 
+                //TODO: Implicit Timeout affects explicit waits (NoMoreThan). So impicit wait cannot be greater than explicit wait currently. TBD: if that should remain the case or explicit wait can override the implicit timeout to a small enough value, not to affect explicit wait interval (e.g. make the ImplicitTimeout .5s when explicityly waiting.
             {
-                var timeLimit = TimeSpan.FromSeconds(1);
+                var timeLimit = TimeSpan.FromSeconds(seconds);
                 Action waitForNonExistingElement = () =>
                 Wait.NoMoreThan(timeLimit).Until(() => nonExistingElement.IsAvailable);
                 using (var benchmark = new BenchmarkScope("timing Wait.NoMoreThan(...)"))
@@ -114,7 +114,7 @@ namespace SomeTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldWaitForAlertAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
@@ -127,7 +127,7 @@ namespace SomeTests
             Browser.IsAlertPresent.Should().BeFalse();
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldWaitForConfirmAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
@@ -140,7 +140,7 @@ namespace SomeTests
             Browser.IsAlertPresent.Should().BeFalse();
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldWaitForConfirmAndDismiss()
         {
             var alertPage = Browser.Open<AlertPage>();

@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
+using SpecDrill.Infrastructure.Configuration;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -9,7 +13,7 @@ namespace SpecDrill
     public class RetryWaitContext
     {
         protected ILogger Logger = DI.GetLogger<RetryWaitContext>();
-
+        
         public int RetryCount { get; set; }
         public TimeSpan? RetryInterval { get; set; }
 
@@ -17,7 +21,7 @@ namespace SpecDrill
 
         public void Until(Func<bool> waitCondition)
         {
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
 
             // default retry interval is 20s
             var retryInterval = this.RetryInterval ?? TimeSpan.FromSeconds(20);
@@ -166,7 +170,7 @@ namespace SpecDrill
         {
             new MaxWaitContext
             {
-                MaximumWait = TimeSpan.FromMilliseconds(Globals.Configuration?.WebDriver?.MaxWait ?? 60000)
+                MaximumWait = TimeSpan.FromMilliseconds(ConfigurationManager.Settings.WebDriver?.MaxWait ?? 60000)
             }.Until(waitCondition);
         }
     }

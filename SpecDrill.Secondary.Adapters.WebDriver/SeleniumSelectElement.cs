@@ -15,14 +15,14 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
         }
 
-        private SelectElement SelectElement
+        private OpenQA.Selenium.Support.UI.SelectElement SelectElement
         {
             get
             {
                 if (!(this.Element is IWebElement element))
                     throw new InvalidCastException("cast to IWebElement failed!");
 
-                return new SelectElement(element);
+                return new OpenQA.Selenium.Support.UI.SelectElement(element);
             }
         }
 

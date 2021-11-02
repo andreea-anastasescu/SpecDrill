@@ -1,22 +1,21 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SomeTests.PageObjects;
 using SpecDrill;
 using SpecDrill.AutomationScopes;
 using SpecDrill.MsTest;
+using SpecDrill.NUnit3;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Exceptions;
 using System;
 
 namespace SomeTests
 {
-    [TestClass]
-    public class ElementStatusTests : MsTestBase
+    [TestFixture]
+    public class ElementStatusTests : NUnitBase
     {
-        [ClassInitialize]
-        public static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);
-
-        [TestMethod]
+        [Test]
         public void ShouldWaitForElementToBecomeDisabled()
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
@@ -31,7 +30,7 @@ namespace SomeTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldWaitForElementToBecomeVisible()
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
@@ -45,17 +44,17 @@ namespace SomeTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldNotCrashIfElementNotAvailable()
         {
             Browser.Open<ElementStatusPage>();
 
             var unrealElement = ElementFactory.Create(null, ElementLocatorFactory.Create(By.Id, "doesNotExist"));
 
-            Assert.IsFalse(unrealElement.IsAvailable);
+            unrealElement.IsAvailable.Should().BeFalse();
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldThrowExceptionWhenTestingDisplayedAndElementNotPresent()
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
@@ -67,7 +66,7 @@ namespace SomeTests
         }
 
 
-        [TestMethod]
+        [Test]
         public void ShouldThrowExceptionWhenTestingEnabledAndElementNotPresent()
         {
             var elStatusPage = Browser.Open<ElementStatusPage>();
