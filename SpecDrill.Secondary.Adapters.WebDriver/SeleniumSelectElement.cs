@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SpecDrill.Secondary.Adapters.WebDriver
 {

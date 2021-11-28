@@ -122,7 +122,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             where U : struct
         {
             IWebElement? ToIWebElement(SearchResult searchResult)
-                => (searchResult.Elements.FirstOrDefault() is IWebElement iwe) ?
+                => (searchResult.Elements.FirstOrDefault()?.NativeElement is IWebElement iwe) ?
                         iwe :
                         throw new ElementNotFoundException($"Element {locator} was not found!");
 
@@ -423,13 +423,12 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                             var cssSelector = elementToSearch.Locator.LocatorValue;
                             shadowDomParts = cssSelector.Split(CSS_SHADOW_DOM_TOKEN);
 
-                            for (int pi = 0; pi < shadowDomParts.Length - 1; pi++)
+                            //for (int pi = 0; pi < shadowDomParts.Length-1; pi++)
+                            foreach (var part in shadowDomParts[..^1])
                             {
-                                var part = pi == 0 ?
-                                    shadowDomParts[pi] :
-                                    shadowDomParts[pi].TrimStart();
+                                //var part = shadowDomParts[pi].Trim();
 
-                                var locator = CreateLocator(Ports.AutomationFramework.By.CssSelector, part, isShadowRoot: true);
+                                var locator = CreateLocator(Ports.AutomationFramework.By.CssSelector, part.Trim(), isShadowRoot: true);
 
                                 shadowRoot = FindElementsInContainer(locator, depth++,
                                     shadowRoot ?? previousContainerNativeElement);
@@ -512,7 +511,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             get
             {
                 Wait.Until(() => this.IsAvailable);
-                var nativeElement = this.NativeElementSearchResult().Elements.FirstOrDefault() as IWebElement;
+                var nativeElement = this.NativeElementSearchResult().Elements.FirstOrDefault().NativeElement as IWebElement;
                 if (nativeElement == null)
                 {
                     throw new Exception("SpecDrill: Element Not Found!");

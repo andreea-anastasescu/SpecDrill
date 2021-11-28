@@ -17,7 +17,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver.Extensions
         {
             using (element.Browser.ImplicitTimeout(TimeSpan.FromSeconds(.5d)))
             {
-                if (!(element.NativeElementSearchResult().Elements.FirstOrDefault() is IWebElement webElement))
+                if (!(element.NativeElementSearchResult().Elements.FirstOrDefault()?.NativeElement is IWebElement webElement))
                 {
                     throw new ElementNotFoundException($"SpecDrill: Element ({element.Locator}) Not Found!");
                 }

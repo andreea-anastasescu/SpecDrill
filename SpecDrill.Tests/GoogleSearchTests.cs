@@ -21,9 +21,9 @@ namespace SomeTests
         public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
-            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
-            Wait.NoMoreThan(TimeSpan.FromSeconds(7))
-                .Until(() => acceptButton.IsAvailable);
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div/div[3]/button[2]"));
+            Wait.NoMoreThan(TimeSpan.FromSeconds(21))
+                .Until(() => acceptButton.IsAvailable,throwExceptionOnTimeout: false);
             if (acceptButton.IsAvailable)
                 acceptButton.Click();
             googleSearchPage.TxtSearch.SendKeys("drill wiki");
@@ -34,7 +34,7 @@ namespace SomeTests
             var resultsPage = googleSearchPage.BtnSearch.Click();
 
             #region Option 1: assuming it's first result
-            //resultsPage.SearchResults[1].Link.Text.Should().Contain("Wikipedia");
+            //resultsPage.SearchResults[1].Link.Text.Should().Contain("Drill");
             #endregion
 
             #region Option 2: searching through search results

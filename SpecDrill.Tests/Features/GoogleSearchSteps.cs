@@ -20,7 +20,8 @@ namespace SomeTests.Features
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
-            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
+
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div/div[3]/button[2]"));
             Wait.NoMoreThan(TimeSpan.FromSeconds(7))
                 .Until(() => acceptButton.IsAvailable);
             if (acceptButton.IsAvailable)
@@ -53,7 +54,7 @@ namespace SomeTests.Features
         {
             var resultsPage = scenarioContext["resultsPage"] as GoogleSearchResultsPage;
             Assert.IsNotNull(resultsPage);
-            var wikiResult = resultsPage.SearchResults.GetElementByText(textToMatch);
+            var wikiResult = resultsPage.SearchResults.FirstOrDefault(x => x.Link.Text.Contains(textToMatch)); //GetElementByText(textToMatch);
             wikiResult.Should().NotBeNull();
         }
 

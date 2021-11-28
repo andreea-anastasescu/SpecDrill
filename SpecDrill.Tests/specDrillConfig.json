@@ -14,7 +14,7 @@
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\94.0.4606.6100\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\96.0.4664.4500\\driver\\win32", //"C:\\Your Browser Drivers Path"//
           "arguments": [
             //"headless",
             "--disable-extensions",

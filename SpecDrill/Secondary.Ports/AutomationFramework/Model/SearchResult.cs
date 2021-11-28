@@ -22,13 +22,13 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Model
             public override string ToString()
                 => "NULL LOCATOR";
         }
-        private SearchResult(IElementLocator locator, SearchResult? container, params object[] elements)
+        private SearchResult(IElementLocator locator, SearchResult? container, params ISearchable[] elements)
             => (Locator, Container, Elements) = (locator, container, elements);
-        public object[] Elements { get; private set; } = new object[0];
+        public ISearchable[] Elements { get; private set; } = System.Array.Empty<ISearchable>();
         public IElementLocator Locator { get; private set; }
         public SearchResult? Container { get; private set; }
         public int Count => Elements.Length;
-        public static SearchResult Create(IElementLocator locator,SearchResult? container, params object[] elements)
+        public static SearchResult Create(IElementLocator locator,SearchResult? container, params ISearchable[] elements)
             => new SearchResult(locator, container, elements);
 
         public static SearchResult Empty => Create(new NullElementLocator(), default);

@@ -512,7 +512,8 @@ namespace SpecDrill
             if (searchRoot?.Locator?.IsShadowRoot ?? false)
             {
                 Logger.LogInformation($"DOM LOOKUP: { searchRoot.Locator } (shadowRoot)");
-                searchContext = ExecuteJavascript($"return arguments[0].shadowRoot", searchRoot?.Elements.First() ?? throw new ElementNotFoundException("searchRoot is null. shadowRoot cannot be accessed!"));
+                //searchContext = ExecuteJavascript($"return arguments[0].shadowRoot;", searchRoot?.Elements.FirstOrDefault() ?? throw new ElementNotFoundException("searchRoot is null. shadowRoot cannot be accessed!"));
+                searchContext = searchRoot?.Elements.FirstOrDefault()?.GetShadowRoot();
             }
 
             Logger.LogInformation($"DOM LOOKUP: {searchRoot?.Locator?.ToString() ?? "ROOT"} :: {locator}");

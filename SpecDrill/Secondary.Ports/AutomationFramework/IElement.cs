@@ -64,7 +64,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
         string GetAttribute(string attributeName);
         bool SetAttribute(string attributeName, string attributeValue);
         string GetCssValue(string cssValueName);
-
+        
         void Hover(bool waitForSilence = false);
 
         void DragAndDropTo(IElement target);

@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RestoreSources>$(RestoreSources)</RestoreSources>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>288</BuildNumber>
+    <BuildNumber>389</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill.SpecFlow - SpecDrill integration with SpecFlow </Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>

@@ -105,11 +105,11 @@ namespace SomeTests
             {
                 var timeLimit = TimeSpan.FromSeconds(seconds);
                 Action waitForNonExistingElement = () =>
-                Wait.NoMoreThan(timeLimit).Until(() => nonExistingElement.IsAvailable);
+                    Wait.NoMoreThan(timeLimit).Until(() => nonExistingElement.IsAvailable);
                 using (var benchmark = new BenchmarkScope("timing Wait.NoMoreThan(...)"))
                 {
                     waitForNonExistingElement.Should().Throw<TimeoutException>();
-                    benchmark.Elapsed.Should().BeCloseTo(timeLimit, TimeSpan.FromMilliseconds(300));
+                    benchmark.Elapsed.Should().BeCloseTo(timeLimit, TimeSpan.FromMilliseconds(500));
                 }
             }
         }

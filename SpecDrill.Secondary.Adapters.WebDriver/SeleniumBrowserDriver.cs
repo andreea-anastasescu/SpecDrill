@@ -127,34 +127,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             timeouts.AsynchronousJavaScript = timeout;
             timeouts.PageLoad = timeout;
         }
-        /// <summary>
-        /// Finds elements for given locator. If searchRoot is provided, search is performed 
-        /// only on the DOM subtree that has it as root.
-        /// </summary>
-        /// <param name="locator"></param>
-        /// <param name="searchRoot">it's basically a IWebElement</param>
-        /// <returns></returns>
-        public ReadOnlyCollection<object> FindElements(IElementLocator locator, object? searchRoot = null)
-        {
-            var result = new List<object>();
-            var searchRootElement = searchRoot as IWebElement;
-            var seleniumLocator = locator.ToSelenium();
-            
-            var elements = searchRootElement == null ?
-                seleniumDriver.FindElements(seleniumLocator) :
-                searchRootElement.FindElements(seleniumLocator);
-
-            result.AddRange(elements);
-            return new ReadOnlyCollection<object>(result);
-        }
-
-        //public object FindElement(IElementLocator locator)
-        //{
-        //    var elements = seleniumDriver.FindElements(locator.ToSelenium());
-        //    if (elements == null || elements.Count == 0)
-        //        return null;
-        //    return elements[0];
-        //}
+        
         public void JsLog(string logEntry)
             => (seleniumDriver as IJavaScriptExecutor)!.ExecuteScript($"console.log('{logEntry.Replace("'", "\"").Replace("\r", "").Replace("\n", "")}')");
         public object? ExecuteJavaScript(string js, params object[] arguments)
@@ -182,7 +155,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         public void MoveToElement(IElement element)
         {
             var actions = new Actions(this.seleniumDriver);
-            actions.MoveToElement(element.NativeElementSearchResult().Elements.FirstOrDefault() as IWebElement);
+            actions.MoveToElement(element.NativeElementSearchResult().Elements.FirstOrDefault()?.NativeElement as IWebElement);
             actions.Build().Perform();
         }
 
@@ -468,5 +441,39 @@ console.log('mouse click!');
             builder.MoveByOffset(offsetX, offsetY);
             builder.Release().Perform();
         }
+
+        /// <summary>
+        /// Finds elements for given locator. If searchRoot is provided, search is performed 
+        /// only on the DOM subtree that has it as root.
+        /// </summary>
+        /// <param name="locator"></param>
+        /// <param name="searchRoot">it's basically a IWebElement</param>
+        /// <returns></returns>
+        public ReadOnlyCollection<ISearchable> FindElements(IElementLocator locator, ISearchable? searchRoot = null)
+        {
+            var result = new List<ISearchable>();
+            var searchRootElement = searchRoot as ISearchContext;
+            var seleniumLocator = locator.ToSelenium();
+
+            ISearchable ToSearchable(IWebElement webElement) => SeleniumSearchable.Create(this, webElement);
+            var elements = searchRootElement == null ?
+                seleniumDriver.FindElements(seleniumLocator).Select(ToSearchable) :
+                searchRootElement.FindElements(seleniumLocator).Select(ToSearchable);
+
+            result.AddRange(elements);
+            return new ReadOnlyCollection<ISearchable>(result);
+        }
+        #region ISearchable
+        public ReadOnlyCollection<ISearchable> FindElements(IElementLocator locator)
+            => FindElements(locator, null);
+
+        public bool IsShadowRoot()
+            => false;
+
+        public ISearchable GetShadowRoot()
+            => throw new Exception("Element `<html/>` is not a ShadowRoot!");
+
+        public object NativeElement => FindElements(SeleniumElementLocator.Create(Ports.AutomationFramework.By.TagName, "html")).First();
+        #endregion
     }
 }

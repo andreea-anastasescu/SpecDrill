@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace SpecDrill.Secondary.Ports.AutomationFramework
 {
-    public interface IBrowserDriver
+    public interface IBrowserDriver : ISearchable
     {
         /// <summary>
         /// Navigates to specified Url
@@ -27,13 +27,12 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
         /// </summary>
         /// <param name="timeout"></param>
         void ChangeBrowserDriverTimeout(System.TimeSpan timeout);
-
         /// <summary>
         /// Finds elements matching provided locator
         /// </summary>
         /// <param name="locator"></param>
         /// <returns></returns>
-        ReadOnlyCollection<object> FindElements(IElementLocator locator, object? searchRoot = null);
+        ReadOnlyCollection<ISearchable> FindElements(IElementLocator locator, ISearchable? searchRoot = null);
         /// <summary>
         /// returns native element. Cannot return IElement since we need an IBrowser instance for creation.
         /// </summary>
