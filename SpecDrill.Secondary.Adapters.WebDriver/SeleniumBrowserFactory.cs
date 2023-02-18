@@ -1,13 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.Android;
-using OpenQA.Selenium.Appium.iOS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Opera;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Safari;
 using SpecDrill.Configuration;
@@ -19,7 +16,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-//using OpenQA.Selenium.Appium.Enums;
 
 namespace SpecDrill.Secondary.Adapters.WebDriver
 {
@@ -127,10 +123,6 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
                         return SeleniumBrowserDriver.Create(new FirefoxDriver(fds, BuildFirefoxOptions(), TimeSpan.FromSeconds(60)), this.configuration);
                     } },
-                { BrowserNames.opera, () => {
-                    Logger.LogInformation("Initializig Opera driver...");
-                    return SeleniumBrowserDriver.Create(new OperaDriver(configuration?.WebDriver?.Browser?.Drivers?.Opera?.Path ?? "", BuildOperaOptions()), this.configuration);
-                } },
                 { BrowserNames.safari, () =>
                 {
                     Logger.LogInformation("Initializig Safari driver...");
@@ -164,11 +156,6 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
                                     FirefoxOptions firefoxOptions = BuildFirefoxOptions();
                                     return CreateRemoteWebDriver(firefoxOptions.ToCapabilities());
-                                }
-                            case BrowserNames.opera:
-                                {
-                                    OperaOptions operaOptions = BuildOperaOptions();
-                                    return CreateRemoteWebDriver(operaOptions.ToCapabilities());
                                 }
                             case BrowserNames.safari:
                                 {
@@ -276,13 +263,14 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                         var type = typeof(T);
                         var addAdditionalCapabilityMethodInfo = type.GetMethod("AddAdditionalCapability",
                             new Type[] { typeof(string), typeof(object), typeof(bool) });
-                        if (addAdditionalCapabilityMethodInfo == null) 
-                            throw new InvalidCastException($"Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
-                        addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString()??"", true });
+                        if (addAdditionalCapabilityMethodInfo != null) 
+                            addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString()??"", true });
+                        else
+                            Logger.LogInformation($"Cannog forceGlobal capabilities ::: Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
                     } 
                     else 
                     {
-                        options.AddAdditionalCapability(kvp.Key, kvp.Value.ToString());
+                        options.AddAdditionalOption(kvp.Key, kvp.Value.ToString());
                     }
                 }
                 catch (ArgumentException)
@@ -325,14 +313,6 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             ieOptions.ForceCreateProcessApi = !string.IsNullOrWhiteSpace(ieOptions.BrowserCommandLineArguments);
             ExtendCapabilities(ieOptions, configuration?.WebDriver?.Browser?.Capabilities);
             return ieOptions;
-        }
-
-        private OperaOptions BuildOperaOptions()
-        {
-            var options = new OperaOptions();
-            options.AddArguments(configuration?.WebDriver?.Browser?.Drivers?.Opera?.Arguments ?? new List<string>());
-            ExtendCapabilities(options, configuration?.WebDriver?.Browser?.Capabilities);
-            return options;
         }
 
         private FirefoxOptions BuildFirefoxOptions()

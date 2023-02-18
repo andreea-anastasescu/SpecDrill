@@ -10,6 +10,8 @@ using SpecDrill.Secondary.Ports.AutomationFramework;
 using NUnit.Framework;
 using SpecDrill.NUnit3;
 
+
+#nullable disable
 namespace SomeTests
 {
     public class ShadowDomPage : WebPage
@@ -22,7 +24,7 @@ namespace SomeTests
     }
     public class ShadowDomControlL0 : WebControl
     {
-        public ShadowDomControlL0(IElement? parent, IElementLocator locator) : base(parent, locator) { }
+        public ShadowDomControlL0(IElement parent, IElementLocator locator) : base(parent, locator) { }
 
         [Find(By.CssSelector, "div#l1regular")]
         public IElement DivL1Regular { get; set; } //present only in 1st level shadow dom
@@ -33,7 +35,7 @@ namespace SomeTests
     }
     public class ShadowDomControlL1 : WebControl
     {
-        public ShadowDomControlL1(IElement? parent, IElementLocator locator) : base(parent, locator) { }
+        public ShadowDomControlL1(IElement parent, IElementLocator locator) : base(parent, locator) { }
 
 
         [Find(By.CssSelector, "div#l2regular")]
@@ -93,3 +95,4 @@ namespace SomeTests
 
     }
 }
+#nullable restore

@@ -15,7 +15,7 @@ namespace SomeTests
         public void ShouldSaveScreenshotSuccessfully()
         {
             Browser.Open<Test001CalculatorPage>();
-            SaveScreenshot(TestContext!.TestName);
+            SaveScreenshot(TestContext?.TestName??UNNAMED_TEST);
             //TODO: change return type of SaveScreenshot() so test can assert on success!
         }
     }

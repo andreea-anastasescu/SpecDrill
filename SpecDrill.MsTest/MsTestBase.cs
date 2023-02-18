@@ -18,6 +18,7 @@ namespace SpecDrill.MsTest
 {
     public class MsTestBase : UiScenarioBase
     {
+        protected const string UNNAMED_TEST = "!UnnamedTest!";
         private static ConcurrentDictionary<string, MsTestBase> _instances = new();
         public TestContext? TestContext { get; set; }
         private string? FixtureKey { get; set; }
@@ -83,7 +84,7 @@ namespace SpecDrill.MsTest
 
                 if (DidFirstTestRan)
                 {
-                    fixtureInstance._ScenarioTeardown(scenarioName: fixtureInstance.TestContext.TestName, isTestError: fixtureInstance.TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
+                    fixtureInstance._ScenarioTeardown(scenarioName: fixtureInstance.TestContext.TestName??UNNAMED_TEST, isTestError: fixtureInstance.TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
                     DidFirstTestRan = false;
                 }
             }
@@ -96,12 +97,12 @@ namespace SpecDrill.MsTest
         {
             if (TestContext == null) throw new Exception("TextContext is not initialized. SpecDrill.MsTest.TestBase.ClassSetup() was not invoked yet!\n Please add following code snippet to your test class:\n[ClassInitialize]\npublic static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);\n");
             if (RestartDriverPerTest)
-                _ScenarioSetup(TestContext.TestName);
+                _ScenarioSetup(TestContext.TestName??UNNAMED_TEST);
             else
             {
                 if (!DidFirstTestRan)
                 {
-                    _ScenarioSetup(TestContext.TestName);
+                    _ScenarioSetup(TestContext.TestName??UNNAMED_TEST);
                     DidFirstTestRan = true;
                 }
             }
@@ -112,16 +113,18 @@ namespace SpecDrill.MsTest
         {
             if (TestContext == null) throw new Exception("TextContext is not initialized. SpecDrill.MsTest.TestBase.ClassSetup() was not invoked yet!\n Please add following code snippet to your test class:\n[ClassInitialize]\npublic static void ClassInitializer(TestContext testContext) => _ClassSetup(testContext);\n");
             if (RestartDriverPerTest)
-                _ScenarioTeardown(scenarioName: TestContext.TestName, isTestError: TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
+                _ScenarioTeardown(scenarioName: TestContext.TestName??UNNAMED_TEST, isTestError: TestContext.CurrentTestOutcome == UnitTestOutcome.Failed);
         }
 
+#pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
         [ModuleInitializer]
+#pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
         public static void AssemblyInitialize()
         {
             DI.ConfigureServices(services =>
             {
                 services.AddWebdriverSecondaryAdapter();
-                services.AddSingleton<Settings>(sp =>
+                services.AddSingleton(sp =>
                 {
                     ConfigurationManager.Load();
                     return ConfigurationManager.Settings;

@@ -9,12 +9,12 @@
     },
     "browser": { // settings for browser mode -> targets browser drivers or selenium server
       "engine": "webdriver", // webdriver, watin (not supported for now) ...
-      "browserName": "chrome", // targeted browser name : chrome, ie, firefox, opera, safari
+      "browserName": "edge", // targeted browser name : chrome, ie, firefox, opera, safari
       "isRemote": false, // when true, seleniumServerUri must be set
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\96.0.4664.4500\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.msedgedriver\\109.0.1518.61\\driver\\win32", //"C:\\Your Browser Drivers Path"//
           "arguments": [
             //"headless",
             "--disable-extensions",
@@ -27,13 +27,13 @@
             //"enable-features=NetworkServiceInProcess",
             //"disable-features=NetworkService"
           ]
-            //[ "disable-features=VizDisplayCompositor", "--incognito", "--disable-gpu", "--disable-dev-shm-usage", "--disable-extensions" ]
-            // "--incognito", "--disable-gpu", "--disable-dev-shm-usage", "enable-automation", "--disable-infobars", "--no-sandbox", "--disable-extensions"
-            //"--incognito", "--disable-gpu", "--disable-dev-shm-usage", "--log-level=3", "enable-features=NetworkServiceInProcess", "disable-features=NetworkService" ]
-            // [ "--incognito", "start-maximized", "enable-automation", "--disable-infobars", "--no-sandbox", "--disable-extensions", "--disable-dev-shm-usage" ] //add , "headless" for headles test run
-            //"disable-features=VizDisplayCompositor",
-            // "--enable-javascript",
-            // "--disable-browser-side-navigation",
+          //[ "disable-features=VizDisplayCompositor", "--incognito", "--disable-gpu", "--disable-dev-shm-usage", "--disable-extensions" ]
+          // "--incognito", "--disable-gpu", "--disable-dev-shm-usage", "enable-automation", "--disable-infobars", "--no-sandbox", "--disable-extensions"
+          //"--incognito", "--disable-gpu", "--disable-dev-shm-usage", "--log-level=3", "enable-features=NetworkServiceInProcess", "disable-features=NetworkService" ]
+          // [ "--incognito", "start-maximized", "enable-automation", "--disable-infobars", "--no-sandbox", "--disable-extensions", "--disable-dev-shm-usage" ] //add , "headless" for headles test run
+          //"disable-features=VizDisplayCompositor",
+          // "--enable-javascript",
+          // "--disable-browser-side-navigation",
         },
         "ie": { "path": "" },
         "firefox": {

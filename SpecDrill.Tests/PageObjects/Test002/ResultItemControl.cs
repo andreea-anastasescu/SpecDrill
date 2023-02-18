@@ -1,6 +1,8 @@
 ﻿using SpecDrill;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 
+#nullable disable
+
 namespace SomeTests.PageObjects.Test002
 {
     public class SearchResultItemControl : WebControl

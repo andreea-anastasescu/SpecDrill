@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SpecDrill.Infrastructure.Configuration;
 using SpecDrill.NUnit3;
 using SpecDrill.Samples.NUnit3.PageObjects;
+using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Linq;
 
@@ -24,8 +25,8 @@ namespace SpecDrill.Samples.NUnit3
         {
             //ConfigurationManager.Load();
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
-            var acceptButton = new Element(null, ElementLocatorFactory.Create(Secondary.Ports.AutomationFramework.By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
-            Wait.NoMoreThan(TimeSpan.FromSeconds(3))
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.Id, "L2AGLb"));
+            Wait.NoMoreThan(TimeSpan.FromSeconds(1))
                 .Until(() => acceptButton.IsAvailable, throwExceptionOnTimeout: false);
             if (acceptButton.IsAvailable)
                 acceptButton.Click();

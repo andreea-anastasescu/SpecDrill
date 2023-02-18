@@ -6,6 +6,8 @@ using SpecDrill.MsTest;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 
+#nullable disable
+
 namespace SomeTests
 {
     [TestClass]

@@ -5,19 +5,20 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>557</BuildNumber>
+    <BuildNumber>460</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
-    <Description>SpecDrill.MsTest - SpecDrill integration with MsTest </Description>
+    <Description>SpecDrill.SpecFlow - SpecDrill integration with SpecFlow </Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <PackageReleaseNotes>
       https://github.com/CosminSontu/SpecDrill/wiki/Release-Notes
     </PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="SpecDrill" Version="[1.3.*,)" />
+    <PackageReference Include="SpecDrill.Infrastructure" Version="[1.3.*,)" />
     <PackageReference Include="SpecDrill.Secondary.Adapters.WebDriver" Version="[1.3.*,)" />
+    <PackageReference Include="SpecFlow" Version="3.9.58" IncludeAssets="All" />
     <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
     <None Include="..\specdrill.png" Pack="true" PackagePath=".\" />
     <Content Include="..\NuGet\content\*.template.*" Pack="true" PackagePath="content" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />

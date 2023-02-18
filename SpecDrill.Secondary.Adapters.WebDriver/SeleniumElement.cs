@@ -511,7 +511,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             get
             {
                 Wait.Until(() => this.IsAvailable);
-                var nativeElement = this.NativeElementSearchResult().Elements.FirstOrDefault().NativeElement as IWebElement;
+                var nativeElement = this.NativeElementSearchResult()?.Elements?.FirstOrDefault()?.NativeElement as IWebElement;
                 if (nativeElement == null)
                 {
                     throw new Exception("SpecDrill: Element Not Found!");

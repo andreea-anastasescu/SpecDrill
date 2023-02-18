@@ -1,6 +1,8 @@
 ﻿using SpecDrill;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 
+#nullable disable
+
 namespace SomeTests.PageObjects.Test000
 {
     public class Test000LoginPage : WebPage

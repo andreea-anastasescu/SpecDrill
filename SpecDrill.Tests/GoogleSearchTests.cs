@@ -21,7 +21,7 @@ namespace SomeTests
         public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
-            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div/div[3]/button[2]"));
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(By.Id, "L2AGLb"));
             Wait.NoMoreThan(TimeSpan.FromSeconds(21))
                 .Until(() => acceptButton.IsAvailable,throwExceptionOnTimeout: false);
             if (acceptButton.IsAvailable)

@@ -9,7 +9,7 @@
     },
     "browser": { // settings for browser mode -> targets browser drivers or selenium server
       "engine": "webdriver", // webdriver, watin (not supported for now) ...
-      "browserName": "chrome", // targeted browser name : chrome, ie, firefox, opera, safari
+      "browserName": "chrome", // targeted browser name : chrome, ie, firefox, safari
       "isRemote": false, // when true, seleniumServerUri must be set
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {

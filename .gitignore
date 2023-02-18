@@ -32,3 +32,5 @@ _ReSharper.*
 node_modules
 **/[Cc]ompiler/[Rr]esources/**/*.js
 sonarcloud-scan.bat
+**/*.nupkg
+*.log

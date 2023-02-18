@@ -16,7 +16,7 @@ namespace SpecDrill.Samples.NUnit3.Features
         public void GivenIHaveEnteredIntoGoogleSearch(string searchTerm)
         {
             var googleSearchPage = Browser.Open<GoogleSearchPage>();
-            var acceptButton = new Element(null, ElementLocatorFactory.Create(Secondary.Ports.AutomationFramework.By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div[3]/button[2]"));
+            var acceptButton = new Element(null, ElementLocatorFactory.Create(Secondary.Ports.AutomationFramework.By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div/div[3]/button[2]"));
             Wait.NoMoreThan(TimeSpan.FromSeconds(7))
                 .Until(() => acceptButton.IsAvailable);
             if (acceptButton.IsAvailable)

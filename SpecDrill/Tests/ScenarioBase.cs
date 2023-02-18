@@ -11,12 +11,13 @@ namespace SpecDrill.Tests
     public class UiScenarioBase : ScenarioBase
     {
         protected IBrowser Browser => LazyBrowser.Value;
-        protected static bool initialized = false;
+        private static bool initialized = false;
         protected static Lazy<IBrowser> LazyBrowser { get; private set; } = new Lazy<IBrowser>(() => throw new Exception("Browser not initialized. _ScenarioSetup was not called yet!"));
+        private static void SetInitialized(bool state) => UiScenarioBase.initialized = state;
         protected sealed override void DriverInit()
         {
             LazyBrowser = new Lazy<IBrowser>(() => DI.ServiceProvider.GetService<IBrowser>() ?? throw new Exception("IBrowser could not be resolved by DI ServiceProvider"));
-            initialized = true;
+            SetInitialized(true);
         }
         protected sealed override void DriverInitRecovery(Exception e)
         {
@@ -26,7 +27,7 @@ namespace SpecDrill.Tests
             {
                 Browser.Exit();
                 LazyBrowser = new Lazy<IBrowser>(() => throw new Exception("Browser already exited. _ScenarioSetup failed!"));
-                initialized = false;
+                SetInitialized(false);
             }
             throw new Exception("Browser initialization exception!", e);
         }
@@ -43,11 +44,11 @@ namespace SpecDrill.Tests
             
             
             LazyBrowser = new Lazy<IBrowser>(() => throw new Exception("Browser already exited. _ScenarioTeardown was called!"));
-            initialized = false;
+            SetInitialized(false);
         }
         protected sealed override void DriverTeardownRecovery(Exception e)
         {
-            Logger.Log(LogLevel.Error, $"Failed in DriverTeardown with {e}");
+            Logger.Log(LogLevel.Error, "Failed in DriverTeardown with {exception}", e);
         }
         protected void SaveScreenshot(string scenarioName) => Browser.SaveScreenshot(this.GetType().Name, scenarioName);
     }
@@ -65,7 +66,7 @@ namespace SpecDrill.Tests
             }
             catch (Exception e)
             {
-                Logger.LogError($"Failed in TestInitialize for scenario: {scenarioName} with {e}");
+                Logger.LogError("Failed in TestInitialize for scenario: {scenarioName} with {exception}", scenarioName, e);
                 DriverInitRecovery(e);
                 return;
             }
@@ -77,14 +78,14 @@ namespace SpecDrill.Tests
         {
             try
             {
-                Logger.Log(LogLevel.Information, $"Cleaning up after {scenarioName} scenario.");
+                Logger.Log(LogLevel.Information, "Cleaning up after {scenarioName} scenario.", scenarioName);
 
                 ScenarioTeardown(scenarioName, isTestError);
 
             }
             catch (Exception e)
             {
-                Logger.Log(LogLevel.Error, $"Failed in ScenarioCleanup for scenario: {scenarioName} with {e}");
+                Logger.Log(LogLevel.Error, "Failed in ScenarioCleanup for scenario: {scenarioName} with {exception}", scenarioName, e);
             }
             finally
             {

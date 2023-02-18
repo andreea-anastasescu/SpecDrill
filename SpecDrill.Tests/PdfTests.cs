@@ -17,6 +17,7 @@ namespace SomeTests
             var alertPage = Browser.Open<PdfIndexPage>();
             using (var pdfPage = alertPage.LnkViewPdf.Open())
             {
+                var txt = pdfPage.Text;
                 pdfPage.Text.Should().Contain("a3b2c1");
             }
         }

@@ -24,28 +24,30 @@ namespace SpecDrill.Infrastructure.Configuration
             Logger = DI.GetLogger<ConfigurationManager>();
             Settings = Load();
         }
-        public static SpecDrill.Configuration.Settings Load(string? jsonConfiguration = null, string? configurationFileName = null)
+        public static SpecDrill.Configuration.Settings Load(string? jsonConfiguration = null, string? configurationFileName = null, string? baseDirectory = null)
         {
             IConfigurationRoot? configRoot;
             if (string.IsNullOrWhiteSpace(jsonConfiguration))
             {
-                Logger.LogInformation($"Searching Configuration file {configurationFileName ?? ConfigurationFileName}...");
-                var configurationPaths = FindConfigurationFile(AppDomain.CurrentDomain.BaseDirectory, configurationFileName ?? ConfigurationFileName);
+                var cfgFileName = configurationFileName ?? ConfigurationFileName;
+                var cfgBaseDirectory = baseDirectory ?? AppDomain.CurrentDomain.BaseDirectory;
+                Logger.LogInformation($"Searching Configuration file {cfgFileName}...");
+                var configurationPaths = FindConfigurationFile(cfgBaseDirectory, cfgFileName);
 
                 if (configurationPaths == ("", ""))
                     throw new FileNotFoundException("Configuration file not found");
 
-                var (_, jsonConfigurationFilePath) = configurationPaths;
+                var (_, jsonConfigurationFullFilePath) = configurationPaths;
 
-                if (string.IsNullOrWhiteSpace(jsonConfigurationFilePath))
+                if (string.IsNullOrWhiteSpace(jsonConfigurationFullFilePath))
                 {
                     Logger.LogInformation("Configuration file not found.");
                     throw new FileNotFoundException("Configuration file not found");
                 }
 
-                Logger.LogInformation($"Configuring json fine -> path = {jsonConfigurationFilePath}");
+                Logger.LogInformation($"Configuring json fine -> path = {jsonConfigurationFullFilePath}");
                 configRoot = new ConfigurationBuilder()
-                    .AddJsonFile(jsonConfigurationFilePath, false, false)
+                    .AddJsonFile(jsonConfigurationFullFilePath, false, false)
                     .Build();
             }
             else

@@ -74,7 +74,9 @@ namespace SpecDrill.NUnit3
             _ScenarioTeardown(scenarioName: TestContext.CurrentContext.Test.Name, isTestError: new HashSet<ResultState>(new ResultState[] {ResultState.Failure, ResultState.ChildFailure}).Contains(TestContext.CurrentContext.Result.Outcome));
         }
 
+#pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
         [ModuleInitializer]
+#pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
         public static void AssemblyInitialize()
         {
             DI.ConfigureServices(services =>

@@ -1,5 +1,6 @@
 # param([string]$version)
-$path = ".\NuGetPackages\*.nupkg";
+$path = "c:\nuget\*.nupkg";
+$path1 = "c:\nuget\*.nupkg";
 
 if ([string]::IsNullOrEmpty($env:NuGetApiKey))
 {
@@ -8,3 +9,5 @@ if ([string]::IsNullOrEmpty($env:NuGetApiKey))
 }
 
 Get-ChildItem -Path $path | Foreach { dotnet nuget push $_.fullname -k $env:NuGetApiKey -s https://api.nuget.org/v3/index.json --skip-duplicate }
+
+Get-ChildItem -Path $path1 | Foreach { dotnet nuget push $_.fullname -k $env:NuGetApiKey -s https://api.nuget.org/v3/index.json --skip-duplicate }

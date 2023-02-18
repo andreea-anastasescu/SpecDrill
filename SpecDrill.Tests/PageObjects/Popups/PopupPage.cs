@@ -1,6 +1,8 @@
 ﻿using SpecDrill;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 
+#nullable disable
+
 namespace SomeTests.PageObjects.Popups
 {
     public class PopupPage : WebPage
@@ -49,7 +51,7 @@ namespace SomeTests.PageObjects.Popups
     [Find(By.ClassName, "popup")]
     public class Popup : WebControl
     {
-        public Popup(IElement? parent, IElementLocator elementLocator) : base(parent, elementLocator) { }
+        public Popup(IElement parent, IElementLocator elementLocator) : base(parent, elementLocator) { }
         
         [Find(By.Id, "txt")]
         public IElement Message { get; private set; }
@@ -60,7 +62,7 @@ namespace SomeTests.PageObjects.Popups
 
     public class PopupNoFindAttribute : WebControl
     {
-        public PopupNoFindAttribute(IElement? parent, IElementLocator elementLocator) : base(parent, elementLocator) { }
+        public PopupNoFindAttribute(IElement parent, IElementLocator elementLocator) : base(parent, elementLocator) { }
 
         [Find(By.Id, "txt")]
         public IElement Message { get; private set; }
@@ -69,3 +71,4 @@ namespace SomeTests.PageObjects.Popups
         public IElement Close { get; private set; }
     }
 }
+#nullable restore

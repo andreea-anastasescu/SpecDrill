@@ -79,6 +79,9 @@ namespace SpecDrill
 
                 //        return true;
                 //    ");
+
+                if (titlePattern == null) return true;
+
                 var title = this.Title;
                 var isLoaded = title != null &&
                                Regex.IsMatch(title, this.titlePattern);
@@ -86,10 +89,7 @@ namespace SpecDrill
                 Logger.LogInformation("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, title ?? "(null)",
                     this.titlePattern ?? "(null)");
 
-
-
                 return isLoaded;
-
             }
         }
 

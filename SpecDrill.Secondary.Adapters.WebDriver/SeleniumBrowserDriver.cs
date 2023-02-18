@@ -245,7 +245,13 @@ console.log('mouse click!');
             //try { action.SendKeys(element.ToWebElement(), Keys.Enter).Perform(); } catch { }
             // action.SendKeys(Keys.Tab).Perform();
             // action.SendKeys(Keys.Enter).Perform();
+            
+        }
 
+        public void ScrollIntoView(IElement element)
+        {
+            //TODO: Add Tests!
+            this.ExecuteJavaScript($"arguments[0].scrollIntoView(true);", element.ToWebElement());
         }
 
         public void DragAndDrop(IElement draggable, int offsetX, int offsetY)
