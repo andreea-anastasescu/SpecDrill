@@ -9,12 +9,13 @@
     },
     "browser": { // settings for browser mode -> targets browser drivers or selenium server
       "engine": "webdriver", // webdriver, watin (not supported for now) ...
-      "browserName": "edge", // targeted browser name : chrome, ie, firefox, opera, safari
+      "browserName": "chrome", // targeted browser name : chrome, edge, firefox, opera, safari
       "isRemote": false, // when true, seleniumServerUri must be set
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.msedgedriver\\109.0.1518.61\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          //"path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.msedgedriver\\109.0.1518.61\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.chromedriver\\112.0.5615.2800-beta\\driver\\win32",
           "arguments": [
             //"headless",
             "--disable-extensions",
@@ -44,9 +45,9 @@
         "safari": { "path": "" }
       },
       "window": {
-        "isMaximized": true, // if true, remaining browserWindow properties will be ignored
-        "initialWidth": 640, // defaults to 800
-        "initialHeight": 720 // defaults to 600
+        "isMaximized": false, // if true, remaining browserWindow properties will be ignored
+        "initialWidth": 1024, // defaults to 800
+        "initialHeight": 768 // defaults to 600
       },
       "screenshots": { "path": "D:\\" },
       "capabilities": {
@@ -141,6 +142,11 @@
     },
     {
       "pageObjectType": "GoogleSearchPage",
+      "url": "http://www.google.com",
+      "isFileSystemPath": false
+    },
+    {
+      "pageObjectType": "GoogleSearch",
       "url": "http://www.google.com",
       "isFileSystemPath": false
     },

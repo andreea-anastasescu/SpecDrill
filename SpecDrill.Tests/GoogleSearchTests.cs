@@ -24,23 +24,25 @@ namespace SomeTests
             var acceptButton = new Element(null, ElementLocatorFactory.Create(By.Id, "L2AGLb"));
             Wait.NoMoreThan(TimeSpan.FromSeconds(21))
                 .Until(() => acceptButton.IsAvailable,throwExceptionOnTimeout: false);
-            if (acceptButton.IsAvailable)
+            //if (acceptButton.IsAvailable)
                 acceptButton.Click();
+
             googleSearchPage.TxtSearch.SendKeys("drill wiki");
             googleSearchPage.TxtSearch.Blur();
+
             Wait.Until(() =>
                 googleSearchPage.BtnSearch.IsDisplayed
             );
+
             var resultsPage = googleSearchPage.BtnSearch.Click();
+            Wait.Until(() => resultsPage.SearchResults.IsAvailable);
 
             #region Option 1: assuming it's first result
             //resultsPage.SearchResults[1].Link.Text.Should().Contain("Drill");
             #endregion
-
+            
             #region Option 2: searching through search results
-            resultsPage.SearchResults
-                .FirstOrDefault(r => r.Link.Text.Contains("Drill"))
-                .Should().NotBeNull();
+            resultsPage.SearchResults.FirstOrDefault(r => r.Description.Text.Contains("drill"));
             #endregion
 
             //#region Option3

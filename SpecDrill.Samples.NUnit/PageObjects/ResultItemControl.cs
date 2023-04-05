@@ -1,4 +1,7 @@
-﻿using SpecDrill.Secondary.Ports.AutomationFramework;
+﻿using SpecDrill;
+using SpecDrill.Secondary.Ports.AutomationFramework;
+
+#nullable disable
 
 namespace SpecDrill.Samples.NUnit3.PageObjects
 {

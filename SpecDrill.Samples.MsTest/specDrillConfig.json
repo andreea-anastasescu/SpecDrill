@@ -14,7 +14,7 @@
       "seleniumServerUri": "http://localhost:5555/wd/hub",
       "drivers": {
         "chrome": {
-          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\110.0.5481.7700\\driver\\win32", //"C:\\Your Browser Drivers Path"//
+          "path": "%USERPROFILE%\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\112.0.5615.2800-beta\\driver\\win32", //"C:\\Your Browser Drivers Path"//
           "arguments": [
             "--disable-extensions",
             "disable-features=VizDisplayCompositor",

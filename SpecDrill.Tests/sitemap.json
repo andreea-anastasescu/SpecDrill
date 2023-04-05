@@ -1,0 +1,158 @@
+
+{
+  "name": "GoogleWebsite",
+  "version": "v1.0",
+  "components": [
+    {
+        //"type": "component",
+        "name": "FooterLinks",
+        "elements": [
+          {
+            "name": "Despre",
+            "type": "link",
+              "locator": {
+              "locatorType": "xpath",                                   // LocatorType Legend above!  
+              "locatorValue": "//div/div/div[1]/a/h3"
+            },
+            "tags": [
+            ]
+          },
+          {
+            "name": "Publicitate",
+            "type": "link"
+            "locator": {
+              "LocatorType": 3,
+              "LocatorValue": "//div[1]/div[1]/div[2]/div[1]",
+              "Index": null,
+              "IsShadowRoot": false
+            },
+            "tags": [
+            ]
+          }
+        ]
+      },
+    {
+      //"type": "component",
+      "name": "SearchResultItem",
+      "elements": [
+        {
+          "name": "Link",
+          "type": "link",
+			"locator": {
+            
+            "LocatorType": 3,                                   // LocatorType Legend above! e.g. 3 means XPath locator type 
+            "LocatorValue": "//div/div/div[1]/a/h3",
+            "Index": null,                                      // Index always set to null
+            "IsShadowRoot": false                               // IsShadowRoot always set to null
+          },
+          "tags": [
+          ]
+        },
+        {
+          "name": "Description",
+          "type": "label"
+          "locator": {
+            "LocatorType": 3,
+            "LocatorValue": "//div[1]/div[1]/div[2]/div[1]",
+            "Index": null,
+            "IsShadowRoot": false
+          },
+          "tags": [
+          ]
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      //"url": null,
+      "elements": [
+        {
+          "type": "[SearchResultItem]",
+          "name": "SearchResults",
+          "locator": {
+            "LocatorType": 2,
+            "LocatorValue": "div#search div.g",
+            "Index": null,
+            "IsShadowRoot": false
+          },
+          "tags": [
+          ]
+        }
+      ],
+      "name": "GoogleSearchResults",
+      "tags": [ //optional
+      ]
+    },
+    {
+      "elements": [
+        {
+          "type": "button", // link, label, (input)textbox, select  ||| (button, link => element) (button(targetpage), link(targetPage) => navigationElement(T)), select => SelectElement, (other => Element)
+          "name": "BtnAccept",
+          "locator": {
+            "LocatorType": 0,
+            "LocatorValue": "L2AGLb",
+            "Index": null,
+            "IsShadowRoot": false
+          },
+          "tags": [ //optional
+          ]
+        },
+        {
+          "type": "input",
+          "name": "TextSearch",
+          "locator": {
+            "LocatorType": 3,
+            "LocatorValue": "//input[@name=\u0027q\u0027]",
+            "Index": null,
+            "IsShadowRoot": false
+          },
+          "text": "Button used to start search for given term(s)",
+          "tags": [ "Search", "Text Search", "Term Search" ]
+        },
+        {
+          "type": "button",
+          "navigationTarget": "GoogleSearchResults", 
+          "name": "BtnSearch",
+          "locator": {
+            "LocatorType": 3,
+            "LocatorValue": "//div[contains(@class,\u0027FPdoLc\u0027)]//input[@name=\u0027btnK\u0027]",
+            "Index": null,
+            "IsShadowRoot": false
+          },
+          "tags": [
+          ]
+        },
+        {
+            "type": "FooterLinks",
+            "name": "Footer"
+        }
+      ],
+      "name": "GoogleSearch",
+      "tags": [
+      ]
+    }
+  ]
+}
+
+
+
+//sections
+PeopleGridRow(link.Name, label.Description,...)
+PeopleGridHeader(label.Name, label.Description ....)
+PeopleGridList([PeopleGridRow])
+PeopleGridFooter(link.Previous, label.Current, link.Next...)
+PeopleGrid(PeopleGridHeader, PeopleGridList, PeopleGridFooter)
+//pages
+People ( PeopleGrid)
+Projects ( ProjectsGrid)
+
+----------
+// sections
+PeopleGridRow(link.Name, label.Description,...)
+
+//pages
+People ( link.name, label.Description, ... , [PeopleGridRow], link.Previous, label.Current, link.Next...)
+
+
+

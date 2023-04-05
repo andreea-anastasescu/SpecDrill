@@ -1,0 +1,82 @@
+//type: link | input | label | page | element_group
+//selector types: see DSL page in confluence
+{
+	"type": "sitemap",
+	"name":  "EWA",
+	"version": "1.0",
+	"elements": [
+		{
+			"type": "element_group",
+			"name": "PersonRow",
+			"aliases": ["Person Row", "Person Record"], // can be null or missing..
+			"elements": [
+				{
+					"name": "Link",
+					"aliases":  ["Personal Details"], // can be null or missing
+					"type": "link",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": null, // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				},
+				{
+					"name": "BtnViewDetails",
+					"type": "link",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": null, // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				}
+			]
+		},
+		{
+
+			"type": "page",
+			"name": "Search Results",
+			"aliases": [ "People Results" ], // can be null or missing..
+			"elements": [
+				{
+					"name": "PeopleGrid",
+					"type": "list[PersonRow]",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": null, // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				},
+				// or
+				{
+					"name": "Person1",
+					"type": "PersonRow",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": null, // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				},
+				{
+					"name": "Person2",
+					"type": "PersonRow",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": null, // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				}
+			]
+		},
+		{
+			"type": "page",
+			"name": "Homepage",
+			"elements": [
+				{
+					"name": "SearchBox",
+					"type": "input",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": null, // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				},
+				{
+					"name": "Search",
+					"type": "input",
+					"selector": [ "bbox", "11,22,33,44" ],
+					"navigationTarget": "Search Results", // "Homepage" or "https://ewa.endava.com" or missing if null
+					"presenceTest": true // false or missing if null
+				}
+
+			]
+		}
+	]
+ }

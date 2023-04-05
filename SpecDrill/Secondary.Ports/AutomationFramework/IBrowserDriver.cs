@@ -72,6 +72,12 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
         void SetWindowSize(int initialWidth, int initialHeight);
 
         void SwitchToWindow<T>(IWindowElement<T> seleniumWindowElement) where T : IPage;
+
+        void ScrollIntoView(IElement element);
+        double? ScrollDivVertically(IElement divElement, int deltaPixels);
+
+        double? ScrollDivHorizontally(IElement divElement, int deltaPixels);
+        
         void CloseLastWindow();
         string GetPdfText();
         void SaveScreenshot(string fileName);

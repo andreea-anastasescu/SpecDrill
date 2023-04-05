@@ -7,6 +7,7 @@ using System;
 
 namespace SpecDrill.Infrastructure
 {
+    public static class String { }
     public static class DI
     {
         private static Func<IServiceCollection> DefaultServiceCollection

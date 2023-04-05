@@ -38,7 +38,7 @@ namespace SomeTests
         public ShadowDomControlL1(IElement parent, IElementLocator locator) : base(parent, locator) { }
 
 
-        [Find(By.CssSelector, "div#l2regular")]
+        [FindAttribute(By.CssSelector, "div#l2regular")]
         public IElement DivL2Regular { get; set; } //present only in 2nd level shadow dom
 
     }

@@ -2,17 +2,18 @@
   <PropertyGroup>
     <RestoreSources>$(RestoreSources)</RestoreSources>
     <PackageSource>bin\$(Configuration)\Package</PackageSource>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>655</BuildNumber>
+    <BuildNumber>878</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <PackageReleaseNotes>
       https://github.com/CosminSontu/SpecDrill/wiki/Release-Notes
     </PackageReleaseNotes>
+    <!--<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>-->
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\LICENSE" Pack="true" PackagePath=".\" />
@@ -21,6 +22,8 @@
     <Content Include="..\NuGet\content\*.template.*" Pack="true" PackagePath="contentFiles/any/any" PackageCopyToOutput="true" CopyToOutputFolder="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
+    <!--<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />-->
     <PackageReference Include="SpecDrill.Infrastructure" Version="[1.3.*,)" />
   </ItemGroup>
   <ItemGroup>

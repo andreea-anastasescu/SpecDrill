@@ -78,25 +78,25 @@ namespace SomeTests
 
     public class WfHomePage : WebPage
     {
-        [Find(By.CssSelector, "#content-container > ng-component > div.overview.callout > table > tbody > tr:nth-child(8) > td:nth-child(2)")]
+        [FindAttribute(By.CssSelector, "#content-container > ng-component > div.overview.callout > table > tbody > tr:nth-child(8) > td:nth-child(2)")]
         public INavigationElement<WfDesigner> TdSomeProcessDefinition { get; private set; }
     }
     public class WfDesigner : WebPage
     {
 
-        [Find(By.XPath, @"//*[@id='System.Activities.Statements.FlowDecision, System.Activities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35']")]
+        [FindAttribute(By.XPath, @"//*[@id='System.Activities.Statements.FlowDecision, System.Activities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35']")]
         public IElement ADecision { get; private set; }
 
-        [Find(By.Id, "canvas")]
+        [FindAttribute(By.Id, "canvas")]
         public IElement Canvas { get; private set; }
 
-        [Find(By.XPath, "//*[@id='canvas']/div[2]")]
+        [FindAttribute(By.XPath, "//*[@id='canvas']/div[2]")]
         public IElement StartConnector { get; private set; }
 
-        [Find(By.XPath, "//*[@id='canvas']/div[5]")]
+        [FindAttribute(By.XPath, "//*[@id='canvas']/div[5]")]
         public IElement DecisionConnector { get; private set; }
 
-        [Find(By.CssSelector, "flowchart>div#canvas>flownode:nth-of-type(1)>div:nth-of-type(1)")]
+        [FindAttribute(By.CssSelector, "flowchart>div#canvas>flownode:nth-of-type(1)>div:nth-of-type(1)")]
         public IElement DecisionActivity { get; private set; }
 
     }

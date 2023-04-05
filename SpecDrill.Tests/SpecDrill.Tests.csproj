@@ -2,7 +2,7 @@
   
   <PropertyGroup>
     <RestoreSources>$(RestoreSources)</RestoreSources>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
 	  <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -41,13 +41,14 @@
 	<PackageReference Include="NReco.Logging.File" Version="1.1.6" />
 	<PackageReference Include="NUnit" Version="3.13.3" />
 	<PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
-	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="110.0.5481.7700" />
-	<PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />
+	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="112.0.5615.2800-beta" />
+	<!--<PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />-->
 	<!--<PackageReference Include="SpecDrill.MsTest" Version="[1.1.15.*,)" />
 	<PackageReference Include="SpecDrill.SpecFlow" Version="[1.1.14.*,)" />-->
     <PackageReference Include="SpecFlow" Version="3.9.74" />
     <PackageReference Include="SpecFlow.MsTest" Version="3.9.74" />
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>

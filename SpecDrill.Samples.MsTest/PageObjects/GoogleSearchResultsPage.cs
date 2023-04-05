@@ -1,10 +1,13 @@
-﻿using SpecDrill.Secondary.Ports.AutomationFramework;
+﻿using SpecDrill;
+using SpecDrill.Secondary.Ports.AutomationFramework;
+
+#nullable disable
 
 namespace SpecDrill.Samples.MsTest.PageObjects
 {
     public class GoogleSearchResultsPage : GoogleSearchPage
     {
-        [Find(By.CssSelector, "div#search div.g")]
+        [Find(By.XPath, "//*[@id=\"rso\"]/div")]
         public ListElement<SearchResultItemControl> SearchResults { get; private set; }
     }
 }

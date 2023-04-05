@@ -22,7 +22,7 @@ public class SearchResultItemControl : WebControl
     public SearchResultItemControl(IElement parent, IElementLocator locator) : base(parent, locator) { }
 }
 
-public class GoogleSearchResultsPage : GoogleSearchPage
+public class GoogleSearchResultsPage : WebPage
 {
     [Find(By.CssSelector, "div#search div.g")]
     public ListElement<SearchResultItemControl> SearchResults { get; private set; }
@@ -34,7 +34,7 @@ public class GoogleSearchPage : WebPage
     public IElement TxtSearch { get; private set; }
 
     [Find(By.XPath, "//div[contains(@class,'FPdoLc')]//input[@name='btnK']")]
-    public INavigationElement<GoogleSearchResultsPage> BtnSearch { get; private set; }
+    public INavigationElement<SearchResultItemControl> BtnSearch { get; private set; }
 }
 
 DI.ConfigureServices(
@@ -55,6 +55,7 @@ DI.ConfigureServices(
 
 DI.Apply();
 var browser = DI.ServiceProvider.GetService<IBrowser>();
+
 // var googleSearchPage = browser.Open<GoogleSearchPage>();
 // var acceptButton = new Element(null, ElementLocatorFactory.Create(By.XPath, "/html/body/div[2]/div[2]/div[3]/span/div/div/div/div[3]/div[1]/button[2]"));
 

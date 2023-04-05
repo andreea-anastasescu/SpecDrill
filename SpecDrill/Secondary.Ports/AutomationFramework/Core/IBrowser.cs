@@ -1,6 +1,7 @@
 using SpecDrill.Secondary.Ports.AutomationFramework.Model;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Security.Cryptography;
 
 namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
@@ -9,8 +10,12 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
     {
         T Open<T>()
             where T : class, IPage;
+        
+        WebPage Open(Type pageType);
+
         T CreatePage<T>()
             where T : class, INavigationTargetElement;
+        WebPage CreatePage(Type pageType);
         T CreateControl<T>(IElement? parent, IElementLocator elementLocator)
             where T : class, IElement;
         T CreateTarget<T>(IElement? parent = null, IElementLocator? elementLocator = null)
@@ -39,13 +44,16 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
 
         void SwitchToWindow<T>(IWindowElement<T> seleniumWindowElement) where T : class, IPage;
 
+        void ScrollIntoView(IElement element);
+        double? ScrollDivHorizontally(IElement divElement, int deltaPixels);
+        double? ScrollDivVertically(IElement divElement, int deltaPixels);
         /// <summary>
         /// Returns instance of element if present or null if not available.
         /// </summary>
         /// <param name="locator"></param>
         /// <returns></returns>
         SearchResult PeekElement(IElement element);
-
+        
         void Exit();
 
         SearchResult Find(IElementLocator locator, SearchResult? searchRoot = null);

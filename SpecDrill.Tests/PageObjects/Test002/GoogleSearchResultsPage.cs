@@ -7,7 +7,7 @@ namespace SomeTests.PageObjects.Test002
 {
     public class GoogleSearchResultsPage : GoogleSearchPage
     {
-        [Find(By.CssSelector, "div#search div.g")]
+        [Find(By.XPath, "//*[@id=\"rso\"]/div")]
         public ListElement<SearchResultItemControl> SearchResults { get; private set; }
     }
 }

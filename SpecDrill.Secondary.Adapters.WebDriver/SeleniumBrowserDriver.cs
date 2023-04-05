@@ -250,8 +250,38 @@ console.log('mouse click!');
 
         public void ScrollIntoView(IElement element)
         {
-            //TODO: Add Tests!
-            this.ExecuteJavaScript($"arguments[0].scrollIntoView(true);", element.ToWebElement());
+            this.ExecuteJavaScript($"arguments[0].scrollIntoViewIfNeeded();", element.ToWebElement());
+        }
+
+        public double? ScrollDivVertically(IElement divElement, int deltaPixels)
+        {
+            var result = this.ExecuteJavaScript($"arguments[0].scrollTop += {deltaPixels}; return arguments[0].scrollTop;", divElement.ToWebElement());
+            if (result == null)
+                return null;
+            try
+            {
+                return (double)result;
+            } 
+            catch
+            {
+                return (long)result;
+            }
+        }
+
+        public double? ScrollDivHorizontally(IElement divElement, int deltaPixels)
+        {
+            var result = this.ExecuteJavaScript($"arguments[0].scrollLeft += {deltaPixels}; return arguments[0].scrollLeft;", divElement.ToWebElement());
+            if (result == null)
+                return null;
+
+            try
+            {
+                return (double)result;
+            }
+            catch
+            {
+                return (long)result;
+            }
         }
 
         public void DragAndDrop(IElement draggable, int offsetX, int offsetY)
@@ -478,6 +508,7 @@ console.log('mouse click!');
 
         public ISearchable GetShadowRoot()
             => throw new Exception("Element `<html/>` is not a ShadowRoot!");
+
 
         public object NativeElement => FindElements(SeleniumElementLocator.Create(Ports.AutomationFramework.By.TagName, "html")).First();
         #endregion

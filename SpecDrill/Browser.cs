@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 
 namespace SpecDrill
 {
@@ -90,33 +91,54 @@ namespace SpecDrill
         public T Open<T>()
             where T : class, IPage
         {
-            var homePage = configuration.Homepages.FirstOrDefault(homepage => homepage.PageObjectType == typeof(T).Name);
+            var pageType = typeof(T);
+            var page = Open(pageType) as T;
+            if (page is null)
+            {
+                var err = $"Page {pageType.Name} is null! (Open failed)";
+                Logger.LogInformation(err);
+                throw new Exception(err);
+            }
+            return page;
+        }
+
+        public WebPage Open(Type pageType)
+        {
+            if (!typeof(WebPage).IsAssignableFrom(pageType))
+            {
+                var err = $"Invalid type {pageType.Name} should be assignable to {nameof(WebPage)}";
+                Logger.LogInformation(err);
+                throw new Exception(err);
+            }
+
+            var homePage = configuration.Homepages.FirstOrDefault(homepage => homepage.PageObjectType == pageType.Name);
             string BuildFileSystemPath(HomepageConfiguration homePage) => string.Format("file:///{0}{1}",
-                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)??"".Replace('\\', '/'),
+                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? "".Replace('\\', '/'),
                             homePage.Url);
-            
+
             if (homePage != null)
             {
                 var url = homePage.IsFileSystemPath ? BuildFileSystemPath(homePage) : homePage.Url ?? "";
 
                 Logger.LogInformation($"Browser opening {url}");
-                
+
                 Action navigateToUrl = () => this.GoToUrl(url);
 
                 navigateToUrl();
 
-                var targetPage = this.CreatePage<T>();
+                var targetPage = this.CreatePage(pageType);
 
                 Wait.WithRetry().Doing(navigateToUrl).Until(() => targetPage.IsLoaded);
                 targetPage.WaitForSilence();
                 return targetPage;
             }
-            string errMsg = $"SpecDrill: Page({ typeof(T).Name }) cannot be found in Homepages section of settings file.";
+            string errMsg = $"SpecDrill: Page({pageType.Name}) cannot be found in Homepages section of settings file.";
             Logger.LogInformation(errMsg);
             throw new MissingHomepageConfigEntryException(errMsg);
         }
-
         public T CreatePage<T>() where T : class, INavigationTargetElement => CreateContainer<T>();
+        public WebPage CreatePage(Type pageType) => (WebPage)CreateContainer(pageType);
+        
         public T CreateControl<T>(IElement? parent, IElementLocator elementLocator) where T : class, IElement
         {
             T? fromInstance;
@@ -159,44 +181,62 @@ namespace SpecDrill
         private T CreateContainer<T>(T? containerInstance = default(T))
             where T : class, IElement
         {
-            var container = EnsureContainerInstance(containerInstance);
+            var result = CreateContainer(typeof(T), containerInstance) as T;
+            if (result is null)
+            {
+                var err = $"Newly created container should be of type {typeof(T).Name}! Actual type is { result?.GetType().Name ?? "(null)" }";
+                Logger.LogInformation(err);
+                throw new Exception(err);
+            }
+            return result;
+        }
+        private Element CreateContainer(Type pageType, object? containerInstance = default)
+        {
+            var container = EnsureContainerInstance(pageType, containerInstance);
 
-            Type containerType = typeof(T);
+            Type containerType = pageType;
+
+            var actualContainerType = container?.GetType();
+            if (container is null || actualContainerType is null || !actualContainerType.IsAssignableTo(typeof(Element)))
+            {
+                var err = $"Invalid container type: {actualContainerType?.Name ?? "(null)" } should be assignable to {nameof(Element)}";
+                Logger.LogInformation(err);
+                throw new Exception(err);
+            }
 
             var members = containerType.GetMembers()
                 .Where(member =>
                  (member.MemberType == MemberTypes.Property || member.MemberType == MemberTypes.Field))
                 .ToDictionary(mi => mi.Name, mi => mi);
-                
-              members.Values.ToList().ForEach(
-              (Action<MemberInfo>)(member =>
+
+            members.Values.ToList().ForEach(
+            (member =>
+            {
+                var memberType = GetMemberType(member);
+                var memberFindAttributes = member.GetCustomAttributes<FindAttribute>(false)
+                  .ToList();
+
+                if (memberFindAttributes.Any())
                 {
-                    var memberType = GetMemberType(member);
-                    var memberFindAttributes = member.GetCustomAttributes<FindAttribute>(false)
-                    .ToList<FindAttribute>();
+                    var memberValue = GetMemberValue(member, container);
 
-                    if (memberFindAttributes.Any<FindAttribute>())
-                    {
-                        var memberValue = GetMemberValue(member, container);
+                    if (memberValue != null)
+                        return;
 
-                        if (memberValue != null)
-                            return;
+                    memberFindAttributes.ForEach //TODO: Currently if many attributes apply, last one wins; Should throw exception !
+                      (
+                          (findAttribute =>
+                          {
+                              var navigationTargetLocator = FigureOutNavigationTargetLocator(member, containerType, members, memberType);
+                              object? element = InstantiateMember(pageType, findAttribute, container, memberType, navigationTargetLocator);
 
-                        memberFindAttributes.ForEach //TODO: Currently if many attributes apply, last one wins; Should throw exception !
-                        (
-                            (Action<FindAttribute>)(findAttribute =>
-                            {
-                                var navigationTargetLocator = FigureOutNavigationTargetLocator(member, containerType, members, memberType);
-                                object? element = InstantiateMember<T>(findAttribute, container, memberType, navigationTargetLocator);
-
-                                SetValue(containerType, member, instance: container, value: element);
-                            })
-                        );
-                    }
-                }));
-            return (T)container;
+                              SetValue(containerType, member, instance: container, value: element);
+                          })
+                      );
+                }
+            }));
+            return (Element) container;
         }
-
         private IElementLocator? FigureOutNavigationTargetLocator(MemberInfo member, Type containerType, Dictionary<string, MemberInfo> members, Type memberType)
         {
             
@@ -273,16 +313,18 @@ namespace SpecDrill
 
         private static readonly string CREATE_NAVIGATION = "CreateNavigation";
         private static object? InstantiateMember<T>(FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null) where T : IElement
+            => InstantiateMember(typeof(T), findAttribute, container, memberType, targetLocator);
+        private static object? InstantiateMember(Type pageType, FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null)
         {
             object? element = null;
             if (memberType == typeof(IElement))
             {
-                element = ElementFactory.Create(findAttribute.Nested ? container : default(T),
+                element = ElementFactory.Create(findAttribute.Nested ? container : null,
                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue));
             }
             else if (memberType == typeof(ISelectElement))
             {
-                element = ElementFactory.CreateSelect(findAttribute.Nested ? container : default(T),
+                element = ElementFactory.CreateSelect(findAttribute.Nested ? container : null,
                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue));
             }
             else if (typeof(INavigationElement<INavigationTargetElement>).IsAssignableFrom(memberType))
@@ -313,14 +355,17 @@ namespace SpecDrill
         }
 
         private static IElement EnsureContainerInstance<T>(T? containerInstance) where T : class, IElement
+            => EnsureContainerInstance(typeof(T), containerInstance);
+
+        private static IElement EnsureContainerInstance(Type pageType, object? containerInstance)
         {
             try
             {
-                return ((containerInstance as IElement) ?? (T?)Activator.CreateInstance(typeof(T))) ?? throw new Exception("Could not ensure container!");
+                return ((containerInstance as IElement) ?? (IElement?)Activator.CreateInstance(pageType)) ?? throw new Exception("Could not ensure container!");
             }
             catch (MissingMethodException mme)
             {
-                throw new MissingEmptyConstructorException($"SpecDrill: Page ({typeof(T).Name}) does not have a prameterless constructor. This error happens when you define at least one constructor with parameters. Possible Solution: Explicitly declare a parameterless constructor.", mme);
+                throw new MissingEmptyConstructorException($"SpecDrill: Page ({pageType.Name}) does not have a prameterless constructor. This error happens when you define at least one constructor with parameters. Possible Solution: Explicitly declare a parameterless constructor.", mme);
             }
         }
 
@@ -580,6 +625,8 @@ namespace SpecDrill
             browserDriver.SwitchToWindow(seleniumWindowElement);
         }
 
+        public void ScrollIntoView(IElement element) => browserDriver.ScrollIntoView(element);
+
         public void CloseLastWindow()
         {
             browserDriver.CloseLastWindow();
@@ -632,6 +679,16 @@ namespace SpecDrill
         public void ClickAndDrag((int x, int y) from, int offsetX, int offsetY)
         {
             this.browserDriver.ClickAndDrag(from, offsetX, offsetY);
+        }
+
+        public double? ScrollDivVertically(IElement divElement, int deltaPixels) => this.browserDriver.ScrollDivVertically(divElement, deltaPixels);
+
+        public double? ScrollDivHorizontally(IElement divElement, int deltaPixels) => this.browserDriver.ScrollDivHorizontally(divElement, deltaPixels);
+        
+
+        public uint ScrollDivVertically(int deltaPixels)
+        {
+            throw new NotImplementedException();
         }
     }
 }
