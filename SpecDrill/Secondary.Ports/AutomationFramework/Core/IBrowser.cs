@@ -8,10 +8,10 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
 {
     public interface IBrowser
     {
-        T Open<T>()
+        T Open<T>(string? url = null)
             where T : class, IPage;
         
-        WebPage Open(Type pageType);
+        WebPage Open(Type pageType, string? url = null);
 
         T CreatePage<T>()
             where T : class, INavigationTargetElement;

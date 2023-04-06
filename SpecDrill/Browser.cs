@@ -88,11 +88,11 @@ namespace SpecDrill
 
         public static IBrowser Instance => browserInstance ?? throw new Exception("Browser could not be instantiated!");
 
-        public T Open<T>()
+        public T Open<T>(string? url = null)
             where T : class, IPage
         {
             var pageType = typeof(T);
-            var page = Open(pageType) as T;
+            var page = Open(pageType, url) as T;
             if (page is null)
             {
                 var err = $"Page {pageType.Name} is null! (Open failed)";
@@ -102,7 +102,7 @@ namespace SpecDrill
             return page;
         }
 
-        public WebPage Open(Type pageType)
+        public WebPage Open(Type pageType, string? url = null)
         {
             if (!typeof(WebPage).IsAssignableFrom(pageType))
             {
@@ -111,18 +111,28 @@ namespace SpecDrill
                 throw new Exception(err);
             }
 
-            var homePage = configuration.Homepages.FirstOrDefault(homepage => homepage.PageObjectType == pageType.Name);
-            string BuildFileSystemPath(HomepageConfiguration homePage) => string.Format("file:///{0}{1}",
-                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? "".Replace('\\', '/'),
-                            homePage.Url);
-
-            if (homePage != null)
+            string? URL = default;
+            if (string.IsNullOrWhiteSpace(url))
             {
-                var url = homePage.IsFileSystemPath ? BuildFileSystemPath(homePage) : homePage.Url ?? "";
+                var homePage = configuration.Homepages.FirstOrDefault(homepage => homepage.PageObjectType == pageType.Name);
+                string BuildFileSystemPath(HomepageConfiguration homePage) => string.Format("file:///{0}{1}",
+                                Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? "".Replace('\\', '/'),
+                                homePage.Url);
 
-                Logger.LogInformation($"Browser opening {url}");
+                if (homePage != null)
+                {
+                    URL = homePage.IsFileSystemPath ? BuildFileSystemPath(homePage) : homePage.Url ?? "";
+                }
+            } else
+            {
+                URL = url;
+            }
 
-                Action navigateToUrl = () => this.GoToUrl(url);
+            if (URL is { })
+            { 
+                Logger.LogInformation($"Browser opening {URL}");
+
+                Action navigateToUrl = () => this.GoToUrl(URL);
 
                 navigateToUrl();
 
