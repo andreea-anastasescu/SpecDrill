@@ -36,9 +36,9 @@ namespace SpecDrill.PageObjectModel
 
     public static class WebPageExtensions
     {
-        public static T Property<T>(this WebPage @this, Type pageType, string propertyName) where T : class, IElement => ((object)@this).Property<T>(pageType, propertyName);
-        public static T Property<T>(this WebControl @this, Type pageType, string propertyName) where T : class, IElement => ((object)@this).Property<T>(pageType, propertyName);
-        public static T Property<T>(this object @this, Type pageType, string propertyName)
+        public static T? Property<T>(this WebPage @this, Type pageType, string propertyName) where T : class, IElement => ((object)@this).Property<T>(pageType, propertyName);
+        public static T? Property<T>(this WebControl @this, Type pageType, string propertyName) where T : class, IElement => ((object)@this).Property<T>(pageType, propertyName);
+        public static T? Property<T>(this object @this, Type pageType, string propertyName)
             where T : class, IElement
             => @this.Property(pageType, propertyName) as T;
         public static object Property(this object @this, Type pageType, string propertyName)

@@ -86,17 +86,19 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         if (acceptButton.IsAvailable)
             acceptButton.Click();
         var txtSearch = googleSearchPage.Property<IElement>(googleSearchPageType, "TxtSearch");
+        Assert.IsNotNull(txtSearch);
         txtSearch.SendKeys("drill wiki");
         txtSearch.Blur();
         var btnSearch = googleSearchPage.Property<INavigationElement<WebPage>>(googleSearchPageType, "BtnSearch");
+        Assert.IsNotNull(btnSearch);
         Wait.Until(() =>
             btnSearch.IsDisplayed
         );
         var resultsPage = btnSearch.Click();
         var googleSearchResultsPageType = sitemap.GetTypeOf("GoogleSearchResults");
         var searchResultItemType = sitemap.GetTypeOf("SearchResultItem");
-        var found = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IEnumerable<WebControl>)
-                        .FirstOrDefault(r => r.Property<Element>(searchResultItemType, "Link").Text.Contains("Drill")) != default;
+        var found = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IEnumerable<WebControl>)?
+                        .FirstOrDefault(r => r.Property<Element>(searchResultItemType, "Link")?.Text.Contains("Drill") ?? false) != default;
 
         Assert.IsTrue(found);
 
