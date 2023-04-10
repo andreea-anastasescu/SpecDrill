@@ -15,7 +15,7 @@
       "drivers": {
         "chrome": {
           //"path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.msedgedriver\\109.0.1518.61\\driver\\win32", //"C:\\Your Browser Drivers Path"//
-          "path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.chromedriver\\112.0.5615.2800-beta\\driver\\win32",
+          "path": "%USERPROFILE%\\.nuget\\packages\\selenium.webdriver.chromedriver\\112.0.5615.4900\\driver\\win32",
           "arguments": [
             //"headless",
             "--disable-extensions",
@@ -145,11 +145,11 @@
       "url": "http://www.google.com",
       "isFileSystemPath": false
     },
-    {
-      "pageObjectType": "GoogleSearch",
-      "url": "http://www.google.com",
-      "isFileSystemPath": false
-    },
+    //{
+    //  "pageObjectType": "GoogleSearch",
+    //  "url": "http://www.google.com",
+    //  "isFileSystemPath": false
+    //},
     {
       "pageObjectType": "HomeWindowPage",
       "url": "../../../../WebsiteMocks/Windows/home_window.html",

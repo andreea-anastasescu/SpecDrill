@@ -32,25 +32,28 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
 
     public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
     {
-        Browser.GoToUrl("https://www.google.com");
-        var sitemap = SiteMap("GoogleWebsite", "v1.0", new(), new())
-                        .AddComponents(
-                            Component("SearchResultItem", null,
-                                Element("link", "Link", new PomLocator("xpath", "//div/div/div[1]/a/h3")),
-                                Element("link", "Description", new PomLocator("xpath", "//div[1]/div[1]/div[2]/div[1]"))
-                            )
-                        )
-                        .AddPages(
-                            Page("GoogleSearchResults", null, null,
-                                   ComponentListElement("SearchResults", new PomLocator("cssselector", "div#search div.g"), itemType: "SearchResultItem")
-                                ),
-                            Page("GoogleSearch", "https://www.google.com", null,
-                                Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")),
-                                Element("input", "TxtSearch", new PomLocator("xpath", "//input[@name='q'] | //*[@id=\"APjFqb\"]")),
-                                Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), targetPage: "GoogleSearchResults")
-                                )
-                        );
+
+        //var sitemap = SiteMap("GoogleWebsite", "v1.0", new(), new())
+        //                .AddComponents(
+        //                    Component("SearchResultItem", null,
+        //                        Element("link", "Link", new PomLocator("xpath", "//div/div/div[1]/a/h3")),
+        //                        Element("link", "Description", new PomLocator("xpath", "//div[1]/div[1]/div[2]/div[1]"))
+        //                    )
+        //                )
+        //                .AddPages(
+        //                    Page("GoogleSearchResults", null, null,
+        //                           ComponentListElement("SearchResults", new PomLocator("cssselector", "div#search div.g"), itemType: "SearchResultItem")
+        //                        ),
+        //                    Page("GoogleSearch", "https://www.google.com", null,
+        //                        Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")),
+        //                        Element("input", "TxtSearch", new PomLocator("xpath", "//input[@name='q'] | //*[@id=\"APjFqb\"]")),
+        //                        Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), targetPage: "GoogleSearchResults")
+        //                        )
+        //                );
         // write json in eyebot form
+        var jsonInput = File.ReadAllText("C:\\_apps\\sitemap.json");
+        var sitemap = JsonSerializer.Deserialize<PomSitemap>(jsonInput);
+        Assert.IsNotNull(sitemap);
 
         string fileName = "sitemap.json";
         string jsonString = JsonSerializer.Serialize(sitemap);
@@ -77,7 +80,8 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         //var gsp = Browser.Open(googleSearchPageType);
         //var googleSearchPageType = sitemap.GetTypeOfPage("GoogleSearch");
         //var gspType = mb.GetType("GoogleSearch");
-        var googleSearchPage = Browser.Open(googleSearchPageType);
+        var googleSearchPage = Browser.Open(googleSearchPageType, "https://www.google.com");
+        //var googleSearchPage = Browser.Open(googleSearchPageType);
         //var googleSearchPage = browser.Open<GoogleSearchPage>();
 
         var acceptButton = googleSearchPage.Property<IElement>(googleSearchPageType, "BtnAccept") ?? throw new Exception($"BtnAccept not accessible on {googleSearchPageType}");
@@ -113,6 +117,7 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         ("input", null, null) => ("element", null, null),
         ("button", null, var tPage) => ("navigation_element", null, tPage),
         ("link", null, var tPage) => ("navigation_element", null, tPage),
+        ("frame", null, var tPage) => ("frame_element", null, tPage),
         ("list", var iType, null) => ("list", iType, null),
         ("select", null, null) => ("select_element", null, null),
         (var t, var iT, var tP) => throw new Exception($"Unexpected combination: type={t}, itemType={iT}, targetPage={tP} !")

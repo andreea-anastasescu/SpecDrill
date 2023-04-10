@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel;
 
 namespace SpecDrill.PageObjectModel
 {
@@ -22,6 +23,7 @@ namespace SpecDrill.PageObjectModel
     // atoms
     public record PomElement(string type, string name, PomLocator locator, List<string> tags, string? targetPage, string? itemType);
     public record PomNavigationElement(string name, PomLocator locator, string targetPage, List<string> tags) : PomElement("navigation_element", name, locator, tags, targetPage, null);
+    public record PomFrameElement(string name, PomLocator locator, string targetPage, List<string> tags) : PomElement("frame_element", name, locator, tags, targetPage, null);
     public record PomSelectElement(string name, PomLocator locator, List<string> tags) : PomElement("select_element", name, locator, tags, null, null);
     //public record PomSelectElement
     // components
@@ -29,9 +31,8 @@ namespace SpecDrill.PageObjectModel
 
     // component ref
     public record PomComponentRef(string type, string name, PomLocator locator, List<string> tags) : PomElement(type, name, locator, tags, null, null);
-
     public record PomComponentList(string name, PomLocator locator, List<string> tags, [NotNull]string itemType) : PomElement("list", name, locator, tags, null, itemType);
-    public record PomPage(string name, string? url, List<string> tags, List<PomElement> elements) : PomComponent(name, elements, tags);
+    public record PomPage(string name, List<string> tags, List<PomElement> elements) : PomComponent(name, elements, tags);
     public record PomSitemap(string name, string version, List<PomComponent> components, List<PomPage> pages);
 
     public static class WebPageExtensions
@@ -109,12 +110,6 @@ namespace SpecDrill.PageObjectModel
             pb.SetCustomAttribute(ab);
         }
 
-        //public static CreatePomClass(PomPage pomPage)
-        //{
-        //    var pomClassBuilder = PomDynamicModuleBuilder.DefineType(pomPage.name, TypeAttributes.Public);
-        //    pomPage.elements.ForEach(e => pomClassBuilder.AddProperty((Type: e.)))
-
-        //}
         public static PomSitemap AddComponents(this PomSitemap @this, params PomComponent[] components)
         {
             foreach (var component in components)
@@ -139,16 +134,18 @@ namespace SpecDrill.PageObjectModel
                 ("list", { }, null) => new PomComponentList(element.name, element.locator, element.tags, element.itemType),
                 ("list", null, null) => throw new Exception($"Expected element.{nameof(element.itemType)} parameter is null!"),
                 ("select_element", null, null) => new PomSelectElement(element.name, element.locator, element.tags),
+                ("frame_element", null, { }) => new PomFrameElement(element.name, element.locator, element.targetPage, element.tags),
+                ("frame_element", null, null) => throw new Exception($"Expected element.{nameof(element.targetPage)} parameter is null!"),
                 ({ }, null, null) => element,
                 (null, null, null) => throw new Exception($"Expected element.{nameof(element.type)} parameter is null!"),
                 (_, _, _) => throw new Exception($"Unexpected combination: element.{nameof(element.type)}, element.{nameof(element.itemType)}, element.{nameof(element.targetPage)}!"),
             };
         public static PomComponent Component(string name, List<string>? tags = default, params PomElement[] elements) => new(name, elements.ToList(), tags ?? new List<string>());
         public static PomComponentRef ComponentRef(string name, PomLocator locator, string type, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>());
-        public static PomPage Page(string name, string? url, List<string>? tags = default, params PomElement[] elements) => new(name, url, tags ?? new List<string>(), elements.ToList());
+        public static PomPage Page(string name, List<string>? tags = default, params PomElement[] elements) => new(name, tags ?? new List<string>(), elements.ToList());
         public static PomElement Element(string type, string name, PomLocator locator, string? targetPage = null, string? itemType = null, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>(), targetPage, itemType);
         public static PomNavigationElement NavigationElement(string name, PomLocator locator, string targetPage, List<string>? tags = default) => new(name, locator, targetPage, tags ?? new List<string>());
-
+        public static PomSelectElement SelectElement(string name, PomLocator locator, List<string>? tags = default) => new(name, locator, tags ?? new());
         public static PomComponentList ComponentListElement(string name, PomLocator locator, string itemType , List<string>? tags = default)
         {
             if (string.IsNullOrWhiteSpace(itemType))
@@ -156,18 +153,11 @@ namespace SpecDrill.PageObjectModel
 
             return new(name, locator, tags ?? new List<string>(),
                 itemType: itemType);
-            // return after first iteration on purpose! only one element supported!
         }
-
-        private static Type TryGetTypeFromDynamicAssembly(string referencedPomType)
-        => SpecDrillDynamicAssembly.Value.GetType(referencedPomType) switch
-        {
-            Type componentType => componentType,
-            _ => throw new Exception($"Missing Type : {referencedPomType}. Component type must be pre-decalred in order to be able to reference it.\n\t- Is this a cyclic dependency?\n\t- Is this an IElement or INavigationElement<>?")
-        };
 
         public static void AddElements(this PomComponent @this, params PomElement[] elements) => @this.elements.AddRange(elements);
         internal static Dictionary<string, ModuleBuilder> moduleBuilders = new();
+        
         public static PomSitemap SiteMap(string name, string version, List<PomComponent> components, List<PomPage> pages)
             => new(name, version, components, pages);
         public static PomSitemap BuildComponents(this PomSitemap @this)
@@ -184,7 +174,7 @@ namespace SpecDrill.PageObjectModel
 
             foreach (var component in @this.components)
             {
-                var componentTb = mb.DefineType(component.name, TypeAttributes.Public, typeof(WebControl));
+                var componentTb = mb.DefineType($"{@this.name}.{component.name}", TypeAttributes.Public, typeof(WebControl));
                 var cb_default = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, Array.Empty<Type>());
                 var defaultCtorBody = cb_default.GetILGenerator();
                 defaultCtorBody.Emit(OpCodes.Ldarg_0);
@@ -208,6 +198,7 @@ namespace SpecDrill.PageObjectModel
         public static PomSitemap BuildPages(this PomSitemap @this)
         {
             ModuleBuilder mb;
+            
             lock (moduleBuilders)
             {
                 if (!moduleBuilders.ContainsKey(@this.name))
@@ -217,7 +208,7 @@ namespace SpecDrill.PageObjectModel
 
             foreach (var page in @this.pages)
             {
-                var pageTb = mb.DefineType(page.name, TypeAttributes.Public, typeof(WebPage));
+                var pageTb = mb.DefineType($"{@this.name}.{page.name}", TypeAttributes.Public, typeof(WebPage));
                 pageTb.AddPropertiesToType(@this, page.elements);
                 pageTb.CreateType();
             }
@@ -233,6 +224,7 @@ namespace SpecDrill.PageObjectModel
                     PomNavigationElement pne => typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(pne.targetPage!)),
                     PomComponentList pcl => typeof(ListElement<>).MakeGenericType(sitemap.GetTypeOf(pcl.itemType!)),
                     PomComponentRef pcr => sitemap.GetTypeOf(pcr.type),
+                    PomFrameElement pfe => typeof(IFrameElement<>).MakeGenericType(sitemap.GetTypeOf(pfe.targetPage!)),
                     PomElement e => typeof(IElement),
                     _ => null
                 };
@@ -258,6 +250,6 @@ namespace SpecDrill.PageObjectModel
            _ => throw new Exception($"Unrecognised locator type `{type}`!")
        };
 
-        public static Type GetTypeOf(this PomSitemap @this, string pageName) => SpecDrillDynamicAssembly.Value.GetType(pageName) ?? throw new Exception($"Page {pageName} is not yet defined in dynamic assembly!");
+        public static Type GetTypeOf(this PomSitemap @this, string pageName) => SpecDrillDynamicAssembly.Value.GetType($"{@this.name}.{pageName}") ?? throw new Exception($"Page {pageName} is not yet defined in dynamic assembly!");
     }
 }
