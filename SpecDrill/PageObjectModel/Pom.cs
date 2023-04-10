@@ -145,6 +145,7 @@ namespace SpecDrill.PageObjectModel
         public static PomPage Page(string name, List<string>? tags = default, params PomElement[] elements) => new(name, tags ?? new List<string>(), elements.ToList());
         public static PomElement Element(string type, string name, PomLocator locator, string? targetPage = null, string? itemType = null, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>(), targetPage, itemType);
         public static PomNavigationElement NavigationElement(string name, PomLocator locator, string targetPage, List<string>? tags = default) => new(name, locator, targetPage, tags ?? new List<string>());
+        public static PomFrameElement FrameElement(string name, PomLocator locator, string targetPage, List<string>? tags = default) => new(name, locator, targetPage, tags ?? new List<string>());
         public static PomSelectElement SelectElement(string name, PomLocator locator, List<string>? tags = default) => new(name, locator, tags ?? new());
         public static PomComponentList ComponentListElement(string name, PomLocator locator, string itemType , List<string>? tags = default)
         {

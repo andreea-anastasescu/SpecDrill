@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>904</BuildNumber>
+    <BuildNumber>906</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
