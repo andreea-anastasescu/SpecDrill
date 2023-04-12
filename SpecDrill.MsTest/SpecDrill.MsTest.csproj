@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>840</BuildNumber>
+    <BuildNumber>842</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill.MsTest - SpecDrill integration with MsTest </Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>

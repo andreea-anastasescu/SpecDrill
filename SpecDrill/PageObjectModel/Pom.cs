@@ -171,11 +171,8 @@ namespace SpecDrill.PageObjectModel
             }
 
             var baseType = typeof(WebControl);
-            var baseEmptyConstructor = baseType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, Array.Empty<Type>());
-            if (baseEmptyConstructor is null)
-                throw new Exception("Expected empty constructor on WebControl type!");
             var baseConstructor = baseType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new[] { typeof(IElement), typeof(IElementLocator) })!; //we are sure we have that constructor in WebControl class!
-            if (baseEmptyConstructor is null)
+            if (baseConstructor is null)
                 throw new Exception("Expected (IElement, IElementLocator) constructor on WebControl type!");
 
             foreach (var component in @this.components)
@@ -184,7 +181,6 @@ namespace SpecDrill.PageObjectModel
                 var cb_default = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, Array.Empty<Type>());
                 var defaultCtorBody = cb_default.GetILGenerator();
                 defaultCtorBody.Emit(OpCodes.Ldarg_0);
-                defaultCtorBody.Emit(OpCodes.Call, baseEmptyConstructor);
                 defaultCtorBody.Emit(OpCodes.Ret);
 
                 var cb_2p = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] { typeof(IElement), typeof(IElementLocator) });
