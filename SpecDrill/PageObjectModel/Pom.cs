@@ -48,13 +48,14 @@ namespace SpecDrill.PageObjectModel
 
     public static class PomExtensions
     {
-        internal static Lazy<AssemblyBuilder> SpecDrillDynamicAssembly = new(() =>
+        internal static Lazy<ModuleBuilder> SpecDrillDynamicModule = new(() =>
         {
             var execAsm = Assembly.GetExecutingAssembly();
             AssemblyName dynAsmName = new("SpecDrillDynamicAssembly");
             dynAsmName.Name = execAsm.GetName().Name;
 
-            return AssemblyBuilder.DefineDynamicAssembly(dynAsmName, AssemblyBuilderAccess.Run);
+            var asmBuilder = AssemblyBuilder.DefineDynamicAssembly(dynAsmName, AssemblyBuilderAccess.Run);
+            return asmBuilder.DefineDynamicModule("SpecDrillDynamicModule");
         });
 
         public static void AddProperty(this TypeBuilder tb, (Type Type, string Name) propertySignature, (By Type, string Value) selector)
@@ -157,18 +158,12 @@ namespace SpecDrill.PageObjectModel
         }
 
         public static void AddElements(this PomComponent @this, params PomElement[] elements) => @this.elements.AddRange(elements);
-        internal static Dictionary<string, ModuleBuilder> moduleBuilders = new();
         
         public static PomSitemap SiteMap(string name, string version, List<PomComponent> components, List<PomPage> pages)
             => new(name, version, components, pages);
         public static PomSitemap BuildComponents(this PomSitemap @this)
         {
-            ModuleBuilder mb;
-            lock (moduleBuilders)
-            {
-                moduleBuilders[@this.name] = SpecDrillDynamicAssembly.Value.DefineDynamicModule(@this.name);
-                mb = moduleBuilders[@this.name];
-            }
+            ModuleBuilder mb = SpecDrillDynamicModule.Value;
 
             var baseType = typeof(WebControl);
             var baseConstructor = baseType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new[] { typeof(IElement), typeof(IElementLocator) })!; //we are sure we have that constructor in WebControl class!
@@ -199,15 +194,8 @@ namespace SpecDrill.PageObjectModel
         }
         public static PomSitemap BuildPages(this PomSitemap @this)
         {
-            ModuleBuilder mb;
+            ModuleBuilder mb = SpecDrillDynamicModule.Value;
             
-            lock (moduleBuilders)
-            {
-                if (!moduleBuilders.ContainsKey(@this.name))
-                    throw new Exception($"Module {@this.name} not found. Please call BuildComponents() first!");
-                mb = moduleBuilders[@this.name];
-            }
-
             foreach (var page in @this.pages)
             {
                 var pageTb = mb.DefineType($"{@this.name}.{page.name}", TypeAttributes.Public, typeof(WebPage));
@@ -252,6 +240,6 @@ namespace SpecDrill.PageObjectModel
            _ => throw new Exception($"Unrecognised locator type `{type}`!")
        };
 
-        public static Type GetTypeOf(this PomSitemap @this, string pageName) => SpecDrillDynamicAssembly.Value.GetType($"{@this.name}.{pageName}") ?? throw new Exception($"Page {pageName} is not yet defined in dynamic assembly!");
+        public static Type GetTypeOf(this PomSitemap @this, string pageName) => SpecDrillDynamicModule.Value.GetType($"{@this.name}.{pageName}") ?? throw new Exception($"Page {pageName} is not yet defined in dynamic assembly!");
     }
 }
