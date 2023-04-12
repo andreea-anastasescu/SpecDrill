@@ -7,11 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace SpecDrill
 {
-    public interface IListElement<T> : IReadOnlyList<T>
-        where T : class, IElement
+    public interface IListElement<T> : IReadOnlyList<T>, IEnumerable, IEnumerable<T>
+       where T : class, IElement
     {
         T GetElementByText(string regex);
+        T GetElementByIndex(int index);
     }
+
     public class ListElement<T> : WebControl, IListElement<T>
         where T : /*WebControl,*/ class, IElement
     {
@@ -37,7 +39,7 @@ namespace SpecDrill
             }
         }
 
-        public T? GetElementByIndex(int index)
+        public T GetElementByIndex(int index)
         {
             return this[index];
         }

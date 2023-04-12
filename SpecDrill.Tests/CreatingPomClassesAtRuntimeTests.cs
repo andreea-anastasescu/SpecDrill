@@ -33,27 +33,27 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
     public void ShouldHaveWikipediaAmongResultsOnGoogleSearch()
     {
 
-        //var sitemap = SiteMap("GoogleWebsite", "v1.0", new(), new())
-        //                .AddComponents(
-        //                    Component("SearchResultItem", null,
-        //                        Element("link", "Link", new PomLocator("xpath", "//div/div/div[1]/a/h3")),
-        //                        Element("link", "Description", new PomLocator("xpath", "//div[1]/div[1]/div[2]/div[1]"))
-        //                    )
-        //                )
-        //                .AddPages(
-        //                    Page("GoogleSearchResults", null, null,
-        //                           ComponentListElement("SearchResults", new PomLocator("cssselector", "div#search div.g"), itemType: "SearchResultItem")
-        //                        ),
-        //                    Page("GoogleSearch", "https://www.google.com", null,
-        //                        Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")),
-        //                        Element("input", "TxtSearch", new PomLocator("xpath", "//input[@name='q'] | //*[@id=\"APjFqb\"]")),
-        //                        Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), targetPage: "GoogleSearchResults")
-        //                        )
-        //                );
+        var sitemap = SiteMap("GoogleWebsite", "v1.0", new(), new())
+                        .AddComponents(
+                            Component("SearchResultItem", null,
+                                Element("link", "Link", new PomLocator("xpath", "./div/div/div/div[1]/div/a | ./div/div[1]/div/a")),
+                                Element("label", "Description", new PomLocator("xpath", "./div/div/div/div[2]/div/span | ./div/div[2]/div/span"))
+                            )
+                        )
+                        .AddPages(
+                            Page("GoogleSearchResults", null,
+                                   ComponentListElement("SearchResults", new PomLocator("xpath", "//*[@id=\"rso\"]/div/div[1]/div[1]/div[starts-with(@class,\"g \") or @class = \"g\"] | //*[@id=\"rso\"]/div/div[starts-with(@class,\"g \") or @class = \"g\"] | //*[@id=\"rso\"]/div/div/div[starts-with(@class,\"g \") or @class = \"g\"]"), itemType: "SearchResultItem")
+                                ),
+                            Page("GoogleSearch", null,
+                                Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")),
+                                Element("input", "TxtSearch", new PomLocator("xpath", "//input[@name='q'] | //*[@id=\"APjFqb\"]")),
+                                Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), targetPage: "GoogleSearchResults")
+                                )
+                        );
         // write json in eyebot form
-        var jsonInput = File.ReadAllText("C:\\_apps\\sitemap.json");
-        var sitemap = JsonSerializer.Deserialize<PomSitemap>(jsonInput);
-        Assert.IsNotNull(sitemap);
+        //var jsonInput = File.ReadAllText("C:\\_apps\\sitemap.json");
+        //var sitemap = JsonSerializer.Deserialize<PomSitemap>(jsonInput);
+        //Assert.IsNotNull(sitemap);
 
         string fileName = "sitemap.json";
         string jsonString = JsonSerializer.Serialize(sitemap);
@@ -101,7 +101,14 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         var resultsPage = btnSearch.Click();
         var googleSearchResultsPageType = sitemap.GetTypeOf("GoogleSearchResults");
         var searchResultItemType = sitemap.GetTypeOf("SearchResultItem");
-        var found = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IEnumerable<WebControl>)?
+        var results = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IEnumerable<WebControl>);
+
+        foreach (var r in results)
+        {
+            var lnk = ((IElement)searchResultItemType.GetProperty("Link").GetValue(r)).Text;
+            var descr = ((IElement)searchResultItemType.GetProperty("Description").GetValue(r)).Text;
+        }
+        var found = results?
                         .FirstOrDefault(r => r.Property<Element>(searchResultItemType, "Link")?.Text.Contains("Drill") ?? false) != default;
 
         Assert.IsTrue(found);
@@ -113,6 +120,7 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
     => (type, itemType, targetPage) switch
     {
         ("button", null, null) => ("element", null, null),
+        ("label", null, null) => ("element", null, null),
         ("link", null, null) => ("element", null, null),
         ("input", null, null) => ("element", null, null),
         ("button", null, var tPage) => ("navigation_element", null, tPage),
