@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
+using System.Collections.Immutable;
+using System.Text.Json.Serialization;
 
 namespace SpecDrill.PageObjectModel
 {
@@ -137,7 +139,8 @@ namespace SpecDrill.PageObjectModel
                 ("select_element", null, null) => new PomSelectElement(element.name, element.locator, element.tags),
                 ("frame_element", null, { }) => new PomFrameElement(element.name, element.locator, element.targetPage, element.tags),
                 ("frame_element", null, null) => throw new Exception($"Expected element.{nameof(element.targetPage)} parameter is null!"),
-                ({ }, null, null) => element,
+                ("element", null, null) => element,
+                ({ }, null, null) => new PomComponentRef(element.type, element.name, element.locator, element.tags),
                 (null, null, null) => throw new Exception($"Expected element.{nameof(element.type)} parameter is null!"),
                 (_, _, _) => throw new Exception($"Unexpected combination: element.{nameof(element.type)}, element.{nameof(element.itemType)}, element.{nameof(element.targetPage)}!"),
             };
@@ -161,7 +164,8 @@ namespace SpecDrill.PageObjectModel
         
         public static PomSitemap SiteMap(string name, string version, List<PomComponent> components, List<PomPage> pages)
             => new(name, version, components, pages);
-        public static PomSitemap BuildComponents(this PomSitemap @this)
+
+        public static PomSitemap Build(this PomSitemap @this)
         {
             ModuleBuilder mb = SpecDrillDynamicModule.Value;
 
@@ -169,41 +173,108 @@ namespace SpecDrill.PageObjectModel
             var baseConstructor = baseType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new[] { typeof(IElement), typeof(IElementLocator) })!; //we are sure we have that constructor in WebControl class!
             if (baseConstructor is null)
                 throw new Exception("Expected (IElement, IElementLocator) constructor on WebControl type!");
-
-            foreach (var component in @this.components)
+            var components = @this.components.Concat(@this.pages);
+            Dictionary<string, TypeBuilder> typeBuilders = new();
+            foreach (var component in components)
             {
-                var componentTb = mb.DefineType($"{@this.name}.{component.name}", TypeAttributes.Public, typeof(WebControl));
-                var cb_default = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, Array.Empty<Type>());
-                var defaultCtorBody = cb_default.GetILGenerator();
-                defaultCtorBody.Emit(OpCodes.Ldarg_0);
-                defaultCtorBody.Emit(OpCodes.Ret);
+                var typeName = $"{@this.name}.{component.name}";
+                if (mb.GetType(typeName) is { })
+                    throw new Exception($"This Page Object component `{typeName}` already exists! Please use a different sitemap name / version!");
 
-                var cb_2p = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] { typeof(IElement), typeof(IElementLocator) });
-                var ctorBody = cb_2p.GetILGenerator();
-                ctorBody.Emit(OpCodes.Ldarg_0);
-                ctorBody.Emit(OpCodes.Ldarg_1);
-                ctorBody.Emit(OpCodes.Ldarg_2);
-                ctorBody.Emit(OpCodes.Call, baseConstructor);
-                ctorBody.Emit(OpCodes.Ret);
+                switch (component)
+                {
+                    case PomComponent page when page is PomPage:
+                        typeBuilders[typeName] = mb.DefineType(typeName, TypeAttributes.Public, typeof(WebPage));
+                        break;
+                    case PomComponent c when c is not PomPage:
+                        var componentTb = mb.DefineType(typeName, TypeAttributes.Public, typeof(WebControl));
+                        var cb_default = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, Array.Empty<Type>());
+                        var defaultCtorBody = cb_default.GetILGenerator();
+                        defaultCtorBody.Emit(OpCodes.Ldarg_0);
+                        defaultCtorBody.Emit(OpCodes.Ret);
 
-                componentTb.AddPropertiesToType(@this, component.elements);
-                componentTb.CreateType();
+                        var cb_2p = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] { typeof(IElement), typeof(IElementLocator) });
+                        var ctorBody = cb_2p.GetILGenerator();
+                        ctorBody.Emit(OpCodes.Ldarg_0);
+                        ctorBody.Emit(OpCodes.Ldarg_1);
+                        ctorBody.Emit(OpCodes.Ldarg_2);
+                        ctorBody.Emit(OpCodes.Call, baseConstructor);
+                        ctorBody.Emit(OpCodes.Ret);
+                        typeBuilders[typeName] = componentTb;
+
+                        break;
+                    default: throw new Exception($"unsupported component type {component.GetType().Name}");
+                }
+            }
+            foreach (var component in components)
+            {
+                var typeName = $"{@this.name}.{component.name}";
+                switch (component)
+                {
+                    case PomComponent page when page is PomPage:
+                        var pageTb = typeBuilders[typeName];
+                        pageTb.AddPropertiesToType(@this, page.elements);
+                        pageTb.CreateType();
+                        break;
+                    case PomComponent c when c is not PomPage:
+                        var componentTb = typeBuilders[typeName];
+                        
+                        componentTb.AddPropertiesToType(@this, component.elements);
+                        componentTb.CreateType();
+                        break;
+                    default: throw new Exception($"unsupported component type {component.GetType().Name}");
+                }
+
+                
             }
 
             return @this;
         }
-        public static PomSitemap BuildPages(this PomSitemap @this)
-        {
-            ModuleBuilder mb = SpecDrillDynamicModule.Value;
+
+        //public static PomSitemap BuildComponents(this PomSitemap @this)
+        //{
+        //    ModuleBuilder mb = SpecDrillDynamicModule.Value;
+
+        //    var baseType = typeof(WebControl);
+        //    var baseConstructor = baseType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, new[] { typeof(IElement), typeof(IElementLocator) })!; //we are sure we have that constructor in WebControl class!
+        //    if (baseConstructor is null)
+        //        throw new Exception("Expected (IElement, IElementLocator) constructor on WebControl type!");
+
+        //    foreach (var component in @this.components)
+        //    {
+        //        var componentTb = mb.DefineType($"{@this.name}.{component.name}", TypeAttributes.Public, typeof(WebControl));
+        //        var cb_default = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, Array.Empty<Type>());
+        //        var defaultCtorBody = cb_default.GetILGenerator();
+        //        defaultCtorBody.Emit(OpCodes.Ldarg_0);
+        //        defaultCtorBody.Emit(OpCodes.Ret);
+
+        //        var cb_2p = componentTb.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new[] { typeof(IElement), typeof(IElementLocator) });
+        //        var ctorBody = cb_2p.GetILGenerator();
+        //        ctorBody.Emit(OpCodes.Ldarg_0);
+        //        ctorBody.Emit(OpCodes.Ldarg_1);
+        //        ctorBody.Emit(OpCodes.Ldarg_2);
+        //        ctorBody.Emit(OpCodes.Call, baseConstructor);
+        //        ctorBody.Emit(OpCodes.Ret);
+
+        //        componentTb.AddPropertiesToType(@this, component.elements);
+        //        componentTb.CreateType();
+        //    }
+
+        //    return @this;
+        //}
+
+        //public static PomSitemap BuildPages(this PomSitemap @this)
+        //{
+        //    ModuleBuilder mb = SpecDrillDynamicModule.Value;
             
-            foreach (var page in @this.pages)
-            {
-                var pageTb = mb.DefineType($"{@this.name}.{page.name}", TypeAttributes.Public, typeof(WebPage));
-                pageTb.AddPropertiesToType(@this, page.elements);
-                pageTb.CreateType();
-            }
-            return @this;
-        }
+        //    foreach (var page in @this.pages)
+        //    {
+        //        var pageTb = mb.DefineType($"{@this.name}.{page.name}", TypeAttributes.Public, typeof(WebPage));
+        //        pageTb.AddPropertiesToType(@this, page.elements);
+        //        pageTb.CreateType();
+        //    }
+        //    return @this;
+        //}
 
         private static void AddPropertiesToType(this TypeBuilder @this, PomSitemap sitemap, List<PomElement> elements)
         {
@@ -240,6 +311,17 @@ namespace SpecDrill.PageObjectModel
            _ => throw new Exception($"Unrecognised locator type `{type}`!")
        };
 
-        public static Type GetTypeOf(this PomSitemap @this, string pageName) => SpecDrillDynamicModule.Value.GetType($"{@this.name}.{pageName}") ?? throw new Exception($"Page {pageName} is not yet defined in dynamic assembly!");
+        public static Type GetTypeOf(this PomSitemap @this, string pageName) => SpecDrillDynamicModule.Value.GetType($"{@this.name}.{pageName}") ?? throw new Exception($"Page/Component {pageName} is not (yet) defined in dynamic assembly!");
+
+    }
+    internal class CDepsComparer : IComparer<(PomComponent c, string[] deps)>
+    {
+        public int Compare((PomComponent c, string[] deps) x, (PomComponent c, string[] deps) y)
+        {
+            var result = y.deps.Length - x.deps.Length;
+            return result == 0 ?
+                1 :
+                result;
+        }
     }
 }
