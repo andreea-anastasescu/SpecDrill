@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace SpecDrill
 {
-    public interface IListElement<T> : IReadOnlyList<T>, IEnumerable, IEnumerable<T>
+    public interface IListElement<out T> : IReadOnlyList<T>, IEnumerable, IEnumerable<T>
        where T : class, IElement
     {
         T GetElementByText(string regex);

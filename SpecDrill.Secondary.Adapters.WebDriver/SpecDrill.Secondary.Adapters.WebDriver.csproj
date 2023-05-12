@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>1052</BuildNumber>
+    <BuildNumber>1055</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Deterministic>true</Deterministic>
     <Description>SpecDrill.SecondaryPorts.Adapters.WebDriver - WebDriver adapter for SpecDrill</Description>

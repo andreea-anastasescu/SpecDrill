@@ -94,7 +94,7 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         var resultsPage = btnSearch.Click();
         var googleSearchResultsPageType = sitemap.GetTypeOf("GoogleSearchResults");
         var searchResultItemType = sitemap.GetTypeOf("SearchResultItem");
-        var results = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IEnumerable<WebControl>);
+        var results = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IListElement<WebControl>);
 
         foreach (var r in results)
         {
