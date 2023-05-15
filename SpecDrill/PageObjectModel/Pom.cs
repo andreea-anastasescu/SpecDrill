@@ -285,6 +285,7 @@ namespace SpecDrill.PageObjectModel
                     PomNavigationElement pne => typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(pne.targetPage!)),
                     PomComponentList pcl => typeof(ListElement<>).MakeGenericType(sitemap.GetTypeOf(pcl.itemType!)),
                     PomComponentRef pcr => sitemap.GetTypeOf(pcr.type),
+                    PomSelectElement pse => typeof(SelectElement),
                     PomFrameElement pfe => typeof(IFrameElement<>).MakeGenericType(sitemap.GetTypeOf(pfe.targetPage!)),
                     PomElement e => typeof(IElement),
                     _ => null
