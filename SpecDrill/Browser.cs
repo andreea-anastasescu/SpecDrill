@@ -238,7 +238,7 @@ namespace SpecDrill
                           (findAttribute =>
                           {
                               var navigationTargetLocator = FigureOutNavigationTargetLocator(member, containerType, members, memberType);
-                              object? element = InstantiateMember(pageType, findAttribute, container, memberType, navigationTargetLocator);
+                              object? element = InstantiateMember(Logger, pageType, findAttribute, container, memberType, navigationTargetLocator);
 
                               SetValue(containerType, member, instance: container, value: element);
                           })
@@ -322,17 +322,17 @@ namespace SpecDrill
         }
 
         private static readonly string CREATE_NAVIGATION = "CreateNavigation";
-        private static object? InstantiateMember<T>(FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null) where T : IElement
-            => InstantiateMember(typeof(T), findAttribute, container, memberType, targetLocator);
-        private static object? InstantiateMember(Type pageType, FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null)
+        private static object? InstantiateMember<T>(ILogger Logger, FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null) where T : IElement
+            => InstantiateMember(Logger, typeof(T), findAttribute, container, memberType, targetLocator);
+        private static object? InstantiateMember(ILogger Logger, Type pageType, FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null)
         {
             object? element = null;
-            if (memberType == typeof(IElement))
+            if (typeof(IElement).IsAssignableFrom(memberType))
             {
                 element = ElementFactory.Create(findAttribute.Nested ? container : null,
                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue));
             }
-            else if (memberType == typeof(ISelectElement))
+            else if (typeof(ISelectElement).IsAssignableFrom(memberType))
             {
                 element = ElementFactory.CreateSelect(findAttribute.Nested ? container : null,
                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue));
@@ -361,6 +361,9 @@ namespace SpecDrill
                 }
             }
 
+            if (element is null) {
+                Logger.LogError($"Element type not supported: {memberType}! (Please file a bug!)");
+            }
             return element;
         }
 
