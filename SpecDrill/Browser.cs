@@ -327,7 +327,7 @@ namespace SpecDrill
         private static object? InstantiateMember(ILogger Logger, Type pageType, FindAttribute findAttribute, IElement container, Type memberType, IElementLocator? targetLocator = null)
         {
             object? element = null;
-            if (typeof(IElement).IsAssignableFrom(memberType))
+            if (typeof(IElement) == memberType)
             {
                 element = ElementFactory.Create(findAttribute.Nested ? container : null,
                     ElementLocatorFactory.Create(findAttribute.SelectorType, findAttribute.SelectorValue));
@@ -349,7 +349,7 @@ namespace SpecDrill
             {
                 element = InvokeFactoryMethod("CreateWindow", memberType.GenericTypeArguments, container, findAttribute, null);
             }
-            else if (typeof(WebControl).IsAssignableFrom(memberType))
+            else if (typeof(WebControl).IsAssignableFrom(memberType) || typeof(IControl).IsAssignableFrom(memberType))
             {
                 if (memberType.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IListElement<>)))
                 {
