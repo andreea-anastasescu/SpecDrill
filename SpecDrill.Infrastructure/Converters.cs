@@ -30,7 +30,7 @@ namespace SpecDrill.Infrastructure
             if (!enumType.IsEnum)
                 return false;
 
-            return Enum.TryParse(enumType, enumValue, out object _);
+            return Enum.TryParse(enumType, enumValue, out object? _);
         }
 
         public static bool OfEnum<T>(this string enumValue)

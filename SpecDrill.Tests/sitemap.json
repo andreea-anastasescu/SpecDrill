@@ -87,7 +87,7 @@
     {
       "elements": [
         {
-          "type": "button", // link, label, (input)textbox, select  ||| (button, link => element) (button(targetpage), link(targetPage) => navigationElement(T)), select => SelectElement, (other => Element)
+          "type": "button", // link, label, (input)textbox, select  ||| (button, link => element) (button(target), link(target) => navigationElement(T)), select => SelectElement, (other => Element)
           "name": "BtnAccept",
           "locator": {
             "LocatorType": 0,

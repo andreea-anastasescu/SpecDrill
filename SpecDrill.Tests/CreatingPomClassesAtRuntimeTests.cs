@@ -41,7 +41,7 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
                             Page("GoogleSearch", null,
                                 Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")),
                                 Element("input", "TxtSearch", new PomLocator("xpath", "//input[@name='q'] | //*[@id=\"APjFqb\"]")),
-                                Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), targetPage: "GoogleSearchResults")
+                                Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), target: "GoogleSearchResults")
                                 )
                         );
         // write json in random form
@@ -96,10 +96,12 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         var searchResultItemType = sitemap.GetTypeOf("SearchResultItem");
         var results = (resultsPage.Property(googleSearchResultsPageType, "SearchResults") as IListElement<WebControl>);
 
+        Assert.IsNotNull(results);
+
         foreach (var r in results)
         {
-            var lnk = ((IElement)searchResultItemType.GetProperty("Link").GetValue(r)).Text;
-            var descr = ((IElement)searchResultItemType.GetProperty("Description").GetValue(r)).Text;
+            var lnk = ((IElement?)searchResultItemType.GetProperty("Link")?.GetValue(r))?.Text;
+            var descr = ((IElement?)searchResultItemType.GetProperty("Description")?.GetValue(r))?.Text;
         }
         var found = results?
                         .FirstOrDefault(r => r.Property<Element>(searchResultItemType, "Link")?.Text.Contains("Drill") ?? false) != default;
@@ -114,15 +116,15 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         var processedComponents = sitemap.components
                                                     .Select(c => c with
                                                     {
-                                                        elements = c.elements.Select(e => (e, t: ToSpecDrillType(e.type, e.itemType, e.targetPage)))
-                                                    .Select(se => se.e with { type = se.t.type, itemType = se.t.itemType, targetPage = se.t.targetPage }).ToList()
+                                                        elements = c.elements.Select(e => (e, t: ToSpecDrillType(e.type, e.itemType, e.target)))
+                                                    .Select(se => se.e with { type = se.t.type, itemType = se.t.itemType, target = se.t.target }).ToList()
                                                     })
                                                     .ToList();
         var processedPages = sitemap.pages
                                         .Select(c => c with
                                         {
-                                            elements = c.elements.Select(e => (e, t: ToSpecDrillType(e.type, e.itemType, e.targetPage)))
-                                        .Select(se => se.e with { type = se.t.type, itemType = se.t.itemType, targetPage = se.t.targetPage }).ToList()
+                                            elements = c.elements.Select(e => (e, t: ToSpecDrillType(e.type, e.itemType, e.target)))
+                                        .Select(se => se.e with { type = se.t.type, itemType = se.t.itemType, target = se.t.target }).ToList()
                                         })
                                         .ToList();
         // replace original elements with specdrill type names (via EyebotTypeToSpecDrillType(...) transform
@@ -147,7 +149,7 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
                             Page("GoogleSearch", null,
                                 Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")),
                                 Element("input", "TxtSearch", new PomLocator("xpath", "//input[@name='q'] | //*[@id=\"APjFqb\"]")),
-                                Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), targetPage: "GoogleSearchResults")
+                                Element("button", "BtnSearch", new PomLocator("xpath", "//div[contains(@class,'FPdoLc')]//input[@name='btnK']"), target: "GoogleSearchResults")
                                 )
                         );
         // process sitemap elements
@@ -162,15 +164,15 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
     [TestMethod]
     public void MoreComplexSitemapDefinition_DeclarationOrderTest_ShouldPass()
     {
-        var sitemap = SiteMap("EwaWebsite", "v1.0", new(), new()).AddComponents(Component("PersonResultItem", null, Element("label", "PersonLabel", new PomLocator("xpath", "./span/div[1]//label")), Element("button", "PersonItem", new PomLocator("xpath", "."), targetPage: "PersonDetailsPage"))).AddPages(Page("PersonDetailsPage", null, Element("label", "PersonName", new PomLocator("xpath", "//*[@id=\"formHeaderTitle_1\"]")), Element("label", "Discipline", new PomLocator("xpath", "//div[@id='tab-section3']//div[@role='tabpanel']/section[1]/section[1]/div[@role='presentation']/div[@role='presentation']/div[2]/div[2]/div[@role='presentation']/div/div[@role='presentation']/div[@role='presentation']/div[3]/div[@role='presentation']/div[@role='presentation']/div[2]/div[1]/div[@role='presentation']/div[@role='presentation']/div[1]//div[@role='link']/div[@role='presentation']"))), Page("EwaHomePage", null, Element("input", "TxtSearch", new PomLocator("xpath", "/html//input[@id='GlobalSearchBox']")), ComponentListElement("PersonResults", new PomLocator("xpath", "//*[@id=\"id-globalSearchFlyout-1\"]/div/div/div/div/div/button"), itemType: "PersonResultItem")), Page("PortalSelectionPage", null, Element("label", "Header", new PomLocator("xpath", "//*[@id=\"app-section-header_1\"]")), Element("button", "TileEwa", new PomLocator("xpath", """//*[@id="AppModuleTileSec_1_Item_2"]"""), targetPage: "EwaHomePage")), Page("CrmLandingPage", null, Element("label", "TopBar", new PomLocator("xpath", "//*[@id=\"topBar\"]")), Element("frame", "PortalSelectionFrame", new PomLocator("xpath", """//*[@id="AppLandingPage"]"""), targetPage: "PortalSelectionPage")), Page("StaySignedInPage", null, Element("input", "LblStaySignedIn", new PomLocator("xpath", "/html//div[@id='lightbox']/div[@role='main']//div[@role='heading']")), Element("button", "BtnYes", new PomLocator("xpath", "/html//input[@id='idSIButton9']"), targetPage: "CrmLandingPage")), Page("Login2Page", null, Element("input", "TxtPassword", new PomLocator("xpath", "/html//div[@id='lightbox']/div[@role='main']/div/div[2]/div//input[@name='passwd']")), Element("button", "BtnSignIn", new PomLocator("xpath", "/html//input[@id='idSIButton9']"), targetPage: "StaySignedInPage")), Page("Login1Page", null, Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")), Element("input", "TxtUsername", new PomLocator("xpath", "/html//div[@id='lightbox']/div[@role='main']/div/div/div//input[@name='loginfmt']")), Element("button", "BtnNext", new PomLocator("xpath", "/html//input[@id='idSIButton9']"), targetPage: "Login2Page")));
+        var sitemap = SiteMap("EwaWebsite", "v1.0", new(), new()).AddComponents(Component("PersonResultItem", null, Element("label", "PersonLabel", new PomLocator("xpath", "./span/div[1]//label")), Element("button", "PersonItem", new PomLocator("xpath", "."), target: "PersonDetailsPage"))).AddPages(Page("PersonDetailsPage", null, Element("label", "PersonName", new PomLocator("xpath", "//*[@id=\"formHeaderTitle_1\"]")), Element("label", "Discipline", new PomLocator("xpath", "//div[@id='tab-section3']//div[@role='tabpanel']/section[1]/section[1]/div[@role='presentation']/div[@role='presentation']/div[2]/div[2]/div[@role='presentation']/div/div[@role='presentation']/div[@role='presentation']/div[3]/div[@role='presentation']/div[@role='presentation']/div[2]/div[1]/div[@role='presentation']/div[@role='presentation']/div[1]//div[@role='link']/div[@role='presentation']"))), Page("EwaHomePage", null, Element("input", "TxtSearch", new PomLocator("xpath", "/html//input[@id='GlobalSearchBox']")), ComponentListElement("PersonResults", new PomLocator("xpath", "//*[@id=\"id-globalSearchFlyout-1\"]/div/div/div/div/div/button"), itemType: "PersonResultItem")), Page("PortalSelectionPage", null, Element("label", "Header", new PomLocator("xpath", "//*[@id=\"app-section-header_1\"]")), Element("button", "TileEwa", new PomLocator("xpath", """//*[@id="AppModuleTileSec_1_Item_2"]"""), target: "EwaHomePage")), Page("CrmLandingPage", null, Element("label", "TopBar", new PomLocator("xpath", "//*[@id=\"topBar\"]")), Element("frame", "PortalSelectionFrame", new PomLocator("xpath", """//*[@id="AppLandingPage"]"""), target: "PortalSelectionPage")), Page("StaySignedInPage", null, Element("input", "LblStaySignedIn", new PomLocator("xpath", "/html//div[@id='lightbox']/div[@role='main']//div[@role='heading']")), Element("button", "BtnYes", new PomLocator("xpath", "/html//input[@id='idSIButton9']"), target: "CrmLandingPage")), Page("Login2Page", null, Element("input", "TxtPassword", new PomLocator("xpath", "/html//div[@id='lightbox']/div[@role='main']/div/div[2]/div//input[@name='passwd']")), Element("button", "BtnSignIn", new PomLocator("xpath", "/html//input[@id='idSIButton9']"), target: "StaySignedInPage")), Page("Login1Page", null, Element("button", "BtnAccept", new PomLocator("id", "L2AGLb")), Element("input", "TxtUsername", new PomLocator("xpath", "/html//div[@id='lightbox']/div[@role='main']/div/div/div//input[@name='loginfmt']")), Element("button", "BtnNext", new PomLocator("xpath", "/html//input[@id='idSIButton9']"), target: "Login2Page")));
 
         sitemap = ConvertToSpecDrillTypes(sitemap);
         
 
         sitemap.Build();
     }
-    private (string type, string? itemType, string? targetPage) ToSpecDrillType(string type, string? itemType, string? targetPage)
-    => (type.ToLowerInvariant(), itemType, targetPage) switch
+    private (string type, string? itemType, string? target) ToSpecDrillType(string type, string? itemType, string? target)
+    => (type.ToLowerInvariant(), itemType, target) switch
     {
         ("button", null, null) => ("element", null, null),
         ("label", null, null) => ("element", null, null),
@@ -188,6 +190,6 @@ public class CreatingPomClassesAtRuntimeTests : MsTestBase
         //("list", var iType, null) => ("list", iType, null),
         ("select_element", null, null) => ("select_element", null, null),
         (null, null, null) => ("page", null, null),
-        (var t, var iT, var tP) => throw new Exception($"Unexpected combination: type={t}, itemType={iT}, targetPage={tP} !")
+        (var t, var iT, var tgt) => throw new Exception($"Unexpected combination: type={t}, itemType={iT}, target={tgt} !")
     };
 }

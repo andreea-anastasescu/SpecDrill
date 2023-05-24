@@ -23,9 +23,9 @@ namespace SpecDrill.PageObjectModel
     // locator
     public record PomLocator(string type, string value);
     // atoms
-    public record PomElement(string type, string name, PomLocator locator, List<string> tags, string? targetPage, string? itemType);
-    public record PomNavigationElement(string name, PomLocator locator, string targetPage, List<string> tags) : PomElement("navigation_element", name, locator, tags, targetPage, null);
-    public record PomFrameElement(string name, PomLocator locator, string targetPage, List<string> tags) : PomElement("frame_element", name, locator, tags, targetPage, null);
+    public record PomElement(string type, string name, PomLocator locator, List<string> tags, string? target, string? itemType);
+    public record PomNavigationElement(string name, PomLocator locator, string target, List<string> tags) : PomElement("navigation_element", name, locator, tags, target, null);
+    public record PomFrameElement(string name, PomLocator locator, string target, List<string> tags) : PomElement("frame_element", name, locator, tags, target, null);
     public record PomSelectElement(string name, PomLocator locator, List<string> tags) : PomElement("select_element", name, locator, tags, null, null);
     //public record PomSelectElement
     // components
@@ -130,26 +130,26 @@ namespace SpecDrill.PageObjectModel
             return @this;
         }
         public static PomElement Specialize(this PomElement element)
-            => (element.type, element.itemType, element.targetPage) switch
+            => (element.type, element.itemType, element.target) switch
             {
-                ("navigation_element", null, { }) => new PomNavigationElement(element.name, element.locator, element.targetPage, element.tags),
-                ("navigation_element", null, null) => throw new Exception($"Expected element.{nameof(element.targetPage)} parameter is null!"),
+                ("navigation_element", null, { }) => new PomNavigationElement(element.name, element.locator, element.target, element.tags),
+                ("navigation_element", null, null) => throw new Exception($"Expected element.{nameof(element.target)} parameter is null!"),
                 ("list", { }, null) => new PomComponentList(element.name, element.locator, element.tags, element.itemType),
                 ("list", null, null) => throw new Exception($"Expected element.{nameof(element.itemType)} parameter is null!"),
                 ("select_element", null, null) => new PomSelectElement(element.name, element.locator, element.tags),
-                ("frame_element", null, { }) => new PomFrameElement(element.name, element.locator, element.targetPage, element.tags),
-                ("frame_element", null, null) => throw new Exception($"Expected element.{nameof(element.targetPage)} parameter is null!"),
+                ("frame_element", null, { }) => new PomFrameElement(element.name, element.locator, element.target, element.tags),
+                ("frame_element", null, null) => throw new Exception($"Expected element.{nameof(element.target)} parameter is null!"),
                 ("element", null, null) => element,
                 ({ }, null, null) => new PomComponentRef(element.type, element.name, element.locator, element.tags),
                 (null, null, null) => throw new Exception($"Expected element.{nameof(element.type)} parameter is null!"),
-                (_, _, _) => throw new Exception($"Unexpected combination: element.{nameof(element.type)}, element.{nameof(element.itemType)}, element.{nameof(element.targetPage)}!"),
+                (_, _, _) => throw new Exception($"Unexpected combination: element.{nameof(element.type)} = {element.type}, element.{nameof(element.itemType)} = {element.itemType}, element.{nameof(element.target)} = {element.target} !"),
             };
         public static PomComponent Component(string name, List<string>? tags = default, params PomElement[] elements) => new(name, elements.ToList(), tags ?? new List<string>());
         public static PomComponentRef ComponentRef(string name, PomLocator locator, string type, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>());
         public static PomPage Page(string name, List<string>? tags = default, params PomElement[] elements) => new(name, tags ?? new List<string>(), elements.ToList());
-        public static PomElement Element(string type, string name, PomLocator locator, string? targetPage = null, string? itemType = null, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>(), targetPage, itemType);
-        public static PomNavigationElement NavigationElement(string name, PomLocator locator, string targetPage, List<string>? tags = default) => new(name, locator, targetPage, tags ?? new List<string>());
-        public static PomFrameElement FrameElement(string name, PomLocator locator, string targetPage, List<string>? tags = default) => new(name, locator, targetPage, tags ?? new List<string>());
+        public static PomElement Element(string type, string name, PomLocator locator, string? target = null, string? itemType = null, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>(), target, itemType);
+        public static PomNavigationElement NavigationElement(string name, PomLocator locator, string target, List<string>? tags = default) => new(name, locator, target, tags ?? new List<string>());
+        public static PomFrameElement FrameElement(string name, PomLocator locator, string target, List<string>? tags = default) => new(name, locator, target, tags ?? new List<string>());
         public static PomSelectElement SelectElement(string name, PomLocator locator, List<string>? tags = default) => new(name, locator, tags ?? new());
         public static PomComponentList ComponentListElement(string name, PomLocator locator, string itemType , List<string>? tags = default)
         {
@@ -282,11 +282,11 @@ namespace SpecDrill.PageObjectModel
             {
                 var elementType = element.Specialize() switch
                 {
-                    PomNavigationElement pne => typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(pne.targetPage!)),
+                    PomNavigationElement pne => typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(pne.target!)),
                     PomComponentList pcl => typeof(ListElement<>).MakeGenericType(sitemap.GetTypeOf(pcl.itemType!)),
                     PomComponentRef pcr => sitemap.GetTypeOf(pcr.type),
                     PomSelectElement pse => typeof(SelectElement),
-                    PomFrameElement pfe => typeof(IFrameElement<>).MakeGenericType(sitemap.GetTypeOf(pfe.targetPage!)),
+                    PomFrameElement pfe => typeof(IFrameElement<>).MakeGenericType(sitemap.GetTypeOf(pfe.target!)),
                     PomElement e => typeof(IElement),
                     _ => null
                 };

@@ -49,7 +49,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 () =>
                 {
                     return (navigationSucceeded ?? (() => target.IsLoaded))();
-                        //bool conditionMet = targetPage.IsLoaded;
+                        //bool conditionMet = target.IsLoaded;
                         //Browser.JsLog($"navigation click condition met = { conditionMet }");
                         //return conditionMet;
                 });
