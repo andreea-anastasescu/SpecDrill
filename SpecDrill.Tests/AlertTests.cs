@@ -1,17 +1,17 @@
 ﻿using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SomeTests.PageObjects.Alerts;
 using SpecDrill;
-using SpecDrill.NUnit3;
+using SpecDrill.MsTest;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 
 namespace SomeTests
 {
-    [TestFixture]
-    public class AlertTests : NUnitBase
+    [TestClass]
+    public class AlertTests : MsTestBase
     {
-        [Test]
+        [TestMethod]
         public void ShouldWaitForAlertAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
@@ -24,7 +24,7 @@ namespace SomeTests
             Browser.IsAlertPresent.Should().BeFalse();
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldWaitForConfirmAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
@@ -38,7 +38,7 @@ namespace SomeTests
             Browser.IsAlertPresent.Should().BeFalse();
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldWaitForConfirmAndDismiss()
         {
             var alertPage = Browser.Open<AlertPage>();

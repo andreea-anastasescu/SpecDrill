@@ -10,6 +10,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>5</WarningLevel>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Features\**" />
+    <EmbeddedResource Remove="Features\**" />
+    <None Remove="Features\**" />
+    <SpecFlowFeatureFiles Remove="Features\**" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="specDrillConfig.json" />
@@ -26,29 +34,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.msbuild" Version="3.2.0">
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
-        <PackageReference Include="coverlet.collector" Version="3.2.0">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+        <PackageReference Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	<PackageReference Include="FluentAssertions" Version="6.10.0" />
-	<PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+	<PackageReference Include="FluentAssertions" Version="6.12.0" />
+	<PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
 	<PackageReference Include="NReco.Logging.File" Version="1.1.6" />
 	<!--<PackageReference Include="NUnit" Version="3.13.3" />
 	<PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />-->
-	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="112.0.5615.4900" />
+	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="116.0.5845.9600" />
 	<!--<PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />-->
 	<!--<PackageReference Include="SpecDrill.MsTest" Version="[1.1.15.*,)" />
 	<PackageReference Include="SpecDrill.SpecFlow" Version="[1.1.14.*,)" />-->
-    <PackageReference Include="SpecFlow" Version="3.9.74" />
-    <PackageReference Include="SpecFlow.MsTest" Version="3.9.74" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
-    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+    <!--<PackageReference Include="SpecFlow" Version="3.9.74" />
+    <PackageReference Include="SpecFlow.MsTest" Version="3.9.74" />-->
+    <!--<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />-->
+    <PackageReference Include="System.Text.Json" Version="7.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,9 +71,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpecDrill.MsTest\SpecDrill.MsTest.csproj" />
-    <ProjectReference Include="..\SpecDrill.NUnit3\SpecDrill.NUnit3.csproj" />
+    <!--<ProjectReference Include="..\SpecDrill.NUnit3\SpecDrill.NUnit3.csproj" />-->
     <ProjectReference Include="..\SpecDrill.Secondary.Adapters.WebDriver\SpecDrill.Secondary.Adapters.WebDriver.csproj" />
-    <ProjectReference Include="..\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj" />
+    <!--<ProjectReference Include="..\SpecDrill.SpecFlow\SpecDrill.SpecFlow.csproj" />-->
     <ProjectReference Include="..\SpecDrill\SpecDrill.csproj" />
   </ItemGroup>
 </Project>

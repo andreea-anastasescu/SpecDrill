@@ -24,8 +24,19 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
         /// Checks if the element is drawn on screen and ready for interaction (shown and enabled)
         /// </summary>
         bool IsAvailable { get; }
+        /// <summary>
+        /// Checks if element is enabled (e.g. disabled buttons cannot be clicked)
+        /// </summary>
         bool IsEnabled { get; }
+        /// <summary>
+        /// Checks if element is rendered on the screen
+        /// </summary>
         bool IsDisplayed { get; }
+
+        /// <summary>
+        /// Checks if element is (literally) visible (e.g. displayed elements might be covered by other elements hence they might not always be visible)
+        /// </summary>
+        bool IsVisible { get; }
 
         /// <summary>
         /// Underlying Browser object responsible with browser interaction

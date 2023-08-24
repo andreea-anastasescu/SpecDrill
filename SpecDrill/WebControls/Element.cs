@@ -66,6 +66,16 @@ namespace SpecDrill
             }
         }
 
+        public bool IsVisible
+        {
+            get
+            {
+                bool isVisible = this.rootElement.IsVisible;
+                Browser.JsLog($"SpecDrill IsVisible ~> {this.Locator} = '{isVisible}'");
+                return isVisible;
+            }
+        }
+
         public IBrowser Browser
         {
             get

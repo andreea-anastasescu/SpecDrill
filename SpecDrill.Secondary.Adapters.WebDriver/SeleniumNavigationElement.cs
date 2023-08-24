@@ -31,7 +31,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 }
             }
 
-            Wait.Until(() => this.IsAvailable);
+            Wait.Until(() => this.IsAvailable && this.IsVisible);
 
             // INavigationElement<T> where T : IPage
             // IOpenerElement<T> where T: IControl

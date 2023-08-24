@@ -1,16 +1,16 @@
 ﻿using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SomeTests.PageObjects.Popups;
 using SpecDrill;
 using SpecDrill.Exceptions;
 using SpecDrill.Infrastructure;
-using SpecDrill.NUnit3;
+using SpecDrill.MsTest;
 using System;
 
 namespace SomeTests
 {
-    [TestFixture]
-    public class PopupTests : NUnitBase
+    [TestClass]
+    public class PopupTests : MsTestBase
     {
         public PopupTests() : base(false) {
         
@@ -25,7 +25,7 @@ namespace SomeTests
         // 1 - property exists but type not supported
         // 3 - Control class has no Find attribute defined
 
-        [Test]
+        [TestMethod]
         public void ShouldBeAbleToOpenAndClosePopupByPropertyName()
         {
             var popupPage = Browser.Open<PopupPage>();
@@ -37,7 +37,7 @@ namespace SomeTests
         }
 
 
-        [Test]
+        [TestMethod]
         public void ShouldBeAbleToOpenAndClosePopupsViaListElement()
         {
             var popupPage = Browser.Open<PopupPage>();
@@ -48,7 +48,7 @@ namespace SomeTests
             popup.IsAvailable.Should().BeFalse();
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldBeAbleToOpenAndClosePopupBySelector()
         {
             var popupPage = Browser.Open<PopupPage>();
@@ -59,7 +59,7 @@ namespace SomeTests
             popup.IsAvailable.Should().BeFalse();
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldThrowWenAttemptingToOpenPopupWithoutFindNorFindTargetAttributes()
         {
             Action @try = () =>
@@ -72,7 +72,7 @@ namespace SomeTests
 
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldThrowWenPopupPageFindTargetPropertyIsNotINavigationTargetOrHasNoFindAttribute()
         {
             Action @try = () =>

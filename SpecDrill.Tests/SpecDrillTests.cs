@@ -1,22 +1,20 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using SomeTests.PageObjects.Alerts;
 using SomeTests.PageObjects.Test000;
 using SpecDrill;
 using SpecDrill.AutomationScopes;
 using SpecDrill.MsTest;
-using SpecDrill.NUnit3;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using System;
 using System.Linq;
 
 namespace SomeTests
 {
-    [TestFixture]
-    public class SpecDrillTests : NUnitBase
+    [TestClass]
+    public class SpecDrillTests : MsTestBase
     {
-        [Test]
+        [TestMethod]
         public void ShouldOpenBrowserWhenHomepageIsOpened()
         {
             var virtualStoreLoginPage = Browser.Open<Test000LoginPage>();
@@ -48,7 +46,7 @@ namespace SomeTests
         }
 
         //TODO: Create Hover tests on css hover menu with at least 2 levels
-        [Test]
+        [TestMethod]
         public void ShouldBeAbleToNavigateWithinFrame()
         {
             var gatewayPage = Browser.Open<Test000GatewayPage>();
@@ -84,7 +82,7 @@ namespace SomeTests
             gatewayPage.LblGwText.Text.Should().Contain("Gateway");
         }
 
-        [Test]
+        [TestMethod]
         public void Issue_6_ShouldCorrectlySelectItemsWhenAccessedByIndex()
         {
             var gatewayPage = Browser.Open<Test000GatewayPage>();
@@ -94,7 +92,7 @@ namespace SomeTests
             item2Text.Should().Be("O2");
         }
 
-        [Test]
+        [TestMethod]
         public void Issue_11_ShouldNoBlockForLongerThanSpecifiedWhenCallingWaitForNoMoreThan()
         {
             var gatewayPage = Browser.Open<Test000GatewayPage>();
@@ -114,7 +112,7 @@ namespace SomeTests
             }
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldWaitForAlertAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
@@ -127,7 +125,7 @@ namespace SomeTests
             Browser.IsAlertPresent.Should().BeFalse();
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldWaitForConfirmAndAccept()
         {
             var alertPage = Browser.Open<AlertPage>();
@@ -140,7 +138,7 @@ namespace SomeTests
             Browser.IsAlertPresent.Should().BeFalse();
         }
 
-        [Test]
+        [TestMethod]
         public void ShouldWaitForConfirmAndDismiss()
         {
             var alertPage = Browser.Open<AlertPage>();

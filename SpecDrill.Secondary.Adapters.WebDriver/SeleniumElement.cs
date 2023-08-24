@@ -57,6 +57,60 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         public bool IsDisplayed => Test(this.NativeElementSearchResult(), "VisibilityTest", (state) => state.HasFlag(ElementStateFlags.Displayed)).Evaluate(throwException: true);
         public bool IsEnabled => Test(this.NativeElementSearchResult(), "IsEnabledTest", (state) => state.HasFlag(ElementStateFlags.Enabled)).Evaluate(throwException: true);
 
+        public bool IsVisible
+        {
+            get
+            {
+                var sr= this.NativeElementSearchResult();
+                if (sr is null)
+                    return false;
+
+                var element = ToIWebElement(sr);
+                if (element is null)
+                    return false;
+
+                var isVisible = (bool?) Browser.ExecuteJavascript("""
+                if (!sd_getElementCenterCoords) {
+                    function sd_getElementCenterCoords(el) {
+                        if (el == null) {
+                            return null;
+                        }
+                        var bc = el.getBoundingClientRect();
+                        var xc = bc.x + bc.width/2;
+                        var yc = bc.y + bc.height/2;
+                        return {
+                            x: xc,
+                            y: yc
+                        };  
+                    }
+                }
+
+                if (!sd_isElementVisible) {
+                    function sd_isElementVisible(el) {
+                        try {
+                            var center = sd_getElementCenterCoords(el);
+                            var topElement = document.elementFromPoint(center.x, center.y);
+
+                            if (topElement == null) {
+                                el.scrollIntoView();
+                                center = sd_getElementCenterCoords(el);
+                                topElement = document.elementFromPoint(center.x, center.y);
+                            }
+                            
+                            return el.isEqualNode(topElement)
+                        }
+                        catch {
+                            return false;
+                        }
+                    }
+                }
+
+                return sd_isElementVisible(arguments[0]);
+                """, element);
+
+                return isVisible ?? false;
+            }
+        }
         //private (ElementStateFlags stateFlags, Exception? exception) InternalElementState
         //{
 
@@ -118,13 +172,15 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
 
             return (testResult, exception);
         }
-        U ResilientAccess<U>(ref SearchResult searchResult, Func<IWebElement?, U> op)
-            where U : struct
-        {
-            IWebElement? ToIWebElement(SearchResult searchResult)
+        private IWebElement? ToIWebElement(SearchResult searchResult)
                 => (searchResult.Elements.FirstOrDefault()?.NativeElement is IWebElement iwe) ?
                         iwe :
                         throw new ElementNotFoundException($"Element {locator} was not found!");
+
+        U ResilientAccess<U>(ref SearchResult searchResult, Func<IWebElement?, U> op)
+            where U : struct
+        {
+            
 
             U result = default;
             try
