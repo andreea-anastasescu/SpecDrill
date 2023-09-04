@@ -3,6 +3,7 @@ using iText.Kernel.Pdf.Canvas.Parser;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V114.Memory;
 using OpenQA.Selenium.Interactions;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;
@@ -466,16 +467,32 @@ console.log('mouse click!');
             return capabilities;
         }
 
-        public void ClickAndDrag((int x, int y) from, int offsetX, int offsetY)
+        public void ClickAndDrag(IElement from, IElement to, TimeSpan? duration = null)
         {
-            var locatorFactory = DI.ServiceProvider.GetService<IElementLocatorFactory>() ?? throw new NotFoundException($"IElementLocatorFactory instance was not registered into DI ServiceCollection");
-            var fromElement = FindElements(locatorFactory.Create(Ports.AutomationFramework.By.TagName, "html"));
-            
+            if (duration is null)
+            {
+                duration = TimeSpan.FromMilliseconds(50);
+            }
+            Wait.Until(() => from.IsAvailable && from.IsVisible);
+            Wait.Until(() => to.IsAvailable && to.IsVisible);
+            var fromCoords = from.GetRectangle();
+            var (fromX, fromY) = (fromCoords.Item1 + fromCoords.Item3 / 2, fromCoords.Item2 + fromCoords.Item4 / 2);
+            var toCoords = to.GetRectangle();
+            var (toX, toY) = (toCoords.Item1 + toCoords.Item3 / 2, toCoords.Item2 + toCoords.Item4 / 2);
             var builder = new Actions(this.seleniumDriver);
-            builder.MoveToElement(fromElement.FirstOrDefault() as IWebElement, from.x, from.y);
+            builder.MoveToElement(from.ToWebElement());
             builder.ClickAndHold();
-            builder.MoveByOffset(offsetX, offsetY);
-            builder.Release().Perform();
+
+            for (int i = 0; i< 12; i++) // emulate mouse movement :)
+            {
+                
+                builder.MoveByOffset(1,1);
+            }
+
+
+            builder.MoveToElement(to.ToWebElement());
+            builder.Release(to.ToWebElement());
+            builder.Perform();
         }
 
         /// <summary>

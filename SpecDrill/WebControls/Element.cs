@@ -173,12 +173,18 @@ namespace SpecDrill
         {
             Browser.JsLog($"SpecDrill DragAndDropTo (target={target.Locator}) ~> {this.Locator}");
             this.rootElement.DragAndDropTo(target);
+            //Browser.DragAndDrop(this.rootElement, target);
         }
-
+        public void ClickAndDragTo(IElement target)
+        { 
+            Browser.JsLog($"SpecDrill ClickAndDragTo (target={target.Locator}) ~> {this.Locator}");
+            this.rootElement.ClickAndDragTo(target);
+            //Browser.ClickAndDrag(this.rootElement, target);
+        }
         public void DragAndDropAt(int offsetX, int offsetY)
         {
             Browser.JsLog($"SpecDrill DragAndDropAt (offsetX={offsetX}, offsetY={offsetY}) ~> {this.Locator}");
-            this.rootElement.DragAndDropAt(offsetX, offsetY);
+            Browser.DragAndDrop(this.rootElement, offsetX, offsetY);
         }
 
         public (int, int) GetCoordinates()

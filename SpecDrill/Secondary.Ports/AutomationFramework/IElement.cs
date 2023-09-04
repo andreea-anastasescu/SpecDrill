@@ -79,6 +79,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
         void Hover(bool waitForSilence = false);
 
         void DragAndDropTo(IElement target);
+        void ClickAndDragTo(IElement target);
 
         void DragAndDropAt(int offsetX, int offsetY);
         (int, int) GetCoordinates();

@@ -49,7 +49,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
 
         void DragAndDrop(IElement draggable, int offsetX, int offsetY);
 
-        void ClickAndDrag((int x, int y) from, int offsetX, int offsetY);
+        void ClickAndDrag(IElement from, IElement to, TimeSpan? duration = null);
 
         void RefreshPage();
 

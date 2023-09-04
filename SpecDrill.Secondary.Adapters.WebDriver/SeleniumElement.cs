@@ -54,7 +54,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         private bool AvailabilityTest(SearchResult searchResult)
         => Test(searchResult, "AvailabilityTest", (state) => state.HasFlag(ElementStateFlags.Displayed) && state.HasFlag(ElementStateFlags.Enabled)).Evaluate();
 
-        public bool IsDisplayed => Test(this.NativeElementSearchResult(), "VisibilityTest", (state) => state.HasFlag(ElementStateFlags.Displayed)).Evaluate(throwException: true);
+        public bool IsDisplayed => Test(this.NativeElementSearchResult(), "DisplayTest", (state) => state.HasFlag(ElementStateFlags.Displayed)).Evaluate(throwException: true);
         public bool IsEnabled => Test(this.NativeElementSearchResult(), "IsEnabledTest", (state) => state.HasFlag(ElementStateFlags.Enabled)).Evaluate(throwException: true);
 
         public bool IsVisible
@@ -97,7 +97,8 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                                 topElement = document.elementFromPoint(center.x, center.y);
                             }
                             
-                            return el.isEqualNode(topElement)
+                            var result = el.compareDocumentPosition(topElement)
+                            return result == 0 || result == 20;
                         }
                         catch {
                             return false;
@@ -550,6 +551,9 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         {
             Browser.DragAndDrop(this, target);
         }
+
+        public void ClickAndDragTo(IElement target)
+            => Browser.ClickAndDrag(this, target);
 
         public void DragAndDropAt(int offsetX, int offsetY)
         {

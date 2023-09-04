@@ -67,7 +67,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
         void DragAndDrop(IElement startFromElement, IElement stopToElement);
 
         void DragAndDrop(IElement startFromElement, int offsetX, int offsetY);
-        void ClickAndDrag((int x, int y) from, int offsetX, int offsetY);
+        void ClickAndDrag(IElement from, IElement to, TimeSpan? duration = null);
         bool IsJQueryDefined { get; }
 
         //bool LoadJQuery();

@@ -7,7 +7,6 @@ using SpecDrill.Infrastructure;
 using SpecDrill.Infrastructure.Enums;
 using SpecDrill.Secondary.Ports.AutomationFramework;
 using SpecDrill.Secondary.Ports.AutomationFramework.Core;
-using SpecDrill.Secondary.Ports.AutomationFramework.Exceptions;
 using SpecDrill.Secondary.Ports.AutomationFramework.Model;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.AccessControl;
 
 namespace SpecDrill
 {
@@ -689,9 +687,9 @@ namespace SpecDrill
         public Dictionary<string, object> GetCapabilities()
             => this.browserDriver.GetCapabilities();
 
-        public void ClickAndDrag((int x, int y) from, int offsetX, int offsetY)
+        public void ClickAndDrag(IElement from, IElement to, TimeSpan? duration = null)
         {
-            this.browserDriver.ClickAndDrag(from, offsetX, offsetY);
+            this.browserDriver.ClickAndDrag(from, to, duration);
         }
 
         public double? ScrollDivVertically(IElement divElement, int deltaPixels) => this.browserDriver.ScrollDivVertically(divElement, deltaPixels);

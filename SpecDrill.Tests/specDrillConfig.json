@@ -163,6 +163,12 @@
       "pageObjectType": "ShadowDomPage",
       "url": "../../../../WebsiteMocks/ShadowDom/shadow_dom.html",
       "isFileSystemPath": true
+    },
+    {
+      "pageObjectType": "ShadyMeadowsHomePage",
+      "url": "https://automationintesting.online/",
+      "isFileSystemPath": false
     }
+
   ]
 }
