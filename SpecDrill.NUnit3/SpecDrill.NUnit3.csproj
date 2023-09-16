@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>852</BuildNumber>
+    <BuildNumber>854</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill.NUnit - SpecDrill integration with NUnit 3</Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
