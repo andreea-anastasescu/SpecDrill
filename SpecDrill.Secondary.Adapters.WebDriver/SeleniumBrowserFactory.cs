@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.iOS;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -109,7 +110,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                 { BrowserNames.firefox, () =>
                     {
                         Logger.LogInformation("Initializig Firefox driver...");
-                        
+
                         var binPath = configuration?.WebDriver?.Browser?.Drivers?.Firefox?.BrowserBinaryPath ?? "";
                         var fds = FirefoxDriverService.CreateDefaultService(configuration?.WebDriver?.Browser?.Drivers?.Firefox?.Path ?? "");
 
@@ -193,7 +194,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
                         //    driver = new AndroidDriver<AndroidElement>(new Uri(appiumServerUri), appiumOptions);
                         //    return SeleniumBrowserDriver.Create(driver, this.configuration);
                         //case PlatformNames.iOS:
-                        //    driver = new IOSDriver<AndroidElement>(new Uri(appiumServerUri), appiumOptions);
+                        //    driver = new IOSDriver<IOSElement>(new Uri(appiumServerUri), appiumOptions);
                         //    return SeleniumBrowserDriver.Create(driver, this.configuration);
                         default:
                             driver = new RemoteWebDriver(new Uri(appiumServerUri), appiumOptions);
@@ -203,7 +204,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             throw new Exception($"Browser mode `{mode}` not supported!");
         }
 
-        private string GetBrowserDriversPath(string driverPath)
+        private static string GetBrowserDriversPath(string driverPath)
         {
             driverPath = Environment.ExpandEnvironmentVariables(driverPath);
             bool isUnixPath = driverPath.Contains("/");
@@ -217,13 +218,13 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             {
                 var execAssemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 var currentPath = System.IO.Path.GetDirectoryName(execAssemblyLocation);
-                if (currentPath == null) 
+                if (currentPath is null)
                     throw new DirectoryNotFoundException($"Could not find executing assembly location {execAssemblyLocation}!");
-                return Path.Combine(currentPath,driverPath);
+                return Path.Combine(currentPath, driverPath);
             }
 
             return driverPath;
-        
+
         }
 
         public IBrowserDriver CreateRemoteWebDriver(ICapabilities desiredCapabilities)
@@ -258,17 +259,17 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             {
                 try
                 {
-                    if (forceGlobal) 
+                    if (forceGlobal)
                     {
                         var type = typeof(T);
                         var addAdditionalCapabilityMethodInfo = type.GetMethod("AddAdditionalCapability",
                             new Type[] { typeof(string), typeof(object), typeof(bool) });
-                        if (addAdditionalCapabilityMethodInfo != null) 
-                            addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString()??"", true });
+                        if (addAdditionalCapabilityMethodInfo != null)
+                            addAdditionalCapabilityMethodInfo.Invoke(options, new object[] { kvp.Key, kvp.Value.ToString() ?? "", true });
                         else
                             Logger.LogInformation($"Cannog forceGlobal capabilities ::: Type {type.Name} does not have a definition for AddAdditionalCapability(string, object, bool) !");
-                    } 
-                    else 
+                    }
+                    else
                     {
                         options.AddAdditionalOption(kvp.Key, kvp.Value.ToString());
                     }
@@ -290,6 +291,9 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
         private SafariOptions BuildSafariOptions()
         {
             var safariOptions = new SafariOptions();
+            var preferences = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Preferences ?? new();
+            foreach (var preference in preferences.Where(p => p.Value is not null))
+                safariOptions.AddAdditionalOption(preference.Key, preference.Value); // Long shot attempt :)
             ExtendCapabilities(safariOptions, configuration?.WebDriver?.Browser?.Capabilities, forceGlobal: false);
             return safariOptions;
         }
@@ -302,6 +306,9 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             {
                 Logger.LogWarning($"Specified command line argument(s) for Edge were igonred !");
             }
+            var preferences = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Preferences ?? new();
+            foreach (var preference in preferences.Where(p => p.Value is not null))
+                edgeOptions.AddUserProfilePreference(preference.Key, preference.Value);
             ExtendCapabilities(edgeOptions, configuration?.WebDriver?.Browser?.Capabilities, forceGlobal: false);
             return edgeOptions;
         }
@@ -311,6 +318,9 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             var ieOptions = new InternetExplorerOptions();
             ieOptions.BrowserCommandLineArguments = string.Join(" ", configuration?.WebDriver?.Browser?.Drivers?.Ie?.Arguments ?? new List<string>());
             ieOptions.ForceCreateProcessApi = !string.IsNullOrWhiteSpace(ieOptions.BrowserCommandLineArguments);
+            var preferences = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Preferences ?? new();
+            foreach (var preference in preferences.Where(p => p.Value is not null))
+                ieOptions.AddAdditionalOption(preference.Key, preference.Value); // Long shot attempt :)
             ExtendCapabilities(ieOptions, configuration?.WebDriver?.Browser?.Capabilities);
             return ieOptions;
         }
@@ -320,7 +330,7 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             var ffOptions = new FirefoxOptions();
             ffOptions.AddArguments(configuration?.WebDriver?.Browser?.Drivers?.Firefox?.Arguments ?? new List<string>());
             var fp = ffOptions.Profile ?? new FirefoxProfile();
-           
+
             //fp.AcceptUntrustedCertificates = true;
             //fp.AssumeUntrustedCertificateIssuer = false;
             ffOptions.Profile = fp;
@@ -329,6 +339,10 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             {
                 ffOptions.BrowserExecutableLocation = binPath;
             }
+            var preferences = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Preferences ?? new();
+            foreach (var preference in preferences.Where(p => p.Value is not null))
+                ffOptions.SetPreference(preference.Key, preference.Value.ToString());
+
             ExtendCapabilities(ffOptions, configuration?.WebDriver?.Browser?.Capabilities);
             return ffOptions;
         }
@@ -339,11 +353,15 @@ namespace SpecDrill.Secondary.Adapters.WebDriver
             var chromeOptions = new ChromeOptions();
             var driverArguments = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Arguments ?? new List<string>();
             chromeOptions.AddArguments(driverArguments);
-            Logger.LogInformation($@"configuration.WebDriver.Browser.Drivers.Chrome.Arguments: {(driverArguments.Any() ? 
-                driverArguments.Aggregate((a, b) => $"{a} {b}") : 
+            Logger.LogInformation($@"configuration.WebDriver.Browser.Drivers.Chrome.Arguments: {(driverArguments.Any() ?
+                driverArguments.Aggregate((a, b) => $"{a} {b}") :
                 string.Empty)}");
             chromeOptions.AddArgument($"window-size={configuration?.WebDriver?.Browser?.Window?.InitialWidth},{configuration?.WebDriver?.Browser?.Window?.InitialHeight}");
-
+            
+            var preferences = configuration?.WebDriver?.Browser?.Drivers?.Chrome?.Preferences ?? new();
+            foreach (var preference in preferences.Where(p => p.Value is not null))
+                chromeOptions.AddUserProfilePreference(preference.Key, preference.Value);
+            
             ExtendCapabilities(chromeOptions, configuration?.WebDriver?.Browser?.Capabilities);
 
             return chromeOptions;

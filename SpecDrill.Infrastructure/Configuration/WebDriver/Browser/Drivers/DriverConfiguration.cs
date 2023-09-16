@@ -8,6 +8,7 @@ namespace SpecDrill.Infrastructure.Configuration.WebDriver.Browser.Drivers
         public string? BrowserBinaryPath { get; set; }
 
         public List<string>? Arguments { get; set; }
+        public Dictionary<string, object>? Preferences { get; set; }
     }
 }
 

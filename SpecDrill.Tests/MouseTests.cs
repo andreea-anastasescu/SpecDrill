@@ -14,14 +14,14 @@ namespace SomeTests
     {
         [Find(By.XPath, "//*[@id=\"root\"]/div/div/div[4]/div/div/div[3]/button")]
 
-        public INavigationElement<RoomPage> BookThisRoom { get; set; }
+        public INavigationElement<RoomPage>? BookThisRoom { get; set; }
     }
     public class RoomPage : WebPage
     {
         [Find(By.XPath, "//*[@id=\"root\"]/div/div/div[4]/div/div[2]/div[2]/div/div[2]/div[5]/div[1]/div[2]")]
-        public IElement StartingCell { get; set; }
+        public IElement? StartingCell { get; set; }
         [Find(By.XPath, "//*[@id=\"root\"]/div/div/div[4]/div/div[2]/div[2]/div/div[2]/div[5]/div[1]/div[3]")]
-        public IElement EndingCell { get; set; }
+        public IElement? EndingCell { get; set; }
     }
 
     [TestClass]

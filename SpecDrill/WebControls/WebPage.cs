@@ -30,7 +30,7 @@ namespace SpecDrill
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError("Cannot read page Title!", e);
+                    Logger.LogError("Cannot read page Title! {0}", e);
                 }
                 return retrievedTitle;
             }
