@@ -1,4 +1,5 @@
-﻿using iText.Kernel.Pdf;
+﻿using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -525,9 +526,51 @@ console.log('mouse click!');
 
         public ISearchable GetShadowRoot()
             => throw new Exception("Element `<html/>` is not a ShadowRoot!");
-
-
         public object NativeElement => FindElements(SeleniumElementLocator.Create(Ports.AutomationFramework.By.TagName, "html")).First();
+
+        private class SeleniumCookieFactory : Ports.AutomationFramework.Model.Cookie.ICookieFactory<OpenQA.Selenium.Cookie>
+        {
+            public OpenQA.Selenium.Cookie Create(string name, string value)
+                => new(name, value);
+            public OpenQA.Selenium.Cookie Create(string name, string value, string path)
+                => new (name, value, path);
+            public OpenQA.Selenium.Cookie Create(string name, string value, string path, DateTime? expiry)
+                => new (name, value, path, expiry);
+
+            public OpenQA.Selenium.Cookie Create(string name, string value, string domain, string path, DateTime? expiry)
+                => new(name, value, domain, path, expiry);
+
+            public OpenQA.Selenium.Cookie Create(string name, string value, string domain, string path, DateTime? expiry, bool isSecure, bool isHttpOnly, string sameSite)
+                => new(name, value, domain, path, expiry, isSecure, isHttpOnly, sameSite);
+        }
+
+        private readonly Ports.AutomationFramework.Model.Cookie.ICookieFactory<OpenQA.Selenium.Cookie>  seleniumCookieFactory = new SeleniumCookieFactory();
+        public void AddCookie(Ports.AutomationFramework.Model.Cookie cookie)
+            => seleniumDriver.Manage().Cookies.AddCookie(cookie.Create(seleniumCookieFactory));
+
+        public void DeleteAllCookies()
+            => seleniumDriver.Manage().Cookies.DeleteAllCookies();
+
+        public void DeleteCookie(Ports.AutomationFramework.Model.Cookie cookie)
+            => seleniumDriver.Manage().Cookies.DeleteCookie(cookie.Create(seleniumCookieFactory));
+
+        public void GetCookieByName(string name)
+            => seleniumDriver.Manage().Cookies.GetCookieNamed(name);
+
+        public void DeleteCookieByName(string name)
+            => seleniumDriver.Manage().Cookies.DeleteCookieNamed(name);
+
+        private static SpecDrill.Secondary.Ports.AutomationFramework.Model.Cookie ToSpecDrillModel(OpenQA.Selenium.Cookie seleniumCookie)
+            => new(seleniumCookie.Name, seleniumCookie.Value, seleniumCookie.Domain, seleniumCookie.Path, seleniumCookie.Expiry, seleniumCookie.Secure, seleniumCookie.IsHttpOnly, seleniumCookie.SameSite);
+        public IEnumerable<Ports.AutomationFramework.Model.Cookie> AllCookies
+        {
+            get
+            {
+                foreach (var cookie in seleniumDriver.Manage().Cookies.AllCookies) 
+                    yield return ToSpecDrillModel(cookie);
+            }
+        }
+            
         #endregion
     }
 }

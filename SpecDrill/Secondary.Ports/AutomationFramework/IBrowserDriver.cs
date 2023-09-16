@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net;
 
 namespace SpecDrill.Secondary.Ports.AutomationFramework
 {
@@ -82,5 +83,12 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework
         string GetPdfText();
         void SaveScreenshot(string fileName);
         Dictionary<string, object> GetCapabilities();
+
+        void AddCookie(Model.Cookie cookie);
+        IEnumerable<Model.Cookie> AllCookies { get; }
+        void DeleteAllCookies();
+        void DeleteCookie(Model.Cookie cookie);
+        void GetCookieByName(string name);
+        void DeleteCookieByName(string name);
     }
 }

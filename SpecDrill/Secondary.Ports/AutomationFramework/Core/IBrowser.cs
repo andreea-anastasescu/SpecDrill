@@ -90,5 +90,12 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
         void CloseLastWindow();
         string GetPdfText();
         void SaveScreenshot(string testClassName, string testMethodName);
+
+        void AddCookie(Model.Cookie cookie);
+        IEnumerable<Model.Cookie> AllCookies { get; }
+        void DeleteAllCookies();
+        void DeleteCookie(Model.Cookie cookie);
+        void GetCookieByName(string name);
+        void DeleteCookieByName(string name);
     }
 }

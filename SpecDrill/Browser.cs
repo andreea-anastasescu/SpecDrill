@@ -508,6 +508,8 @@ namespace SpecDrill
 
         public Uri Url => browserDriver.Url;
 
+        public IEnumerable<Cookie> AllCookies => throw new NotImplementedException();
+
         public IDisposable ImplicitTimeout(TimeSpan implicitTimeout, string? message = null)
         {
             return new ImplicitWaitScope(browserDriver, timeoutHistory, implicitTimeout, message);
@@ -697,9 +699,19 @@ namespace SpecDrill
         public double? ScrollDivHorizontally(IElement divElement, int deltaPixels) => this.browserDriver.ScrollDivHorizontally(divElement, deltaPixels);
         
 
-        public uint ScrollDivVertically(int deltaPixels)
-        {
-            throw new NotImplementedException();
-        }
+        public void AddCookie(Cookie cookie)
+            => browserDriver.AddCookie(cookie);
+
+        public void DeleteAllCookies()
+            => browserDriver.DeleteAllCookies();
+
+        public void DeleteCookie(Cookie cookie)
+            => browserDriver.DeleteCookie(cookie);
+
+        public void GetCookieByName(string name)
+            => browserDriver.GetCookieByName(name);
+
+        public void DeleteCookieByName(string name)
+            => browserDriver.DeleteCookieByName(name);
     }
 }

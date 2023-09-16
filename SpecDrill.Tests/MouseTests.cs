@@ -34,11 +34,11 @@ namespace SomeTests
         public void ShouldClickAndDrag()
         {
             var homePage = Browser.Open<ShadyMeadowsHomePage>();
-            var roomPage = homePage.BookThisRoom.Click();
-            Wait.Until(() => roomPage.StartingCell.IsVisible);
-            Browser.ClickAndDrag(roomPage.StartingCell, roomPage.EndingCell, TimeSpan.FromSeconds(.2));
-            roomPage.StartingCell.IsVisible.Should().BeFalse();
-            roomPage.EndingCell.IsVisible.Should().BeFalse();
+            var roomPage = homePage.BookThisRoom!.Click();
+            Wait.Until(() => roomPage.StartingCell!.IsVisible);
+            Browser.ClickAndDrag(roomPage.StartingCell!, roomPage.EndingCell!, TimeSpan.FromSeconds(.2));
+            roomPage.StartingCell!.IsVisible.Should().BeFalse();
+            roomPage.EndingCell!.IsVisible.Should().BeFalse();
             System.Threading.Thread.Sleep(5000);
         }
 
