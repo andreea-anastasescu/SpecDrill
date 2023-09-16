@@ -192,7 +192,7 @@ namespace SpecDrill
             var result = CreateContainer(typeof(T), containerInstance) as T;
             if (result is null)
             {
-                var err = $"Newly created container should be of type {typeof(T).Name}! Actual type is { result?.GetType().Name ?? "(null)" }";
+                var err = $"Newly created container should be of type {typeof(T).Name}! Actual type is (null)";
                 Logger.LogInformation(err);
                 throw new Exception(err);
             }

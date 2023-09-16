@@ -87,7 +87,7 @@ namespace SpecDrill
                                Regex.IsMatch(title, this.titlePattern);
 
                 Logger.LogInformation("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, title ?? "(null)",
-                    this.titlePattern ?? "(null)");
+                    this.titlePattern);
 
                 return isLoaded;
             }

@@ -38,7 +38,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Model
             => (constructorType, Name, Value) = (ConstructorType.name_value, name, value);
 
         public Cookie(string name, string value, string path) : this(name, value)
-            => (constructorType, Path) = (ConstructorType.name_value_path, Path);
+            => (constructorType, Path) = (ConstructorType.name_value_path, path);
 
         public Cookie(string name, string value, string path, DateTime? expiry) : this(name, value, path)
             => (constructorType, Expiry) = (ConstructorType.name_value_path_expiry, expiry);
