@@ -53,7 +53,7 @@ namespace SpecDrill
             var elements = this.ToArray();
             var match = elements.FirstOrDefault(
                 item => 
-                    Regex.IsMatch(item.Text, regex)
+                    Regex.IsMatch(item.Text, regex, RegexOptions.None, TimeSpan.FromSeconds(30))
                     );
 
             if (match == default(T))

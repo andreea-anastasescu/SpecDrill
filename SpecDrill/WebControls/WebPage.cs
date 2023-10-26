@@ -84,7 +84,7 @@ namespace SpecDrill
 
                 var title = this.Title;
                 var isLoaded = title != null &&
-                               Regex.IsMatch(title, this.titlePattern);
+                               Regex.IsMatch(title, this.titlePattern, RegexOptions.None, TimeSpan.FromSeconds(30));
 
                 Logger.LogInformation("LoadCompleted = {0}, retrievedTitle = {1}, patternToMatch = {2}", isLoaded, title ?? "(null)",
                     this.titlePattern);

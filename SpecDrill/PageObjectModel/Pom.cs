@@ -17,10 +17,11 @@ namespace SpecDrill.PageObjectModel
 
     // locator
     public record PomLocator(string type, string value);
+    public record PomTarget(string type, string value, string action);
     // atoms
-    public record PomElement(string type, string name, PomLocator locator, List<string> tags, string? target, string? itemType);
-    public record PomNavigationElement(string name, PomLocator locator, string target, List<string> tags) : PomElement("navigation_element", name, locator, tags, target, null);
-    public record PomFrameElement(string name, PomLocator locator, string target, List<string> tags) : PomElement("frame_element", name, locator, tags, target, null);
+    public record PomElement(string type, string name, PomLocator locator, List<string> tags, PomTarget? target, string? itemType);
+    public record PomNavigationElement(string name, PomLocator locator, PomTarget target, List<string> tags) : PomElement("navigation_element", name, locator, tags, target, null);
+    public record PomFrameElement(string name, PomLocator locator, PomTarget target, List<string> tags) : PomElement("frame_element", name, locator, tags, target, null);
     public record PomSelectElement(string name, PomLocator locator, List<string> tags) : PomElement("select_element", name, locator, tags, null, null);
     //public record PomSelectElement
     // components
@@ -55,7 +56,7 @@ namespace SpecDrill.PageObjectModel
             return asmBuilder.DefineDynamicModule("SpecDrillDynamicModule");
         });
 
-        public static void AddProperty(this TypeBuilder tb, (Type Type, string Name) propertySignature, (By Type, string Value) selector)
+        public static void AddProperty(this TypeBuilder tb, (Type Type, string Name) propertySignature, (By Type, string Value) selector, PomTarget? target)
         {
             FieldBuilder fb = tb.DefineField(
                 $"m_{propertySignature.Name.ToLower()}",
@@ -97,16 +98,34 @@ namespace SpecDrill.PageObjectModel
             pb.SetGetMethod(mbPropertyAccessor);
             pb.SetSetMethod(mbPropertySetter);
 
+            // creating Find attribute
             Type findAttrType = typeof(FindAttribute);
             ConstructorInfo? findAttrInfo = findAttrType.GetConstructor(new Type[] { typeof(By), typeof(string) });
 
             if (findAttrInfo == null)
                 throw new NullReferenceException($"ConstructorInfo? {nameof(findAttrInfo)} : should not be null!");
 
-            var ab = new CustomAttributeBuilder(findAttrInfo, new[] { (object)selector.Type, selector.Value });
+            // adding Find attribute
+            var findAB = new CustomAttributeBuilder(findAttrInfo, new[] { (object)selector.Type, selector.Value });
 
-            pb.SetCustomAttribute(ab);
-        }
+            pb.SetCustomAttribute(findAB);
+
+            if (target?.type == "element")
+            {
+                // creating FindTarget attribute
+                Type findTargetAttrType = typeof(FindTargetAttribute);
+                ConstructorInfo? findTargetAttrInfo = findTargetAttrType.GetConstructor(new Type[] { typeof(string) });
+
+                if (findTargetAttrInfo == null)
+                    throw new NullReferenceException($"ConstructorInfo? {nameof(findTargetAttrInfo)} : should not be null!");
+                // adding FindTarget attribute
+                var findTargetAB = new CustomAttributeBuilder(findTargetAttrInfo, new[] { target.value });
+
+                pb.SetCustomAttribute(findTargetAB);
+            }
+
+
+            }
 
         public static PomSitemap AddComponents(this PomSitemap @this, params PomComponent[] components)
         {
@@ -142,9 +161,9 @@ namespace SpecDrill.PageObjectModel
         public static PomComponent Component(string name, List<string>? tags = default, params PomElement[] elements) => new(name, elements.ToList(), tags ?? new List<string>());
         public static PomComponentRef ComponentRef(string name, PomLocator locator, string type, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>());
         public static PomPage Page(string name, List<string>? tags = default, params PomElement[] elements) => new(name, tags ?? new List<string>(), elements.ToList());
-        public static PomElement Element(string type, string name, PomLocator locator, string? target = null, string? itemType = null, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>(), target, itemType);
-        public static PomNavigationElement NavigationElement(string name, PomLocator locator, string target, List<string>? tags = default) => new(name, locator, target, tags ?? new List<string>());
-        public static PomFrameElement FrameElement(string name, PomLocator locator, string target, List<string>? tags = default) => new(name, locator, target, tags ?? new List<string>());
+        public static PomElement Element(string type, string name, PomLocator locator, PomTarget? target = null, string? itemType = null, List<string>? tags = default) => new(type, name, locator, tags ?? new List<string>(), target, itemType);
+        public static PomNavigationElement NavigationElement(string name, PomLocator locator, PomTarget target, List<string>? tags = default) => new(name, locator, target, tags ?? new List<string>());
+        public static PomFrameElement FrameElement(string name, PomLocator locator, PomTarget target, List<string>? tags = default) => new(name, locator, target, tags ?? new List<string>());
         public static PomSelectElement SelectElement(string name, PomLocator locator, List<string>? tags = default) => new(name, locator, tags ?? new());
         public static PomComponentList ComponentListElement(string name, PomLocator locator, string itemType , List<string>? tags = default)
         {
@@ -276,12 +295,15 @@ namespace SpecDrill.PageObjectModel
             foreach (var element in elements)
             {
                 var elementType = element.Specialize() switch
-                {
-                    PomNavigationElement pne => typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(pne.target!)),
+                { // Approach: fail fast in case expected fields are null for particular cases
+                    PomNavigationElement pne when pne.target is not null && pne.target.type == "page" => typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(pne.target.value!)),
+                    // DONE: for Component case, identify component type (use elements collection)!
+                    PomNavigationElement pne when pne.target is not null && pne.target.type == "element" =>
+                        typeof(INavigationElement<>).MakeGenericType(sitemap.GetTypeOf(elements.First(e => e.name == pne.target.value!).itemType!)),
                     PomComponentList pcl => typeof(ListElement<>).MakeGenericType(sitemap.GetTypeOf(pcl.itemType!)),
                     PomComponentRef pcr => sitemap.GetTypeOf(pcr.type),
                     PomSelectElement pse => typeof(SelectElement),
-                    PomFrameElement pfe => typeof(IFrameElement<>).MakeGenericType(sitemap.GetTypeOf(pfe.target!)),
+                    PomFrameElement pfe => typeof(IFrameElement<>).MakeGenericType(sitemap.GetTypeOf(pfe.target!.value!)),
                     PomElement e => typeof(IElement),
                     _ => null
                 };
@@ -289,9 +311,17 @@ namespace SpecDrill.PageObjectModel
                 if (elementType is null)
                     continue;
 
-                AddProperty(@this, (elementType, element.name), (LocatorTypeFromString(element.locator.type), element.locator.value));
+                // to also pass a flag to know this is targeting a component (not a page) and also pass component instance field name !!!
+
+                // DONE: Add property will add [FindTarget(nameof(ThePopup))] attribute to NavigationElement fields when target is Component!
+
+                AddProperty(@this, (elementType, element.name), (LocatorTypeFromString(element.locator.type), element.locator.value), element.target);
+
             }
         }
+
+        // target: "PageTypeName" | "ComponentInstanceFieldName" (1)
+        // target: "page:click@PageTypeName" | "element:hover@ComponentInstanceFieldName" (2)
 
         private static By LocatorTypeFromString(string type)
        => type.ToLowerInvariant() switch

@@ -73,6 +73,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
         //bool LoadJQuery();
 
         void MaximizePage();
+        void SetWindowSize(int initialWidth, int initialHeight);
 
         void RefreshPage();
 

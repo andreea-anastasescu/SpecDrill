@@ -16,10 +16,10 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="116.0.5845.9600" />
-    <PackageReference Include="SpecDrill" Version="[1.3.*,)" />
-    <PackageReference Include="SpecDrill.NUnit3" Version="1.3.0.833" />
-    <PackageReference Include="SpecDrill.SpecFlow" Version="1.3.0.928" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="117.0.5938.8800" />
+    <PackageReference Include="SpecDrill" Version="1.3.0.1231" />
+    <PackageReference Include="SpecDrill.NUnit3" Version="1.3.0.852" />
+    <PackageReference Include="SpecDrill.SpecFlow" Version="1.3.0.947" />
 	  <PackageReference Include="SpecFlow" Version="3.9.74" />
 	  <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
   </ItemGroup>

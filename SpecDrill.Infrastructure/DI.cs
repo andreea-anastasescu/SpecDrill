@@ -18,7 +18,7 @@ namespace SpecDrill.Infrastructure
                                                                             .AddConsole()
                                                                             .AddFile("app.log", append: true)
                                                                                         
-                                                                //.AddFile("c:\\apps\\app_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts => {
+                                                                            //.AddFile("c:\\apps\\app_{0:yyyy}-{0:MM}-{0:dd}.log", fileLoggerOpts => {
                                                                             //    fileLoggerOpts.FormatLogFileName = fName => String.Format(fName, DateTime.UtcNow);
                                                                             //})
                                                                 );
