@@ -6,4 +6,4 @@ Please check the [Wiki](https://github.com/CosminSontu/SpecDrill/wiki) for setup
 
 SpecDrill NuGet packages are available at nuget.org
 
-[SpecDrill@SonarCloud](https://sonarcloud.io/dashboard?id=CosminSontu_SpecDrill)
+[SpecDrill@SonarCloud](https://sonarcloud.io/project/overview?id=CosminSontu_SpecDrill)
