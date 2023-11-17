@@ -16,8 +16,8 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="117.0.5938.8800" />
-    <PackageReference Include="SpecDrill" Version="1.3.0.1231" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="119.0.6045.10500" />
+    <PackageReference Include="SpecDrill" Version="1.3.0.1279" />
     <PackageReference Include="SpecDrill.MsTest" Version="[1.3.*,)" />
 	</ItemGroup>
 

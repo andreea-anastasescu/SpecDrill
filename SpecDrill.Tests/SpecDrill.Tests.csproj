@@ -49,7 +49,7 @@
 	<PackageReference Include="NReco.Logging.File" Version="1.1.6" />
 	<!--<PackageReference Include="NUnit" Version="3.13.3" />
 	<PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />-->
-	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="117.0.5938.8800" />
+	<PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="119.0.6045.10500" />
 	<!--<PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />-->
 	<!--<PackageReference Include="SpecDrill.MsTest" Version="[1.1.15.*,)" />
 	<PackageReference Include="SpecDrill.SpecFlow" Version="[1.1.14.*,)" />-->

@@ -44,7 +44,7 @@ namespace SpecDrill.Secondary.Ports.AutomationFramework.Core
 
         void SwitchToWindow<T>(IWindowElement<T> seleniumWindowElement) where T : class, IPage;
 
-        void ScrollIntoView(IElement element);
+        void ScrollIntoView(IElement element, bool ifNeeded = true);
         double? ScrollDivHorizontally(IElement divElement, int deltaPixels);
         double? ScrollDivVertically(IElement divElement, int deltaPixels);
         /// <summary>

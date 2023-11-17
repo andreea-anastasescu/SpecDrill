@@ -250,9 +250,11 @@ console.log('mouse click!');
             
         }
 
-        public void ScrollIntoView(IElement element)
+        public void ScrollIntoView(IElement element, bool ifNeeded = true)
         {
-            this.ExecuteJavaScript($"arguments[0].scrollIntoViewIfNeeded();", element.ToWebElement());
+            this.ExecuteJavaScript(ifNeeded ? 
+                                  $"arguments[0].scrollIntoViewIfNeeded();" :
+                                  $"arguments[0].scrollIntoView();", element.ToWebElement());
         }
 
         public double? ScrollDivVertically(IElement divElement, int deltaPixels)

@@ -638,7 +638,7 @@ namespace SpecDrill
             browserDriver.SwitchToWindow(seleniumWindowElement);
         }
 
-        public void ScrollIntoView(IElement element) => browserDriver.ScrollIntoView(element);
+        public void ScrollIntoView(IElement element, bool ifNeeded = true) => browserDriver.ScrollIntoView(element, ifNeeded);
 
         public void CloseLastWindow()
         {
