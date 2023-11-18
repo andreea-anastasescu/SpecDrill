@@ -4,7 +4,6 @@ using iText.Kernel.Pdf.Canvas.Parser;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium;
-using OpenQA.Selenium.DevTools.V114.Memory;
 using OpenQA.Selenium.Interactions;
 using SpecDrill.Configuration;
 using SpecDrill.Infrastructure;

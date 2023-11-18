@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>specdrill.png</PackageIcon>
-    <BuildNumber>1288</BuildNumber>
+    <BuildNumber>1291</BuildNumber>
     <Version>1.3.0.$(BuildNumber)</Version>
     <Description>SpecDrill - An opinionated automated testing framework based on Selenium WebDriver</Description>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -24,7 +24,7 @@
   <ItemGroup>
     <!--<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />-->
-    <PackageReference Include="SpecDrill.Infrastructure" Version="1.3.0.526" />
+    <PackageReference Include="SpecDrill.Infrastructure" Version="1.3.0.550" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="bin\**" />
