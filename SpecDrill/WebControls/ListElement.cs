@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace SpecDrill
@@ -50,11 +51,19 @@ namespace SpecDrill
 
         public T GetElementByText(string regex)
         {
-            var elements = this.ToArray();
-            var match = elements.FirstOrDefault(
-                item => 
-                    Regex.IsMatch(item.Text, regex, RegexOptions.None, TimeSpan.FromSeconds(30))
-                    );
+            T? match;
+            if (this.locator.LocatorType == By.XPath)
+            {
+                match = ElementFactory.CreateControl<T>(parent, ElementLocatorFactory.Create(By.XPath, locator.LocatorValue + $"[.//text()[contains(.,'{regex}')]]"));
+            }
+            else
+            {
+                var elements = this.ToArray();
+                match = elements.FirstOrDefault(
+                    item =>
+                        Regex.IsMatch(item.Text, regex, RegexOptions.None, TimeSpan.FromSeconds(30))
+                        );
+            }
 
             if (match == default(T))
                 throw new Exception($"SpecDrill: No element matching '{regex}' was found!");

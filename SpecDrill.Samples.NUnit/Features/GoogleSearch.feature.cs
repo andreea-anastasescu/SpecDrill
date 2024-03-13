@@ -132,7 +132,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("I press Search button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.Then("You should get a \"Drill\" entry in search results", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("You should get a \"Fandom\" entry in search results", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

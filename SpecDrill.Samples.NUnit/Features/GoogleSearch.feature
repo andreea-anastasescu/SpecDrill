@@ -13,4 +13,4 @@ Scenario: 1.Find wiki entry for searched keyword
 Scenario: 2.Find wiki entry for searched keyword
 	Given I have entered "drill wiki" into Google search
 	When I press Search button
-	Then You should get a "Drill" entry in search results
+	Then You should get a "Fandom" entry in search results
